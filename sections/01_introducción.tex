@@ -24,6 +24,18 @@ el resto del documento. Un lector tras leer esta sección debería poder respond
   \item \ph{Conceptos básicos imprescindibles para entender el resto.}
 \end{itemize}
 
+El desarrollo de software actual debe dar respuesta a sistemas cada vez más configurables, capaces de adaptarse a distintas necesidades, plataformas y contextos de uso. Dentro de este escenario, las Líneas de Productos Software (Software Product Lines, SPL) \cite{spl} ofrecen un enfoque para gestionar familias de productos relacionados a partir de los elementos que comparten y de aquellos que pueden variar entre unas configuraciones y otras. Esto permite tratar la variabilidad de forma explícita y facilita tareas como la configuración de productos, la reutilización de componentes o el análisis automático de las distintas combinaciones posibles.
+
+Una de las formas más extendidas de representar esta variabilidad son los modelos de características (Feature Models) \cite{featureModels}. Estos modelos describen las características que puede incluir una familia de productos y las relaciones que existen entre ellas, permitiendo establecer qué elementos son obligatorios u opcionales, cuáles pueden combinarse y qué restricciones deben respetarse para obtener una configuración válida.
+
+A medida que los modelos han ganado en complejidad, también ha surgido la necesidad de disponer de formatos que permitan representarlos de manera común. Universal Variability Language (UVL) \cite{uvl} nace con este propósito y proporciona un lenguaje para describir modelos de variabilidad con diferentes grados de expresividad. Además de las relaciones habituales entre características, UVL permite incorporar construcciones más avanzadas, como atributos y restricciones, ampliando así los escenarios que pueden representarse y analizarse.
+
+En torno a estos modelos se han desarrollado distintas herramientas destinadas a facilitar su procesamiento y análisis. Entre ellas se encuentra Flamapy \cite{flamapy}, un framework desarrollado en Python que proporciona soporte para el análisis automático de modelos de características. Su arquitectura extensible, basada en plugins, permite incorporar nuevos formatos, operaciones y técnicas de análisis sin necesidad de modificar el núcleo de la herramienta, lo que facilita su evolución y su uso en diferentes líneas de investigación.
+
+El presente Trabajo Fin de Grado se desarrolla dentro de este ecosistema y se enmarca en la actividad investigadora de DiversoLab y en TASOVA Plus (Red en nuevas Tendencias en Arquitectura Software y Variabilidad) \cite{tasovaplus}. Este entorno promueve el desarrollo de herramientas relacionadas con la ingeniería de líneas de productos software, la arquitectura software y el análisis de variabilidad, siguiendo además principios asociados al software libre y a la ciencia abierta (Open Science).
+
+Otro de los componentes de este ecosistema es UVLHub \cite{uvlhub}, una plataforma orientada a la publicación, gestión y exploración de modelos expresados en UVL. La plataforma ofrece un espacio en el que investigadores y desarrolladores pueden compartir modelos y reutilizarlos en distintos experimentos o herramientas. Flamapy, UVL y UVLHub conforman así buena parte del entorno tecnológico sobre el que se desarrolla este trabajo.
+
 \section{Problema}
 \label{sec:problema}
 
@@ -37,6 +49,18 @@ y qué consecuencias tiene.}
   \item \textbf{\ph{Limitación 1:}} \ph{descripción del problema y de su impacto.}
   \item \textbf{\ph{Limitación 2:}} \ph{descripción del problema y de su impacto.}
   \item \textbf{\ph{Limitación 3:}} \ph{descripción del problema y de su impacto.}
+\end{enumerate}
+
+La evolución de los lenguajes de modelado y de los motores de razonamiento ha permitido trabajar con formas de variabilidad cada vez más complejas. Sin embargo, disponer de herramientas capaces de procesar esa complejidad no resulta suficiente por sí solo: para poder evaluarlas también es necesario contar con modelos que hagan uso de esas capacidades.
+
+Buena parte de los modelos de características disponibles se concentra en construcciones relativamente básicas. Estos modelos siguen siendo útiles para numerosos análisis, pero resultan menos adecuados cuando se pretende experimentar con elementos más avanzados del lenguaje o estudiar cómo se comportan los motores de razonamiento ante distintos grados de complejidad. Se produce así una diferencia entre la expresividad que pueden ofrecer los lenguajes y herramientas actuales y la variedad de modelos disponibles para ponerlos a prueba.
+
+Es por ello que se identifican de forma explícita las siguientes limitaciones:
+
+\begin{enumerate}
+  \item \textbf{Expresividad limitada de los modelos de características disponibles:} Muchos de estos modelos se basan principalmente en relaciones estructurales básicas entre características. Aunque estos modelos permiten realizar análisis fundamentales, no siempre permiten representar escenarios más complejos donde intervienen elementos avanzados del lenguaje, lo que reduce la capacidad de explorar nuevas técnicas de razonamiento y análisis.
+  \item \textbf{Complicaciones a la hora de evaluar y mejorar motores de razonamiento avanzados sobre modelos más complejos:} Esto es consecuencia directa del problema anteriormente descrito. Sin estos modelos más avanzados, la capacidad de validar nuevas aproximaciones se ve limitada, por lo que es más complicado estudiar hasta qué punto estos motores pueden aprovechar construcciones más avanzadas del lenguaje de modelado.
+  \item \textbf{Necesidad de ampliar el conjunto de modelos disponibles para investigación en variabilidad software} La investigación en este ámbito requiere disponer de modelos que permitan experimentar con diferentes escenarios, niveles de complejidad y características del lenguaje. Sin una base amplia y diversa de modelos, resulta mucho más difícil comparar técnicas, evaluar resultados y avanzar en el desarrollo de herramientas más potentes.
 \end{enumerate}
 
 \section{Motivación}
@@ -53,6 +77,17 @@ Conecta el problema (sección anterior) con la solución que se va a proponer
   \item \ph{Encaje del trabajo en un contexto académico, profesional o de investigación
         (grupo de investigación, asignatura, empresa, publicación\dots).}
 \end{itemize}
+
+A partir de esta necesidad surge la propuesta desarrollada en este Trabajo Fin de Grado: incorporar al ecosistema Flamapy un generador de modelos UVL que permita crear modelos con diferentes características y niveles de expresividad. El interés de esta herramienta no reside únicamente en producir nuevos modelos; también en facilitar la creación de casos de estudio ajustados a diferentes necesidades de experimentación.
+
+Contar con un generador de este tipo permite ampliar de forma más sencilla el conjunto de modelos disponible para pruebas y análisis. De esta manera, investigadores y desarrolladores pueden disponer de ejemplos adicionales con los que estudiar el comportamiento de motores de razonamiento, comprobar el soporte de distintas construcciones de UVL o plantear experimentos sobre modelos con características diferentes.
+
+La integración en Flamapy también permite aprovechar un ecosistema ya existente, en lugar de desarrollar una solución completamente aislada. El generador pasa así a convivir con las operaciones, formatos y herramientas disponibles en el framework, manteniendo una arquitectura coherente con el resto del proyecto. Del mismo modo, su integración con UVLHub acerca esta funcionalidad a usuarios que ya trabajan con modelos de variabilidad dentro de la plataforma.
+
+Otro aspecto importante es el carácter abierto del desarrollo. La herramienta se plantea como software libre (Free/Libre Open Source Software, FLOSS), por lo que su código fuente puede ser consultado, modificado y reutilizado por otros desarrolladores e investigadores. Esto permite que el resultado del TFG no quede limitado a una implementación cerrada o a un único experimento, sino que pueda evolucionar con nuevas contribuciones y servir como base para trabajos posteriores.
+
+El punto de partida del proyecto estuvo ligado a una colaboración como técnico de apoyo dentro de TASOVA Plus. Esto me permitió conocer de cerca las necesidades que aparecen en un entorno real de investigación y trabajar sobre un ecosistema software que ya se encontraba en uso, lo cual será muy probablemente lo que me encuentre en mi futuro laboral. Al mismo tiempo, el desarrollo me ofreció la oportunidad de aplicar los conocimientos adquiridos durante el grado en un proyecto con requisitos y condicionantes reales, abordando aspectos habituales de la ingeniería del software como la integración con código existente, la documentación, el mantenimiento o la automatización de pruebas.
+
 
 \section{Objetivos}
 \label{sec:objetivos}
@@ -83,6 +118,31 @@ registros en menos de 200~ms, dando respuesta a la Limitación~1''.}
   \item \textbf{\ph{Objetivo específico 5 (opcional):}} \ph{descripción concreta y medible.}
 \end{enumerate}
 
+
+
+El objetivo principal de este trabajo es dar apoyo a la mejora de los motores de razonamiento existentes para el análisis de modelos de características mediante la obtención de una cantidad significativa y variada de modelos con expresividad avanzada. Como propuesta para conseguirlo, se pretende desarrollar un generador de modelos de características aleatorio y completamente configurable para poder cubrir todas las posibilidades en las que un modelo de características pueda ser diseñado.
+
+De forma más específica, podemos desgranar los objetivos de este trabajo de la siguiente forma:
+
+\begin{enumerate}[label=\textbf{O\arabic*.}]
+      \item Diseñar e implementar un generador automático de modelos de características capaz de producir modelos UVL con diferentes niveles de complejidad y expresividad.
+      \item Desarrollar un sistema de configuración flexible que permita controlar las características de los modelos generados y adaptarlos a distintos escenarios de experimentación.
+      \item Incorporar soporte para la generación de modelos que utilicen construcciones avanzadas del lenguaje UVL, permitiendo ampliar la variedad de casos de estudio disponibles para el análisis de variabilidad.
+      \item Integrar la solución desarrollada dentro del ecosistema Flamapy y facilitar su utilización desde UVLHub como herramienta orientada a la generación y gestión de modelos de características.
+      \item Validar el funcionamiento del generador mediante pruebas automatizadas que permitan comprobar la corrección de los modelos producidos.
+\end{enumerate}
+
+De forma paralela, el trabajo persigue una serie de objetivos formativos que se pretenden conseguir con la realización del proyecto:
+
+\begin{enumerate}[resume,label=\textbf{O\arabic*.}]
+      \item Reutilizar el conocimiento científico en el desarrollo de herramientas software (objetivo heredado de la red TASOVA Plus)
+      \item Adquirir experiencia en el desarrollo y mantenimiento de proyectos software reales mediante la participación en un entorno de investigación y código abierto.
+      \item Profundizar en el uso de tecnologías empleadas en el proyecto, especialmente Python, Flask, Docker y herramientas asociadas a integración y despliegue continuo (CI/CD).
+      \item Mejorar la capacidad de búsqueda, análisis y selección de información técnica relevante para resolver problemas dentro de un contexto de investigación.
+      \item Aplicar buenas prácticas de planificación, gestión y documentación durante el desarrollo individual de un proyecto software de mayor duración y complejidad.
+      
+\end{enumerate}
+
 \ph{Resume en la tabla siguiente el criterio de éxito de cada objetivo, cómo se
 verificará y en qué capítulo. Esta tabla es la columna vertebral de la memoria:
 el Capítulo~\ref{chap:resultados} dará el veredicto sobre \textbf{todos} los
@@ -99,11 +159,11 @@ para que la numeración se mantenga sola.}
   \textbf{Obj.} & \textbf{Criterio de éxito (medible)} & \textbf{Cómo se verifica} & \textbf{Cap.} \\
   \midrule
   \endhead
-  O1 & \ph{p.\,ej.\ el sistema cubre todos los RF de prioridad alta} & \ph{matriz de trazabilidad y suite de pruebas} & \ph{4, 7} \\[0.3em]
-  O2 & \ph{p.\,ej.\ tiempo de respuesta inferior a 200~ms en consultas típicas} & \ph{medición sobre el banco de pruebas} & \ph{8} \\[0.3em]
-  O3 & \ph{criterio medible con métrica y umbral.} & \ph{evidencia que lo demuestra.} & \ph{X} \\[0.3em]
-  O4 & \ph{criterio medible con métrica y umbral.} & \ph{evidencia que lo demuestra.} & \ph{X} \\[0.3em]
-  O5 & \ph{criterio medible con métrica y umbral.} & \ph{evidencia que lo demuestra.} & \ph{X} \\
+  O1 & El generador permite producir modelos UVL automáticamente incorporando diferentes niveles de complejidad y expresividad del lenguaje. & Generación de modelos con configuraciones variadas y validación de que los modelos producidos cumplen la sintaxis y estructura esperada de UVL. & 6, 7 \\[0.3em]
+  O2 & El generador dispone de un sistema de configuración que permite modificar los parámetros principales del proceso de generación y adaptar los modelos obtenidos a distintos escenarios. & Revisión de las opciones de configuración disponibles y ejecución de pruebas con diferentes configuraciones para comprobar su efecto sobre los modelos generados. & 6, 7 \\[0.3em]
+  O3 & El generador permite crear modelos que incorporan construcciones avanzadas de UVL más allá de las relaciones básicas entre características. & Análisis de los modelos generados verificando la presencia y correcto tratamiento de atributos, restricciones y otros elementos avanzados del lenguaje. & 6, 7\\[0.3em]
+  O4 & La solución desarrollada queda integrada dentro del ecosistema Flamapy y puede ser utilizada desde UVLHub como herramienta de generación de modelos. & Verificación de la integración del plugin en Flamapy y comprobación del flujo completo de generación desde UVLHub. & 6, 7 \\[0.3em]
+  O5 & El generador cuenta con una batería de pruebas automatizadas que permita validar su correcto funcionamiento y detectar errores en los modelos producidos. & Ejecución de la suite de pruebas automatizadas y análisis de los resultados obtenidos. & 7 \\
   \bottomrule
   \caption{Criterios de éxito de los objetivos y capítulos donde se verifican.}
   \label{tab:criterios-exito}
