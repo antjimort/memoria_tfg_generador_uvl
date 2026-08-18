@@ -78,15 +78,13 @@ Conecta el problema (sección anterior) con la solución que se va a proponer
         (grupo de investigación, asignatura, empresa, publicación\dots).}
 \end{itemize}
 
-A partir de esta necesidad surge la propuesta desarrollada en este Trabajo Fin de Grado: incorporar al ecosistema Flamapy un generador de modelos UVL que permita crear modelos con diferentes características y niveles de expresividad. El interés de esta herramienta no reside únicamente en producir nuevos modelos; también en facilitar la creación de casos de estudio ajustados a diferentes necesidades de experimentación.
+La disponibilidad de modelos de características con distintos niveles de expresividad resulta fundamental para continuar avanzando en el desarrollo y evaluación de técnicas de análisis automático de variabilidad software. Como se ha comentado anteriormente, la evolución de los lenguajes de modelado permite representar escenarios cada vez más complejos, pero esta capacidad debe estar acompañada de modelos que permitan estudiar y validar el comportamiento de las herramientas encargadas de procesarlos.
 
-Contar con un generador de este tipo permite ampliar de forma más sencilla el conjunto de modelos disponible para pruebas y análisis. De esta manera, investigadores y desarrolladores pueden disponer de ejemplos adicionales con los que estudiar el comportamiento de motores de razonamiento, comprobar el soporte de distintas construcciones de UVL o plantear experimentos sobre modelos con características diferentes.
+Abordar esta necesidad dentro de un entorno de investigación permite trabajar sobre problemas que aparecen de forma directa durante el desarrollo de nuevas técnicas y herramientas. En este sentido, el contexto proporcionado por TASOVA Plus y DiversoLab ofrece un marco adecuado para contribuir al avance de soluciones relacionadas con la ingeniería de líneas de productos software, la arquitectura software y el análisis de variabilidad, lo que además permite seguir principios asociados al software libre y la reutilización del conocimiento científico.
 
-La integración en Flamapy también permite aprovechar un ecosistema ya existente, en lugar de desarrollar una solución completamente aislada. El generador pasa así a convivir con las operaciones, formatos y herramientas disponibles en el framework, manteniendo una arquitectura coherente con el resto del proyecto. Del mismo modo, su integración con UVLHub acerca esta funcionalidad a usuarios que ya trabajan con modelos de variabilidad dentro de la plataforma.
+Desde una perspectiva académica y profesional, este Trabajo Fin de Grado representa también una oportunidad para aplicar los conocimientos adquiridos durante el grado en un proyecto software real. Durante su desarrollo, he tenido la oportunidad de trabajar dentro de un ecosistema ya existente, enfrentándome a aspectos habituales en la ingeniería del software, como la comprensión de código desarrollado previamente, la integración de nuevas funcionalidades, la documentación o la validación mediante pruebas automatizadas.
 
-Otro aspecto importante es el carácter abierto del desarrollo. La herramienta se plantea como software libre (Free/Libre Open Source Software, FLOSS), por lo que su código fuente puede ser consultado, modificado y reutilizado por otros desarrolladores e investigadores. Esto permite que el resultado del TFG no quede limitado a una implementación cerrada o a un único experimento, sino que pueda evolucionar con nuevas contribuciones y servir como base para trabajos posteriores.
-
-El punto de partida del proyecto estuvo ligado a una colaboración como técnico de apoyo dentro de TASOVA Plus. Esto me permitió conocer de cerca las necesidades que aparecen en un entorno real de investigación y trabajar sobre un ecosistema software que ya se encontraba en uso, lo cual será muy probablemente lo que me encuentre en mi futuro laboral. Al mismo tiempo, el desarrollo me ofreció la oportunidad de aplicar los conocimientos adquiridos durante el grado en un proyecto con requisitos y condicionantes reales, abordando aspectos habituales de la ingeniería del software como la integración con código existente, la documentación, el mantenimiento o la automatización de pruebas.
+Además, la participación en un proyecto vinculado a investigación me ha permitido adquirir experiencia en un contexto diferente al de los desarrollos software tradicionales. La necesidad de analizar información técnica, consultar documentación especializada y tomar decisiones fundamentadas ha favorecido el desarrollo de habilidades relacionadas con la búsqueda autónoma de conocimiento y la resolución de problemas abiertos.
 
 
 \section{Objetivos}
@@ -190,6 +188,20 @@ Es la sección que protege al autor de expectativas desmedidas durante la defens
   \item \ph{Funcionalidad excluida 3 (con una breve justificación).}
 \end{itemize}
 
+Este TFG comprende el desarrollo de un generador automático de modelos de características integrado dentro del ecosistema de herramientas asociado a Flamapy y orientado principalmente a su utilización desde UVLHub. La solución desarrollada permite generar modelos expresados en UVL mediante una configuración definida por el usuario, incorporando diferentes niveles de complejidad y expresividad con el objetivo de ampliar la disponibilidad de modelos para tareas de análisis e investigación en variabilidad software.
+
+Dentro del alcance del proyecto se incluye el diseño e implementación del generador como un nuevo plugin de Flamapy, siguiendo la arquitectura extensible del framework. Asimismo, se contempla su integración dentro del módulo \textit{generator} de UVLHub, permitiendo que los usuarios de la plataforma puedan interactuar con la funcionalidad desarrollada mediante una interfaz adaptada al flujo existente de la aplicación. Esta integración incluye la definición de los mecanismos necesarios para configurar el proceso de generación, la incorporación de soporte para diferentes construcciones del lenguaje UVL y la validación del funcionamiento del generador mediante pruebas automatizadas destinadas a comprobar la corrección de los modelos producidos.
+
+En cuanto a lo que queda \textbf{fuera} del alcance del proyecto, se consideran los siguientes aspectos:
+
+\begin{itemize}
+    \item La creación de una aplicación web independiente para el generador. Aunque la integración realizada en UVLHub incorpora una interfaz que permite configurar y ejecutar el proceso de generación, el generador como componente reutilizable no incluye una interfaz propia. En caso de utilizarse fuera de UVLHub, sería necesario desarrollar una capa de interacción adaptada al contexto concreto de uso.
+    
+    \item La modificación o ampliación de otros módulos de UVLHub distintos al módulo \textit{generator}, ya que la intervención realizada se limita a la incorporación del generador dentro del módulo correspondiente.
+    
+    \item El desarrollo de nuevos motores de razonamiento o algoritmos de análisis de variabilidad. El objetivo del generador es proporcionar modelos con diferentes características y niveles de expresividad que puedan servir como base experimental para este tipo de herramientas, pero esto es algo que se pretende conseguir indirectamente con su uso.
+\end{itemize}
+
 \section{Estructura de la memoria}
 \label{sec:estructura_memoria}
 
@@ -197,8 +209,6 @@ Es la sección que protege al autor de expectativas desmedidas durante la defens
 No describas solo el contenido (``se presentan los requisitos''), sino el papel
 de cada capítulo en el argumento de la memoria (``se establece qué debe hacer el
 sistema, base contractual del diseño'').}
-
-El resto de la memoria se organiza como sigue:
 
 \begin{itemize}
   \item El \textbf{Capítulo~\ref{chap:estado_arte}} \ph{revisa los fundamentos
@@ -230,3 +240,26 @@ El resto de la memoria se organiza como sigue:
 siguiente capítulo. Por ejemplo: «Definidos el problema, los objetivos y el
 alcance, el Capítulo~\ref{chap:estado_arte} revisa los fundamentos y las
 soluciones existentes sobre los que se construye la propuesta».}
+
+El resto de la memoria se organiza como sigue:
+
+\begin{itemize}
+    \item El \textbf{Capítulo 2} presenta el \textbf{estado del arte} relacionado con la ingeniería de líneas de productos software, los modelos de características, el lenguaje UVL y las herramientas que forman parte del ecosistema en el que se desarrolla el trabajo. Además, se revisan trabajos relacionados con el objetivo de identificar las necesidades que justifican la propuesta desarrollada.
+
+    \item El \textbf{Capítulo 3} describe la \textbf{planificación y gestión del proyecto}, incluyendo la metodología seguida durante el desarrollo, la organización de las tareas, la gestión de riesgos y los aspectos relacionados con la evolución del trabajo a lo largo del tiempo.
+
+    \item El \textbf{Capítulo 4} define los \textbf{requisitos} que debe cumplir la solución desarrollada. En este capítulo se establecen las funcionalidades esperadas del generador, sus restricciones y la relación existente entre los requisitos y las pruebas destinadas a validarlos.
+
+    \item El \textbf{Capítulo 5} presenta el \textbf{diseño de la solución} propuesta, describiendo la arquitectura general del sistema, la organización de sus componentes y las decisiones tomadas para integrar el generador dentro del ecosistema de Flamapy y UVLHub.
+
+    \item El \textbf{Capítulo 6} detalla la \textbf{implementación} de la solución, incluyendo las tecnologías utilizadas, la estructura del plugin desarrollado, los mecanismos empleados para la generación de modelos y la integración realizada con la plataforma UVLHub.
+
+    \item El \textbf{Capítulo 7} describe la estrategia de \textbf{pruebas} aplicada para verificar el correcto funcionamiento del sistema. En él se presentan las pruebas unitarias, de integración y de extremo a extremo utilizadas para validar la generación de modelos y la integración de la funcionalidad desarrollada.
+
+    \item El \textbf{Capítulo 8} analiza los \textbf{resultados} obtenidos durante la evaluación del trabajo. Se contrastan los resultados con los criterios de éxito definidos para los objetivos y se discuten las aportaciones realizadas frente al contexto presentado en capítulos anteriores.
+
+    \item El \textbf{Capítulo 9} recoge las \textbf{conclusiones} del trabajo, valorando el grado de cumplimiento de los objetivos planteados, las limitaciones encontradas y las posibles líneas de trabajo futuro derivadas de la solución desarrollada.
+\end{itemize}
+
+Definidos el contexto, el problema, los objetivos y el alcance del trabajo, el siguiente capítulo establece los fundamentos teóricos y tecnológicos necesarios para comprender el entorno de variabilidad software sobre el que se desarrolla la propuesta.
+

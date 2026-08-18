@@ -20,8 +20,25 @@ fue introducido por Apellido et al.~\cite{apellido2024articulo} y desde
 entonces se ha aplicado a \dots». Consulta \texttt{bibliography.bib}: incluye
 un modelo de cada tipo de entrada.}
 
-\section{\ph{Concepto / paradigma principal}}
-\label{sec:concepto1}
+\begin{itemize}
+\item 2.1 Ingeniería de Líneas de Productos Software (SPL)
+\item   2.1.1 Líneas de Productos Software
+\item   2.1.2 Modelos de características
+\item   2.1.3 Análisis automático y motores de razonamiento / herramientas y ecosistema (según veamos cómo encaje mejor)
+\item 2.2 Universal Variability Language (UVL)
+\item   2.2.1 Basic structure of a UVL model 
+\item   2.2.2 Syntax: Language specification 
+\item   2.2.3 Languaje design
+\item   2.2.4 Language levels
+\item 2.3 Ecosistema de herramientas y aplicación en variabilidad software
+\item   2.3.1 Flamapy como framework de análisis de variabilidad
+\item   2.3.2 UVLHub como plataforma de gestión de modelos UVL
+\item   2.3.3 Generación automática de modelos de características
+\end{itemize}
+
+
+\section{Ingeniería de Líneas de Productos Software (SPL)}
+\label{sec:ingenieria_spl}
 
 \ph{Primer pilar teórico del trabajo. Por ejemplo: el paradigma, la metodología
 o el tipo de sistema sobre el que se construye la solución, apoyado en su
@@ -34,72 +51,561 @@ fuente primaria, típicamente un libro de referencia~\cite{apellido2021libro}.}
   \item \ph{Conceptos auxiliares que el lector necesita conocer.}
 \end{itemize}
 
-\subsection{\ph{Subconcepto 1.1}}
-\label{subsec:concepto1_1}
 
-\ph{Profundiza en una de las ideas del concepto anterior.
-Aquí van las definiciones, propiedades o variantes relevantes.}
+\subsection{Líneas de Productos Software}
+\label{subsec:spl}
 
-\subsection{\ph{Subconcepto 1.2}}
-\label{subsec:concepto1_2}
+A lo largo de la historia, el desarrollo de software se ha basado tradicionalmente en la construcción de sistemas individuales orientados a resolver necesidades concretas, donde cada nuevo producto software suele desarrollarse como un proyecto independiente, incluso cuando comparte una parte significativa de sus funcionalidades, arquitectura o componentes con otros sistemas existentes. Esta estrategia puede resultar adecuada cuando el número de productos es reducido; sin embargo, hoy en día esto presenta limitaciones importantes para la gran mayoría de organizaciones, ya que surge de forma paralela la necesidad de adaptar un determinado sistema base a una gran cantidad de clientes con problemas ligera o enormemente diferentes.
 
-\ph{Otro aspecto del mismo concepto. Por ejemplo, su modelo formal,
-su notación, su clasificación o sus etapas.}
+Debido a este hecho surge la Ingeniería de Líneas de Productos Software, definidas por Clements y Northrop como "\textit{a set of software-intensive systems that share a common, managed set of features satisfying the specific needs of a particular market segment or mission and that are developed from a common set of core assets in a prescribed way}" \cite{clements2002}. Gracias a ellas es posible identificar, gestionar y reutilizar aquellos elementos comunes entre diferentes productos, a la vez que se mantienen explícitamente aquellos aspectos que pueden variar entre las distintas configuraciones posibles, haciendo así factible y mucho más viable la gestión de dichos elementos en lugar de construir cada producto desde cero.
 
-\subsection{\ph{Herramientas y ecosistema}}
-\label{subsec:herramientas1}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{SPL.jpg}
+    \caption{Representación de una línea de productos software basada en activos comunes. Extraído de \cite{lineas_producto_software_web}.}
+    \label{fig:ejemplo_spl}
+\end{figure}
 
-\ph{Si procede, repasa las herramientas, librerías o frameworks asociados al concepto
-y comenta brevemente cuáles son relevantes para el trabajo y por qué. Cita cada
-herramienta con su entrada de software~\cite{autor2024software}.}
+La existencia de elementos comunes introduce el concepto de variabilidad: "\textit{...is the ability of a software system or software artifact to be changed, customized, or configured for use in a particular context}" \cite{pohl2005}. Esta debe ser identificada, representada y gestionada durante el proceso de desarrollo, ya que permite definir qué elementos pueden formar parte de cada producto y bajo qué condiciones pueden combinarse.
 
-\section{\ph{Tecnología / lenguaje / estándar clave}}
-\label{sec:concepto2}
+La gestión de esta variabilidad requiere distinguir entre dos actividades complementarias. Por una parte, la ingeniería de dominio (\textit{domain engineering}) se encarga de analizar un determinado dominio, identificar sus elementos comunes y variables, y construir los activos reutilizables que formarán la base de la línea de productos. Por otra parte, la ingeniería de aplicación (\textit{application engineering}) utiliza dichos activos para derivar productos concretos mediante la selección de las características necesarias y la resolución de las variabilidades definidas.
 
-\ph{Segundo pilar: una tecnología, lenguaje o estándar concreto sobre el que
-se apoya la solución. Sirve para que el lector entienda la sintaxis, la semántica
-o los componentes de algo que aparecerá en capítulos posteriores.}
+No obstante, este paradigma introduce consigo retos relacionados con la representación y gestión de la complejidad. A medida que aumenta el número de características variables y configuraciones posibles, resulta necesario disponer de mecanismos que permitan gestionar esta variabilidad de forma íntegra y precisa, lo cual da surgimiento a técnicas como los modelos de características.
 
-\subsection{\ph{Sintaxis / componentes}}
+
+\subsection{Modelos de características}
+\label{subsec:feature_models}
+
+Los modelos de características (\textit{Feature Models}) son considerados uno de los mecanismos más utilizados para representar la variabilidad dentro de las líneas de productos software. Originalmente fueron introducidos como parte del método FODA (\textit{Feature-Oriented Domain Analysis}) por Kang et al., con el objetivo de describir las características comunes y variables existentes dentro de una familia de sistemas software \cite{kang1990}. Benavides et al. los describen de la siguiente forma: "\textit{a feature model represents the information of all possible products of a software product line in terms of features and relationships among them}" \cite{benavides2010}. Estos modelos permiten representar el espacio de configuraciones de una línea de productos mediante las características que pueden formar parte de cada producto y las relaciones existentes entre ellas.
+
+Para entenderlo mejor, estos modelos se pueden representar mediante una estructura jerárquica en forma de árbol, donde cada nodo representa una característica del sistema. Las relaciones existentes entre características permiten establecer dependencias entre ellas, indicando qué elementos son obligatorios, opcionales o alternativas dentro de una configuración concreta. Además, pueden incorporar restricciones adicionales que expresan condiciones que no pueden representarse únicamente mediante la jerarquía del modelo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{ejemplo_feature_model.png}
+    \caption{Ejemplo de modelo de características. Extraído de \cite{benavides2025uvl}.}
+    \label{fig:ejemplo_feature_model}
+\end{figure}
+
+Aunque los modelos de características tradicionales permiten representar una gran cantidad de escenarios de variabilidad, inicialmente estaban orientados principalmente a expresar relaciones estructurales entre características. Con el aumento de la complejidad de los sistemas software surgió la necesidad de incorporar mecanismos adicionales, como atributos, restricciones aritméticas o diferentes tipos de dominios, que permitan representar escenarios más cercanos a los sistemas reales. A su vez, al incrementar la expresividad de los modelos, también se incrementa la complejidad de los mismos, lo cual hace necesaria la existencia de herramientas capaces de procesar estos modelos automáticamente y verificar propiedades sobre las configuraciones posibles.
+
+\subsection{Análisis automático y motores de razonamiento}
+\label{subsec:analisis_automatico_motores_razonamiento}
+
+Una vez definidos los modelos de características como mecanismo para representar la variabilidad de una SPL, surge la necesidad de disponer de técnicas capaces de analizar automáticamente la información contenida en dichos modelos. El análisis automático permite obtener información sobre las configuraciones representadas, comprobar propiedades del modelo y realizar operaciones de razonamiento sin necesidad de explorar manualmente cada una de las posibles variantes.
+
+Los motores de razonamiento (\textit{reasoning engine}) se encargan de realizar este análisis. Procesan los modelos de variabilidad y realizan operaciones como la comprobación de satisfacibilidad, la detección de inconsistencias o la identificación de características que no pueden formar parte de ninguna configuración válida. Por ejemplo, en un restaurante un cliente puede elegir en su primer plato Pasta o Arroz (obligatoriamente uno de ellos), y opcionalmente Salsa. No se puede establecer como restricción que se deba elegir Pasta y Arroz a la vez, ya que no tendría sentido. Los motores de razonamiento se encargan de comprobar que esto no ocurra, y lo categorizarían como \underline{no satisfacible}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{ejemplo_fm_propio.png}
+    \caption{Ejemplo de modelo de características. Elaboración propia.}
+    \label{fig:ejemplo_sat}
+\end{figure}
+
+Una de las aproximaciones más utilizadas para realizar análisis automático sobre modelos de características consiste en transformar dichos modelos en fórmulas proposicionales que puedan ser procesadas mediante solucionadores SAT (\textit{Boolean Satisfiability Problem}). El problema SAT consiste en determinar si existe una asignación de valores para un conjunto de variables booleanas que haga verdadera una fórmula lógica dada. En el contexto de las líneas de productos software, las características y restricciones de un modelo pueden representarse mediante variables booleanas y expresiones lógicas equivalentes, permitiendo utilizar solucionadores SAT para responder consultas relacionadas con la validez de configuraciones o la existencia de productos derivados \cite{benavides2010}.
+
+Para aplicar esta técnica, el modelo se traduce normalmente a una fórmula lógica equivalente que conserva las restricciones definidas entre sus elementos. Por ejemplo, una relación obligatoria entre dos características puede expresarse mediante una implicación lógica, mientras que las restricciones de exclusión entre características pueden representarse mediante cláusulas que impidan determinadas combinaciones. Una vez realizada esta transformación, el solucionador SAT puede determinar si existe una configuración válida o identificar aquellas asignaciones que cumplen las restricciones del modelo.
+
+Otra técnica ampliamente utilizada en el análisis automático de modelos de características son los Diagramas de Decisión Binarios (\textit{Binary Decision Diagrams}, BDD). Introducidos originalmente por Bryant como una estructura eficiente para representar funciones booleanas, los BDD permiten representar dichas funciones mediante grafos dirigidos acíclicos cuyos nodos internos corresponden a variables de decisión y cuyos nodos terminales representan los valores posibles de la función \cite{bryant1986}. Así es posible modelar de forma compacta y comprensible el espacio de configuraciones válidas de un modelo de características.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{sat_vs_bdd.png}
+    \caption{Funcionamiento de cada motor de razonamiento. Elaboración propia.}
+    \label{fig:sat_vs_bdd}
+\end{figure}
+
+La siguiente tabla muestra una comparativa que describe los aspectos principales de ambos \textit{solvers}:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{p{4cm}p{5cm}p{5cm}}
+        \toprule
+        \textbf{Criterio} & \textbf{SAT} & \textbf{BDD} \\
+        \midrule
+        Representación del problema &
+        Transformación del modelo de características a una fórmula lógica que debe ser evaluada por un solucionador SAT. &
+        Construcción de una estructura gráfica que representa las posibles asignaciones de la función booleana. \\
+        \midrule
+        Tipo de análisis &
+        Orientado principalmente a responder consultas concretas sobre la existencia de configuraciones válidas. &
+        Permite realizar análisis globales sobre el espacio completo de configuraciones representado. \\
+        \midrule
+        Resultado obtenido &
+        Determina si existe una asignación que satisface las restricciones y, en algunos casos, proporciona una configuración válida. &
+        Proporciona una representación compacta del conjunto de configuraciones válidas. \\
+        \midrule
+        Ventaja principal &
+        Gran eficiencia para comprobar propiedades concretas del modelo y resolver problemas de satisfacibilidad. &
+        Permite realizar múltiples operaciones de análisis sobre el modelo una vez construido el BDD. \\
+        \midrule
+        Limitación principal &
+        Requiere resolver consultas individuales y no mantiene necesariamente una representación completa del espacio de configuraciones. &
+        La construcción del diagrama puede resultar costosa para modelos con elevada complejidad. \\
+        \bottomrule
+    \end{tabular}
+    \caption{Comparativa entre SAT y BDD como técnicas de análisis automático de modelos de características.}
+    \label{tab:sat_vs_bdd}
+\end{table}
+
+
+\section{Universal Variability Language (UVL)}
+\label{sec:uvl}
+
+A continuación, se ofrecerán unas nociones básicas sobre UVL \cite{uvl}, un lenguaje diseñado para proporcionar una forma común de representar modelos de características y facilitar su procesamiento dentro del ecosistema de ingeniería de líneas de productos software. Entender la estructura y funcionamiento de este lenguaje es esencial, ya que supone la base teórica por la que funciona la solución propuesta. 
+
+Como ejemplo, el siguiente bloque muestra lo que sería un modelo de características de un smartwatch escrito en UVL:
+
+\begin{lstlisting}[caption={Ejemplo de modelo de características en UVL}]
+features
+    Smartwatch
+        mandatory
+            Display
+                alternative
+                    LCD
+                    OLED
+                    "E-Ink"
+            Connectivity
+                or
+                    Bluetooth
+                    "Wi-Fi"
+                    LTE
+            Sensors
+                mandatory
+                    "Heart Rate Monitor"
+                optional
+                    GPS
+                    "Blood Oxygen Sensor" {Accuracy 95}
+                    Accelerometer
+            Battery
+                alternative
+                    Standard {Capacity 300}
+                    "Long Life" {Capacity 450}
+        optional
+            "Music Player" {Storage 2}
+            NFC
+            "Voice Assistant"
+            "Water Resistance"
+                alternative
+                    IP67
+                    IP68
+                    IPX8
+            "Watch Faces" cardinality [5..50]
+            Accessories
+                [0..2]
+                    "Leather Strap"
+                    "Metal Strap"
+                    "Silicone Strap"
+            String Color
+            Float Weight
+
+constraints
+    LTE => (GPS & Bluetooth)
+    IPX8 => (!LCD)
+    "Fall Detection" => (Accelerometer & Gyroscope)
+    "Voice Assistant" <=> "Wi-Fi"
+    sum(Capacity) >= 400
+    avg(Accuracy) >= 90
+    len("Serial Number") == 10
+    Weight > 30.0
+    Color != "Pink"
+\end{lstlisting}
+
+
+\subsection{Estructura básica de un modelo UVL}
+\label{subsec:estructura_basica}
+
+Un archivo UVL está compuesto principalmente por dos bloques:
+
+\begin{itemize}
+    \item \texttt{features}: define la estructura jerárquica de las características del modelo, constituyendo el núcleo principal del documento.
+    
+    \item \texttt{constraints}: define las restricciones lógicas existentes entre características que no pueden expresarse mediante la estructura definida en \texttt{features}. Estas restricciones deben cumplirse para garantizar la consistencia del modelo descrito, ya sea debido a reglas de negocio del producto o a otros requisitos establecidos.
+\end{itemize}
+
+Además, UVL permite incorporar dos bloques opcionales en aquellos casos donde sea necesario:
+
+\begin{itemize}
+    \item \texttt{include}: permite importar extensiones adicionales, como los \textit{minor levels}.
+    
+    \item \texttt{import}: permite importar submodelos de características situados en el mismo directorio, facilitando una organización más modular y limpia de los modelos y sus características.
+\end{itemize}
+
+Estos dos últimos bloques deben situarse al principio del archivo UVL.
+
+\subsection{Sintaxis}
 \label{subsec:sintaxis}
 
-\ph{Describe los elementos básicos.}
+\subsubsection{Imports}
 
-\subsection{\ph{Aspecto avanzado / extensión}}
-\label{subsec:avanzado}
+El mecanismo de importación de UVL permite dividir un modelo de características de gran tamaño en submodelos más pequeños y manejables. Mediante la palabra reservada \texttt{imports}, es posible incorporar otros archivos UVL, facilitando la organización de los modelos y favoreciendo su reutilización. Además, cada submodelo importado puede asociarse a un alias mediante la palabra reservada \texttt{as}, permitiendo acceder a sus características mediante la notación \texttt{alias.FeatureName}.
 
-\ph{Profundiza en un aspecto que será especialmente relevante para el TFG.}
+Los elementos importados pueden utilizarse tanto dentro de la estructura jerárquica de características como en la definición de restricciones, permitiendo mantener los modelos más limpios, modulares y facilitando su mantenimiento y evolución.
 
-\subsection{\ph{Soporte en herramientas}}
-\label{subsec:soporte}
+Por ejemplo:
 
-\ph{Si la tecnología tiene un ecosistema de herramientas, comenta las más relevantes
-y, si la implementación del TFG decide no usar alguna, explica por qué.}
+\begin{lstlisting}[language={}, caption={Ejemplo de importación de submodelos en UVL.}]
+imports
+    platform as pl
+    security
 
-\section{\ph{Dominio de aplicación}}
-\label{sec:dominio}
+features
+    eShop
+        mandatory
+            security.Security
+        optional
+            pl.Platform
+\end{lstlisting}
 
-\ph{Tercer pilar: el dominio físico, funcional o de negocio sobre el que se aplica
-la solución. Aporta el conocimiento de dominio mínimo para entender las decisiones
-que se tomarán en diseño e implementación, citando los recursos oficiales del
-dominio cuando existan~\cite{organizacion2025recurso}.}
+En este caso, los modelos \texttt{platform} y \texttt{security} representan submodelos definidos en archivos UVL independientes situados en el mismo directorio.
 
-\subsection{\ph{Aspecto del dominio 1}}
-\label{subsec:dominio_1}
 
-\ph{Por ejemplo: parámetros principales, magnitudes, normativa, actores.}
+\subsubsection{Feature tree}
 
-\subsection{\ph{Aspecto del dominio 2}}
-\label{subsec:dominio_2}
+En UVL, el árbol de características está compuesto por características y grupos de características. Cada modelo debe tener exactamente una característica raíz, a partir de la cual se define la estructura jerárquica del resto de elementos. Cada característica puede contener uno o varios grupos de características asociados.
 
-\ph{Por ejemplo: limitaciones físicas, criterios de calidad, requisitos legales.}
+La relación entre características y grupos se expresa mediante indentación: los grupos se escriben con respecto a su característica padre, mientras que las características se indentan respecto a su grupo correspondiente. Cada característica debe tener un nombre único que permita identificarla dentro del modelo, pudiendo utilizar comillas cuando contiene símbolos especiales o cuando su nombre está formado por varias palabras.
 
-\section{\ph{Cuarto bloque temático (opcional)}}
+UVL define diferentes tipos de grupos para expresar las relaciones entre características, incluyendo \texttt{mandatory}, \texttt{optional}, \texttt{or} y \texttt{alternative}, pertenecientes al nivel booleano del lenguaje. También incorpora las cardinalidades de grupo (\textit{group cardinality}), que permiten expresar restricciones más avanzadas sobre la selección de características.
+
+Como detalle adicional, cuando una característica lleva mas de una palabra consigo, se suele rodear de comillas dobles \verb|""|.
+
+\subsection{Diseño del lenguaje}
+\label{subsec:diseño_lenguaje}
+
+UVL define modelos de variabilidad mediante una estructura jerárquica basada en árboles, donde cada nodo representa una característica y las relaciones entre dichos nodos permiten establecer las reglas de selección entre ellas. El núcleo del lenguaje se basa en diferentes construcciones que permiten especificar cómo pueden o deben seleccionarse las características dentro de un modelo.
+
+
+\subsubsection{\texttt{mandatory}}
+
+Una característica obligatoria debe ser seleccionada siempre que su característica padre forme parte de una configuración válida. Por ejemplo, en el siguiente modelo, si se selecciona la característica \textit{Sensors}, también debe seleccionarse obligatoriamente \textit{Heart Rate Monitor}.
+
+\begin{lstlisting}[language={}, caption={Ejemplo de característica obligatoria en UVL.}]
+Sensors
+    mandatory
+        "Heart Rate Monitor"
+\end{lstlisting}
+
+En este caso, la inclusión de \textit{Sensors} implica necesariamente la selección de \textit{Heart Rate Monitor}.
+
+
+\subsubsection{\texttt{optional}}
+
+Una característica opcional puede ser seleccionada o no dependiendo de las necesidades de una configuración concreta. Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de características opcionales en UVL.}]
+Sensors
+    optional
+        GPS
+        "Blood Oxygen Sensor" {Accuracy 95}
+        Accelerometer
+        Gyroscope
+\end{lstlisting}
+
+En este caso, si la característica \textit{Sensors} es seleccionada, el usuario puede decidir si incorporar o no características como \textit{GPS}, \textit{Blood Oxygen Sensor}, \textit{Accelerometer} o \textit{Gyroscope}.
+
+
+\subsubsection{\texttt{alternative}}
+
+Un grupo alternativo indica que, si la característica padre es seleccionada, exactamente una de las características hijas debe formar parte de la configuración. Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de grupo alternativo en UVL.}]
+Display
+    alternative
+        LCD
+        OLED
+        "E-Ink"
+\end{lstlisting}
+
+En este caso, al seleccionar \textit{Display}, debe escogerse exactamente una de las alternativas disponibles: \textit{LCD}, \textit{OLED} o \textit{E-Ink}.
+
+
+\subsubsection{\texttt{or}}
+
+Un grupo \texttt{or} permite seleccionar una o más características hijas cuando su característica padre está incluida en una configuración. Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de grupo OR en UVL.}]
+Connectivity
+    or
+        Bluetooth
+        "Wi-Fi"
+        LTE
+\end{lstlisting}
+
+En este caso, pueden seleccionarse varias opciones simultáneamente, siempre que al menos una de ellas sea seleccionada.
+
+
+\subsubsection{Restricciones entre características (\textit{Cross-tree Constraints})}
+
+Además de las relaciones jerárquicas definidas mediante la estructura del árbol, UVL permite establecer restricciones lógicas entre características situadas en diferentes ramas del modelo. Estas restricciones, denominadas \textit{cross-tree constraints}, permiten expresar condiciones que no pueden representarse únicamente mediante las relaciones padre-hijo.
+
+Estas restricciones se definen dentro del bloque \texttt{constraints} del archivo UVL y permiten utilizar diferentes operadores lógicos:
+
+\begin{itemize}
+    \item Negación mediante \texttt{!A}: expresa que una característica no puede estar seleccionada.
+    
+    \item Conjunción mediante \texttt{A \& B}: indica que ambas características deben estar seleccionadas.
+    
+    \item Disyunción mediante \texttt{A | B}: indica que al menos una de las características debe estar seleccionada.
+    
+    \item Implicación mediante \texttt{A => B}: indica que si una característica A está seleccionada, entonces la característica B también debe estarlo.
+    
+    \item Equivalencia mediante \texttt{A <=> B}: indica que ambas características deben seleccionarse conjuntamente o ninguna de ellas debe seleccionarse.
+\end{itemize}
+
+Por ejemplo, la siguiente restricción establece que si se selecciona la característica \textit{Fall Detection}, también deben seleccionarse \textit{Accelerometer} y \textit{Gyroscope}:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de restricción lógica en UVL.}]
+constraints
+    "Fall Detection" => (Accelerometer & Gyroscope)
+\end{lstlisting}
+
+Otro ejemplo sería:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de restricción de equivalencia en UVL.}]
+constraints
+    "Voice Assistant" <=> "Wi-Fi"
+\end{lstlisting}
+
+En este caso, ambas características deben aparecer juntas en una configuración válida, de forma que la selección de una de ellas implica necesariamente la selección de la otra.
+
+\subsection{Niveles del lenguaje}
+\label{subsec:niveles_lenguaje}
+
+En UVL, los niveles del lenguaje permiten separar la expresividad del mismo en diferentes capas. Esta organización permite que usuarios y herramientas puedan decidir qué grado de complejidad desean soportar, además de facilitar la extensión del lenguaje sin incrementar la complejidad para aquellos usuarios que únicamente necesitan modelos sencillos.
+
+Un usuario o herramienta que requiera modelos UVL básicos puede trabajar únicamente con el nivel booleano. Sin embargo, cuando sea necesario representar escenarios más complejos, como atributos numéricos, valores textuales u operaciones sobre ellos, pueden activarse niveles superiores.
+
+UVL define tres niveles jerárquicos de expresividad:
+
+\begin{itemize}
+    \item \textbf{Boolean level}: incluye características booleanas y restricciones lógicas.
+    
+    \item \textbf{Arithmetic level}: incorpora atributos numéricos y operaciones aritméticas.
+    
+    \item \textbf{Type level}: permite trabajar con atributos de diferentes tipos, como valores numéricos o textuales, así como operaciones asociadas a dichos tipos.
+\end{itemize}
+
+Cada uno de estos niveles incluye completamente las capacidades proporcionadas por los niveles anteriores. Además, UVL incorpora niveles menores (\textit{minor levels}), que representan extensiones opcionales que añaden funcionalidades adicionales sin ser necesarias para avanzar entre los diferentes niveles principales.
+
+
+\subsubsection{Boolean level}
+
+El nivel booleano constituye el nivel principal más básico y representa el núcleo del lenguaje UVL. En él se define la estructura del árbol de características, las relaciones entre ellas (\texttt{mandatory}, \texttt{optional}, \texttt{alternative} y \texttt{or}) y las restricciones lógicas básicas entre características mediante operadores como \texttt{!}, \texttt{\&}, \texttt{|}, \texttt{=>} y \texttt{<=>}.
+
+Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de modelo UVL utilizando el nivel booleano.}]
+features
+    Smartwatch
+        optional
+            GPS
+            "Water Resistance"
+            Accessories
+                [1..2]
+                    "Leather Strap"
+                    "Metal Strap"
+                    "Silicone Strap"
+
+constraints
+    Wi-Fi || Bluetooth
+    "Water Resistance" => Display
+\end{lstlisting}
+
+En este nivel únicamente se representa la presencia o ausencia de características dentro de una configuración.
+
+
+\subsubsection{Group Cardinality}
+
+La cardinalidad de grupo (\textit{Group Cardinality}) es un nivel menor perteneciente al nivel booleano. Permite establecer que, dentro de un grupo de características, únicamente pueda seleccionarse un número determinado de elementos comprendido entre un límite inferior y superior.
+
+En el ejemplo anterior, la expresión:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de cardinalidad de grupo en UVL.}]
+[1..2]
+\end{lstlisting}
+
+indica que pueden seleccionarse entre una y dos características del grupo \textit{Accessories}.
+
+
+\subsubsection{Arithmetic level}
+
+El nivel aritmético incluye todas las capacidades del nivel booleano y permite definir atributos numéricos asociados a características, así como restricciones basadas en operaciones aritméticas mediante operadores como \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/}, \texttt{=}, \texttt{<}, \texttt{>}, \texttt{<=} y \texttt{>=}.
+
+Además, este nivel incorpora dos niveles menores: \textit{Feature Cardinality} y \textit{Aggregate Functions}.
+
+Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de atributos y restricciones aritméticas en UVL.}]
+include
+    Arithmetic.feature-cardinality
+    Arithmetic.aggregate-function
+
+features
+    Smartwatch
+        mandatory
+            Connectivity
+                or
+                    Bluetooth
+                    Wi-Fi
+            Battery
+                alternative
+                    Standard {Capacity 300}
+                    "Long Life" {Capacity 450}
+        optional
+            "Music Player" {Storage 2}
+            "Film Player" {Storage 10}
+            "Watch Faces" cardinality [5..20]
+
+constraints
+    ("Music Player".Storage + "Film Player".Storage) = 12
+    avg(Capacity) >= 300
+\end{lstlisting}
+
+
+\subsubsection{Feature Cardinality}
+
+La cardinalidad de característica (\textit{Feature Cardinality}) es un nivel menor del nivel aritmético que permite indicar un número de instancias que pueden seleccionarse de dicha característica.
+
+Para utilizar esta funcionalidad debe incluirse explícitamente mediante:
+
+\begin{lstlisting}[language={}]
+Arithmetic.feature-cardinality
+\end{lstlisting}
+
+En el siguiente ejemplo se puede ver la forma en la que se emplea:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de atributos y restricciones aritméticas en UVL.}]
+include
+    Arithmetic.feature-cardinality
+
+features
+    Smartwatch
+      ...
+        optional
+            "Watch Faces" cardinality [5..20]
+
+constraints
+    ...
+\end{lstlisting}
+
+
+\subsubsection{Aggregate Functions}
+
+El nivel menor denominado \textit{Aggregate Functions} permite utilizar funciones agregadas como \texttt{sum()} y \texttt{avg()} dentro del bloque de restricciones.
+
+Por ejemplo:
+
+\begin{lstlisting}[language={}]
+include
+    Arithmetic.aggregate-function
+
+features
+    ...
+
+constraints
+    sum(PriceEuros) > 200
+    avg(Calification) > 5
+\end{lstlisting}
+
+
+En este caso, la restricción definida mediante la función \texttt{sum()} establece que la suma total de las veces que aparece el atributo \texttt{Capacity} en el árbol debe ser mayor que 400. La función \texttt{avg()} funciona de forma similar: devuelve la media de sus argumentos. Asimismo, es posible usar más de un atributo o \textit{feature} en la misma llamada a la función, separadas por coma. 
+
+
+\subsubsection{Type level}
+
+El nivel de tipos incluye las capacidades proporcionadas por los niveles booleano y aritmético, incorporando además atributos con tipos específicos como \texttt{Integer}, \texttt{Float} y \texttt{String}. Gracias a ello, es posible asociar valores concretos a las características y establecer restricciones sobre dichos valores.
+
+Este nivel también incorpora el nivel menor \textit{String Constraints}, que permite realizar operaciones sobre atributos de tipo cadena mediante funciones como \texttt{len()}.
+
+Por ejemplo:
+
+\begin{lstlisting}[language={}, caption={Ejemplo de atributos tipados en UVL.}]
+include
+    Type.string-constraints
+
+features
+    Smartwatch
+        mandatory
+            String Color
+            Float Weight
+            String "Serial Number"
+
+constraints
+    len("Serial Number") == 10
+    Weight > 30.0
+    Color != "Pink"
+\end{lstlisting}
+
+En este ejemplo, se definen atributos de tipo cadena y decimal asociados a características del modelo. La primera restricción establece que el atributo \textit{Serial Number} debe tener exactamente diez caracteres, mientras que las siguientes restricciones permiten comparar valores numéricos y textuales.
+
+
+\section{Ecosistema de herramientas y aplicación en variabilidad software}
+\label{sec:ecosistema_herramientas}
+
+A continuación se procederá a hablar sobre herramientas y entornos que permitan trabajar con los modelos de características más allá de su simple representación, las cuales proporcionan capacidades para la creación, gestión y análisis automático de modelos, integrando diferentes técnicas de razonamiento y facilitando su adaptación a nuevos escenarios. Dentro de este ecosistema destaca Flamapy como framework orientado al análisis automático de modelos de características mediante una arquitectura extensible. Asimismo, destaca UVLHub como plataforma destinada a la gestión y compartición de modelos definidos en UVL.
+
+\subsection{Flamapy como framework de análisis de variabilidad}
+\label{subsec:flamapy_como_framework}
+
+Flamapy es un framework desarrollado en Python orientado al análisis automático de modelos de características dentro del ámbito de la ingeniería de líneas de productos software \cite{flamapy}. Su objetivo principal es proporcionar un entorno común para trabajar con modelos de variabilidad, facilitando tanto su procesamiento como la aplicación de diferentes técnicas de análisis automático. Para ello, Flamapy puede entenderse desde dos perspectivas complementarias: como una herramienta que permite ejecutar análisis sobre modelos de características de forma directa, y como un framework extensible que proporciona una arquitectura modular para incorporar nuevos modelos, operaciones y técnicas de análisis.
+
+Desde la perspectiva de herramienta, Flamapy proporciona diferentes mecanismos para facilitar su utilización en distintos escenarios. Entre ellos se encuentra una interfaz de línea de comandos (\textit{Command Line Interface}) que permite ejecutar análisis directamente sobre modelos de variabilidad, así como una fachada de Python (\textit{Python Facade}) que simplifica su integración dentro de otros desarrollos software. Además, ofrece interfaces adicionales como servicios REST mediante Swagger y soporte para ejecución en entornos web mediante WebAssembly (WASM), permitiendo utilizar sus capacidades de análisis desde diferentes aplicaciones y contextos.
+
+Como framework, Flamapy sigue una arquitectura modular basada en plugins, los cuales permiten extender sus capacidades sin modificar el núcleo principal del sistema. Esta arquitectura hace mucho más sencilla la incorporación de nuevos lenguajes de modelado, metamodelos o técnicas de análisis mediante componentes independientes que pueden integrarse dentro del ecosistema existente. Gracias a este enfoque, es posible adaptar Flamapy a diferentes necesidades relacionadas con la ingeniería de variabilidad, incorporando soporte para nuevos tipos de modelos o herramientas de razonamiento.
+
+Otro de los elementos principales que ofrece Flamapy son las operaciones (\textit{operations}), que representan las diferentes tareas de análisis que pueden ejecutarse sobre modelos de características. Cada operación define una funcionalidad concreta, como la comprobación de satisfacibilidad, la obtención de configuraciones válidas o el cálculo de propiedades del modelo, independientemente del formato en el que este haya sido definido. Esta separación permite reutilizar las mismas operaciones sobre diferentes tipos de modelos siempre que exista una representación compatible dentro del framework.
+
+Por otra parte, las transformaciones (\textit{transformations}) permiten convertir modelos entre diferentes representaciones dentro de Flamapy. Estas transformaciones actúan como mecanismo de conexión entre los distintos metamodelos soportados, permitiendo que los modelos puedan ser procesados por diferentes componentes del framework (o incluso no del framework) independientemente de su representación original. Por ejemplo, el componente \textit{UVLWriter}, que es el que se ha utilizado para descargar los modelos creados por el generador diseñado, permite transformar un modelo de características almacenado internamente en Flamapy a su representación textual en formato UVL. Otras de las transformaciones existentes, por nombrar algunas, son \textit{AFM Reader}, \textit{AFM Writer}, \textit{XML Reader}, \textit{JSON Writer}, \textit{SPLOT Writer} o \textit{FM to BDD}. Todo esto facilita la interoperabilidad entre lenguajes de variabilidad, metamodelos y herramientas de análisis.
+
+\subsection{UVLHub como plataforma de gestión de modelos UVL}
+\label{subsec:uvlhub_como_plataforma}
+
+UVLHub es una plataforma orientada a la gestión de modelos de características definidos mediante el lenguaje UVL (\textit{Universal Variability Language}) dentro del ámbito de la ingeniería de líneas de productos software \cite{uvlhub}. Tiene como objetivo proporcionar un repositorio especializado que permita almacenar, organizar, compartir y analizar modelos de variabilidad, facilitando tanto la reutilización de estos artefactos tanto en entornos de investigación como de desarrollo software como la colaboración entre usuarios.
+
+La razón principal de su existencia se debe a la complicada localización de los modelos de características empleados por los usuarios, ya que estos los almacenaban en diferentes repositorios, páginas personales o proyectos independientes, utilizando además diferentes formatos de representación, dificultando su búsqueda, reutilización y análisis. UVLHub sigue los principios de ciencia abierta (\textit{Open Science}), como accesibilidad, transparencia y colaboración, con la finalidad de compartir estos modelos de forma homogénea, haciendo más sencilla la colaboración entre usuarios.
+
+Una de las características más relevantes de UVLHub es su capacidad de integración con otras herramientas y servicios relacionados con la gestión y análisis de modelos de variabilidad. Por una parte, la plataforma se integra con Zenodo, un repositorio abierto de investigación que permite almacenar los conjuntos de datos de forma permanente mediante la generación de identificadores DOI (\textit{Digital Object Identifier}), garantizando que los modelos publicados puedan seguir estando disponibles aunque la plataforma dejase de mantenerse en el futuro. Por otra parte, UVLHub incorpora las capacidades de análisis automático proporcionadas por Flamapy, permitiendo obtener información relevante sobre los modelos almacenados, como el número de características, la validez del modelo o el número de configuraciones posibles que pueden derivarse de ellos.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{arquitectura_uvlhub.png}
+    \caption{Arquitectura general de UVLHub y sus integraciones principales. Extraído de \cite{wiki_uvlhub}}
+    \label{fig:arquitectura_uvlhub}
+\end{figure}
+
+Además de sus integraciones externas, UVLHub proporciona diferentes funcionalidades (\textit{features}) en forma de módulos orientadas a cubrir las principales necesidades relacionadas con la gestión de modelos UVL. Algunas de las más relevantes son:
+
+\begin{itemize}
+    \item \textbf{dataset}: representa el núcleo principal de UVLHub, permitiendo gestionar el ciclo de vida de los conjuntos de modelos UVL. Esta funcionalidad permite realizar operaciones como la subida de datasets, su almacenamiento junto con los metadatos asociados, la descarga de los modelos y la resolución de identificadores DOI generados mediante la integración con Zenodo.
+
+    \item \textbf{featuremodel}: permite gestionar la información asociada a los modelos de características almacenados dentro de un dataset. Esta \textit{feature} define elementos como el modelo de características, sus metadatos y las métricas asociadas, estableciendo la relación entre los datasets y los archivos UVL almacenados.
+
+    \item \textbf{explore}: proporciona mecanismos para explorar los datasets disponibles dentro de la plataforma mediante diferentes criterios de búsqueda, permitiendo localizar modelos de características publicados previamente.
+
+    \item \textbf{flamapy}: integra las capacidades de análisis automático proporcionadas por Flamapy dentro de UVLHub. Esta integración permite realizar operaciones sobre los modelos UVL, como la validación del modelo o transformaciones hacia otros formatos soportados.
+
+    \item \textbf{zenodo}: permite la comunicación con la API REST de Zenodo para realizar la publicación y almacenamiento permanente de los datasets, proporcionando identificadores DOI asociados a los recursos compartidos.
+\end{itemize}
+
+La siguiente imagen representa, a grandes rasgos, los módulos actuales de UVLHub y cómo se complementan entre sí:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{modulos_uvlhub.png}
+    \caption{Arquitectura general de UVLHub y sus integraciones principales. Extraído de \cite{wiki_uvlhub}}
+    \label{fig:modulos_uvlhub}
+\end{figure}
+
+Estos módulos son originales de UVLHub. A ellos hay que añadirle también el módulo \textbf{generator}, objetivo principal de este TFG. 
+
+\subsection{Generación automática de modelos de características}
 \label{sec:concepto4}
 
-\ph{Si el TFG combina más de tres áreas (por ejemplo, una metodología adicional,
-un tipo concreto de algoritmo o una tecnología específica), añade aquí un cuarto bloque.
-En caso contrario, elimina esta sección.}
+Ya es bien sabido que los modelos de características permiten representar la variabilidad existente dentro de una línea de productos software. Sin embargo, a medida que aumenta el número de características, restricciones y posibles configuraciones, la creación manual de estos modelos puede convertirse en una tarea costosa y difícil de gestionar.
+
+Debido a esto, surge la necesidad de disponer de mecanismos capaces de generar modelos de características de forma automática. Se ha comprobado que la generación automática es una vía bastante eficaz, ya que permite crear modelos de variabilidad siguiendo determinados parámetros o condiciones definidas previamente, reduciendo el esfuerzo necesario para construirlos y facilitando su utilización en tareas como la evaluación de herramientas de análisis o la realización de experimentos sobre diferentes escenarios de complejidad. Esta capacidad complementa las funcionalidades proporcionadas por lenguajes como UVL y frameworks de análisis como Flamapy, ya que permite no solo almacenar y analizar modelos existentes, sino también generar nuevos modelos que puedan ser posteriormente procesados dentro de estas herramientas.
 
 \section{Trabajos relacionados}
 \label{sec:relacionados}
@@ -121,6 +627,26 @@ Sin embargo, ninguno cubre \dots, que es precisamente lo que motiva este trabajo
 
 \ph{En el ámbito de \dots, los enfoques existentes se centran en \dots.
 La diferencia con la propuesta de este TFG es \dots.}
+
+Dentro del ámbito de la ingeniería de líneas de productos software existen diferentes propuestas orientadas a la generación automática de modelos de características. Estas aproximaciones han sido utilizadas principalmente para crear modelos sintéticos destinados a la evaluación de herramientas de análisis de variabilidad, la realización de experimentos controlados o el estudio de la complejidad de diferentes técnicas de razonamiento. Para analizar el estado actual de estas soluciones, se ha tomado como punto de partida el apartado \textit{Related Work} del paper proporcionado por el tutor de este TFG para el desarrollo de un nuevo generador de modelos de características basado en UVL. En dicho apartado se identifican diferentes propuestas existentes dentro de este ámbito, entre las que se encuentran S.P.L.O.T., FeatureIDE, BeTTy y ETHOM. A partir de esta información, se han realizado búsquedas individuales de cada generador, localizando las páginas web donde se encuentran disponibles sus respectivas publicaciones científicas, como ResearchGate para los trabajos asociados a BeTTy y S.P.L.O.T., ScienceDirect para FeatureIDE y ETHOM, así como las páginas oficiales de los propios proyectos cuando estas proporcionaban información adicional. A partir de estas fuentes se ha extraído la información necesaria para analizar las principales características de cada propuesta, prestando especial atención a sus capacidades de personalización, la expresividad de los modelos generados y su integración dentro de otros ecosistemas de variabilidad software.
+
+\subsection{S.P.L.O.T.}
+
+S.P.L.O.T. (\textit{Software Product Lines Online Tools}) es una plataforma web orientada al desarrollo y análisis de líneas de productos software, proporcionando diferentes herramientas relacionadas con la gestión de modelos de características \cite{splot}. Entre sus funcionalidades se encuentra un generador automático de modelos de características, diseñado para crear modelos sintéticos que pueden ser utilizados posteriormente en tareas de experimentación y evaluación de técnicas de análisis de variabilidad.
+
+Aunque S.P.L.O.T. supuso una de las primeras aproximaciones ampliamente utilizadas para la generación automática de modelos de características, sus capacidades están principalmente orientadas a construcciones pertenecientes al nivel booleano del lenguaje de variabilidad. Por tanto, permite representar estructuras jerárquicas y restricciones lógicas básicas entre características, pero no contempla elementos más avanzados como atributos numéricos, operaciones aritméticas o restricciones basadas en tipos.
+
+\subsection{FeatureIDE}
+
+FeatureIDE es un framework extensible orientado al desarrollo software basado en características que proporciona soporte para diferentes actividades relacionadas con la ingeniería de líneas de productos software \cite{featureide}. La plataforma permite crear, editar y analizar modelos de características, integrando diferentes herramientas destinadas a facilitar el desarrollo de sistemas configurables.
+
+Además de sus capacidades de gestión y análisis, FeatureIDE incorpora un generador automático de modelos de características que permite crear modelos sintéticos dentro de su propio ecosistema. Sin embargo, al igual que otras propuestas existentes, su generación está principalmente limitada a construcciones pertenecientes al nivel booleano de los lenguajes de variabilidad, por lo que no permite generar modelos que incorporen toda la expresividad proporcionada por lenguajes más recientes como UVL.
+
+\subsubsection{BeTTy}
+
+BeTTy (\textit{Benchmarking and Testing on the Automated Analysis of Feature Models}) es un framework orientado al benchmarking y evaluación de herramientas destinadas al análisis automático de modelos de características \cite{betty}. A diferencia de aproximaciones más simples, BeTTy permite configurar diferentes parámetros relacionados con la generación de modelos, facilitando la creación de escenarios experimentales adaptados a las necesidades de evaluación.
+
+Una de sus principales aportaciones es la capacidad de generar modelos con diferentes niveles de complejidad estructural y restricciones, permitiendo estudiar el comportamiento de diferentes técnicas de razonamiento sobre escenarios controlados \cite{betty}. Sin embargo, aunque proporciona una mayor flexibilidad respecto a generadores anteriores, sus capacidades siguen centradas principalmente en el nivel booleano del lenguaje de variabilidad. Por ello, permite aumentar la dificultad de análisis de los modelos generados, pero no ampliar su expresividad mediante construcciones como atributos o restricciones aritméticas.
 
 \subsection{Comparativa de trabajos relacionados}
 \label{subsec:comparativa_relacionados}
@@ -164,3 +690,41 @@ establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
 Capítulo~\ref{chap:planificacion} describe cómo se ha organizado el proyecto
 para construir la solución que lo cubre: metodología, fases, recursos y
 gestión de riesgos».}
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{X c c c}
+        \toprule
+        \textbf{Trabajo} &
+        \textbf{Generación automática} &
+        \textbf{Personalización} &
+        \textbf{Expresividad avanzada} \\
+        \midrule
+        
+        S.P.L.O.T. \cite{splot} &
+        Sí &
+        Parcial &
+        No \\
+        
+        FeatureIDE \cite{featureide} &
+        Sí &
+        Parcial &
+        No \\
+        
+        BeTTy \cite{betty} &
+        Sí &
+        Sí &
+        No \\
+        
+        \midrule
+        
+        \textbf{Este TFG} &
+        Sí &
+        Sí &
+        Sí \\
+        
+        \bottomrule
+    \end{tabularx}
+    \caption{Comparativa de trabajos relacionados con la generación automática de modelos de características.}
+    \label{tab:comparativa_generadores}
+\end{table}
