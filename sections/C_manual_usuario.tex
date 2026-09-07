@@ -12,14 +12,40 @@ de las acciones principales cuando completes la memoria final.}
 \ph{Indica la URL (o forma de acceso) del sistema y los pasos para
 registrarse e iniciar sesión.}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item \ph{URL de acceso: \url{https://example.org}}
   \item \ph{Registro de cuenta nueva.}
   \item \ph{Inicio de sesión.}
   \item \ph{Recuperación de contraseña (si aplica).}
-\end{itemize}
+\end{itemize}}
 
 \ph{(Espacio reservado para una captura de la pantalla de inicio.)}
+
+El sistema puede utilizarse mediante dos alternativas. En primer lugar, es
+posible ejecutar la aplicación en el entorno local siguiendo los pasos
+descritos en la Sección~\ref{sec:verificacion-instalacion} del manual de
+instalación y despliegue.
+
+Como alternativa, se puede acceder al despliegue oficial disponible públicamente
+mediante la siguiente dirección:
+
+\begin{itemize}
+    \item \url{https://www.uvlhub.io/}
+\end{itemize}
+
+La generación de modelos no requiere que el usuario disponga de una cuenta ni
+que realice un proceso de autenticación previo.
+
+La pantalla inicial de UVLHub se muestra en la Figura~\ref{fig:inicio-uvlhub}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.2\textwidth]{inicio_uvlhub.png}
+    }
+    \caption{Pantalla inicial de UVLHub. Elaboración propia}
+    \label{fig:inicio-uvlhub}
+\end{figure}
 
 \section{Funcionalidad principal}
 \label{sec:funcionalidad_principal}
@@ -28,28 +54,41 @@ registrarse e iniciar sesión.}
 Conviene incluir capturas o anotaciones que destaquen los botones y campos
 relevantes.}
 
-\begin{enumerate}
+\ph{\begin{enumerate}
   \item \ph{Paso 1: dónde hacer clic, qué introducir.}
   \item \ph{Paso 2: qué pantalla aparece y qué hacer en ella.}
   \item \ph{Paso 3: cómo confirmar la acción.}
   \item \ph{Paso 4: cómo verificar el resultado.}
-\end{enumerate}
+\end{enumerate}}
 
-\section{Funcionalidades secundarias}
-\label{sec:funcionalidades_secundarias}
+La funcionalidad principal del sistema consiste en la generación automática de
+modelos de características mediante un asistente de configuración
+(\textit{wizard}). La estructura completa del flujo de generación y las
+pantallas correspondientes a cada etapa pueden consultarse en la
+Sección~\ref{subsec:mapa_navegacion}.
 
-\ph{Describe el resto de funcionalidades relevantes para el usuario, una
-por subsección.}
+El funcionamiento del asistente consiste en configurar los diferentes
+parámetros de generación según las necesidades del usuario. En cada etapa del
+flujo se pueden modificar las opciones disponibles y avanzar al siguiente paso
+mediante el botón \textit{Next}, situado en la parte inferior de la pantalla.
+En caso de querer modificar una configuración anterior, es posible volver a
+los pasos previos utilizando el botón \textit{Previous}.
 
-\subsection{\ph{Gestión de \dots}}
-\ph{Cómo crear, listar, editar y eliminar el recurso correspondiente.}
-
-\subsection{\ph{Consulta de \dots}}
-\ph{Cómo acceder a la información, qué filtros y ordenaciones están
-disponibles.}
-
-\subsection{\ph{Gestión del perfil de usuario}}
-\ph{Cómo modificar datos personales, cambiar la contraseña y cerrar sesión.}
+Una vez completada la configuración, en el sexto y último paso del asistente se generan
+los modelos de características solicitados. Desde esta pantalla el usuario
+dispone de diferentes opciones sobre los modelos generados:
+\begin{itemize}
+    \item Descargar el conjunto de modelos generado mediante el botón
+    \textit{Download}.
+    \item Visualizar un modelo directamente desde la aplicación mediante el
+    botón con el icono del ojo.
+    \item Descargar individualmente cada modelo mediante el botón verde
+    disponible junto a cada resultado.
+    \item Abrir un modelo mediante el botón morado con el icono del
+    cohete en FlamapyIDE, un entorno externo que permite visualizar, editar y
+    realizar tareas de análisis automático sobre modelos de características
+    (\url{https://github.com/flamapy/flamapy-ide}).
+\end{itemize}
 
 \section{Mensajes de error y resolución de incidencias}
 \label{sec:errores}
@@ -57,14 +96,53 @@ disponibles.}
 \ph{Lista de errores frecuentes que puede encontrar el usuario, con su
 significado y la acción recomendada para resolverlos.}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item \textbf{\ph{Mensaje 1}}: \ph{causa habitual y solución.}
   \item \textbf{\ph{Mensaje 2}}: \ph{causa habitual y solución.}
   \item \textbf{\ph{Mensaje 3}}: \ph{causa habitual y solución.}
+\end{itemize}}
+
+Durante el proceso de configuración y generación, el sistema muestra mensajes
+de error descriptivos cuando no se cumplen las reglas de negocio definidas en la Sección~\ref{sec:reglas_negocio},
+indicando al usuario la condición que debe modificarse para poder continuar.
+
+Existe un caso particular durante la generación de modelos en el que puede
+aparecer un error no asociado a una configuración incorrecta, sino a una
+exigencia excesiva sobre los recursos disponibles. Este problema puede ocurrir,
+por ejemplo, al solicitar un número elevado de modelos con un gran número de
+características, restricciones, variables por restricción o atributos.
+
+Para solucionar esta situación se recomienda revisar los parámetros de
+generación configurados, especialmente:
+\begin{itemize}
+    \item Número de modelos a generar.
+    \item Número de características.
+    \item Número de restricciones.
+    \item Número de variables por restricción.
+    \item Número de atributos.
 \end{itemize}
+
+Un ejemplo del mensaje mostrado en esta situación se presenta en la
+Figura~\ref{fig:error-generacion-modelos}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{error_generacion_modelos.png}
+    \caption{Ejemplo de error durante la generación de modelos. Elaboración propia}
+    \label{fig:error-generacion-modelos}
+\end{figure}
 
 \section{Contacto y soporte}
 \label{sec:contacto}
 
 \ph{Vía de contacto para incidencias o soporte (correo, formulario,
 repositorio de issues), si la hubiese.}
+
+Para cualquier duda relacionada con el funcionamiento del sistema o para
+reportar errores no contemplados en este manual, se puede contactar con el
+desarrollador mediante las siguientes direcciones de correo electrónico:
+
+\begin{itemize}
+    \item antjimort@alum.us.es
+    \item ajimenez34@us.es
+\end{itemize}

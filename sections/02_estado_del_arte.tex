@@ -155,62 +155,7 @@ La siguiente tabla muestra una comparativa que describe los aspectos principales
 
 A continuación, se ofrecerán unas nociones básicas sobre UVL \cite{uvl}, un lenguaje diseñado para proporcionar una forma común de representar modelos de características y facilitar su procesamiento dentro del ecosistema de ingeniería de líneas de productos software. Entender la estructura y funcionamiento de este lenguaje es esencial, ya que supone la base teórica por la que funciona la solución propuesta. 
 
-Como ejemplo, el siguiente bloque muestra lo que sería un modelo de características de un smartwatch escrito en UVL:
-
-\begin{lstlisting}[caption={Ejemplo de modelo de características en UVL}]
-features
-    Smartwatch
-        mandatory
-            Display
-                alternative
-                    LCD
-                    OLED
-                    "E-Ink"
-            Connectivity
-                or
-                    Bluetooth
-                    "Wi-Fi"
-                    LTE
-            Sensors
-                mandatory
-                    "Heart Rate Monitor"
-                optional
-                    GPS
-                    "Blood Oxygen Sensor" {Accuracy 95}
-                    Accelerometer
-            Battery
-                alternative
-                    Standard {Capacity 300}
-                    "Long Life" {Capacity 450}
-        optional
-            "Music Player" {Storage 2}
-            NFC
-            "Voice Assistant"
-            "Water Resistance"
-                alternative
-                    IP67
-                    IP68
-                    IPX8
-            "Watch Faces" cardinality [5..50]
-            Accessories
-                [0..2]
-                    "Leather Strap"
-                    "Metal Strap"
-                    "Silicone Strap"
-            String Color
-            Float Weight
-
-constraints
-    LTE => (GPS & Bluetooth)
-    IPX8 => (!LCD)
-    "Fall Detection" => (Accelerometer & Gyroscope)
-    "Voice Assistant" <=> "Wi-Fi"
-    sum(Capacity) >= 400
-    avg(Accuracy) >= 90
-    len("Serial Number") == 10
-    Weight > 30.0
-    Color != "Pink"
-\end{lstlisting}
+El modelo completo utilizado como ejemplo se incluye en el \underline{Apéndice~\ref{app:modelo-uvl}}.
 
 
 \subsection{Estructura básica de un modelo UVL}
@@ -655,23 +600,6 @@ Una de sus principales aportaciones es la capacidad de generar modelos con difer
 \textbackslash cite) y 3--4 criterios como columnas, derivados del problema
 que resuelve tu TFG (no genéricos). La última fila es tu propuesta: así el
 lector ve de un vistazo el hueco que cubre el trabajo.}
-
-\begin{table}[H]
-  \centering
-  \begin{tabular}{P{6cm}ccc}
-    \toprule
-    \textbf{Trabajo} & \ph{Criterio 1} & \ph{Criterio 2} & \ph{Criterio 3} \\
-    \midrule
-    \ph{Trabajo A~\cite{apellido2024articulo}} & \ph{Sí} & \ph{Parcial} & \ph{No} \\
-    \ph{Trabajo B~\cite{apellido2023congreso}} & \ph{Parcial} & \ph{Sí} & \ph{No} \\
-    \ph{Trabajo C~\cite{apellido2022tfm}} & \ph{No} & \ph{Parcial} & \ph{Sí} \\
-    \midrule
-    \textbf{Este TFG} & \ph{Sí} & \ph{Sí} & \ph{Sí} \\
-    \bottomrule
-  \end{tabular}
-  \caption{Comparativa de trabajos relacionados.}
-  \label{tab:comparativa_relacionados}
-\end{table}
 
 \ph{Leyenda: Sí = lo cubre completamente; Parcial = lo cubre con limitaciones;
 No = no lo cubre. Comenta la tabla de forma crítica, no descriptiva: justifica

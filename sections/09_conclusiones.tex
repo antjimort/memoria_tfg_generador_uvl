@@ -85,6 +85,75 @@ párrafo genérico.}
 limitaciones identificadas en la introducción con la solución desarrollada
 (``el sistema desarrollado resuelve los X problemas estructurales\dots'').}
 
+El objetivo principal de este trabajo era desarrollar un generador automático de
+modelos de características capaz de producir modelos UVL con diferentes niveles
+de complejidad y expresividad, integrándose dentro del ecosistema Flamapy y
+UVLHub. Para ello, se ha desarrollado una solución configurable que permite
+generar modelos con construcciones avanzadas del lenguaje UVL y validar su
+correcto funcionamiento mediante pruebas automatizadas.
+
+Los resultados obtenidos en el Capítulo~\ref{chap:resultados} permiten concluir
+que los objetivos planteados inicialmente han sido alcanzados. El objetivo O1,
+relacionado con la generación automática de modelos UVL con distintos niveles de
+expresividad, se ha cumplido mediante la generación y validación de modelos con
+diferentes configuraciones, como se muestra en la Sección~\ref{subsec:resultados_o1}.
+
+El objetivo O2 se ha cumplido mediante la incorporación de un sistema de
+configuración flexible que permite adaptar el proceso de generación a distintos
+escenarios. Por su parte, el objetivo O3 se ha alcanzado mediante la integración
+del generador como plugin de Flamapy y su utilización desde UVLHub, permitiendo
+su incorporación dentro del flujo habitual de la plataforma
+(Secciones~\ref{subsec:resultados_o2} y~\ref{subsec:resultados_o3}).
+
+El objetivo O4, centrado en la evaluación del rendimiento del generador, se ha
+verificado mediante la medición del coste de generación en escenarios con un
+volumen elevado de modelos, obteniendo resultados adecuados para el uso
+previsto de la herramienta (Sección~\ref{subsec:resultados_o4}). Finalmente, el
+objetivo O5 se ha cumplido mediante la ejecución de una batería de pruebas
+automatizadas que valida las principales funcionalidades del generador y sus
+diferentes flujos de configuración
+(Sección~\ref{subsec:resultados_o5}).
+
+La Tabla~\ref{tab:grado-cumplimiento-objetivos} resume el grado de cumplimiento
+de los objetivos definidos.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}P{1cm} P{6cm} P{2cm}@{}}
+\toprule
+\textbf{Obj.} & \textbf{Objetivo} & \textbf{Grado} \\
+\midrule
+O1 & Generación automática de modelos UVL con expresividad avanzada. & Completo \\
+O2 & Configuración flexible del proceso de generación. & Completo \\
+O3 & Integración con Flamapy y UVLHub. & Completo \\
+O4 & Evaluación temporal del generador. & Completo \\
+O5 & Validación mediante pruebas automatizadas. & Completo \\
+\bottomrule
+\end{tabular}
+\caption{Grado de cumplimiento de los objetivos. Elaboración propia}
+\label{tab:grado-cumplimiento-objetivos}
+\end{table}
+
+Como aportación principal, este trabajo proporciona una solución integrada para
+la generación automática de modelos UVL con mayor expresividad que los
+generadores tradicionales centrados en construcciones booleanas. Además, la
+integración dentro del ecosistema Flamapy y UVLHub permite utilizar esta
+funcionalidad en escenarios de experimentación y análisis de variabilidad.
+
+A nivel personal y técnico, el desarrollo ha permitido identificar la
+importancia de realizar una planificación temporal con margen para imprevistos,
+así como la necesidad de utilizar desde el inicio herramientas que faciliten un
+entorno reproducible, como Docker. También se ha comprobado la relevancia de
+realizar refactorizaciones progresivas y acompañar los cambios funcionales con
+pruebas automatizadas para evitar la acumulación de errores durante la
+evolución del software.
+
+En conjunto, los resultados obtenidos permiten concluir que la solución
+desarrollada cumple los objetivos establecidos y proporciona una base extensible
+para futuras mejoras relacionadas con la generación y análisis de modelos de
+características.
+
 \section{Limitaciones}
 \label{sec:limitaciones}
 
@@ -113,6 +182,37 @@ mitigaría}. Organízalas en tres categorías:}
 \ph{Cada limitación es candidata natural a una línea de la
 Sección~\ref{sec:trabajo_futuro}: si una limitación no genera línea
 futura ni se justifica como asumible, queda coja.}
+
+A pesar de los resultados obtenidos, existen ciertas limitaciones que deben
+tenerse en cuenta al interpretar el alcance del trabajo realizado. Estas
+limitaciones no afectan al cumplimiento de los objetivos planteados, pero
+delimitan los escenarios en los que se han validado las capacidades del
+generador.
+
+Desde un punto de vista técnico, la evaluación del generador se ha realizado
+sobre configuraciones representativas, pero no se ha estudiado su comportamiento
+en escenarios extremos con modelos de características de gran tamaño o con una
+complejidad significativamente superior. Esto puede afectar al coste
+computacional en configuraciones con un número elevado de características,
+atributos o restricciones. No obstante, la arquitectura desarrollada permite
+continuar optimizando y ampliando el generador para este tipo de escenarios.
+
+Respecto a la validación, las pruebas realizadas se han basado principalmente
+en modelos sintéticos generados mediante la propia herramienta y en escenarios
+diseñados para cubrir las funcionalidades implementadas. Por tanto, aunque la
+suite de pruebas automatizadas permite validar el comportamiento esperado del
+sistema, no se ha evaluado todavía su comportamiento con modelos reales
+procedentes de dominios específicos ni mediante estudios con usuarios finales.
+Además, no se ha realizado una comparación cuantitativa directa con otras
+herramientas debido a la ausencia de condiciones experimentales homogéneas que
+permitieran obtener resultados comparables.
+
+Finalmente, en cuanto al alcance del trabajo, la solución desarrollada se ha
+centrado en la generación automática de modelos UVL y su integración dentro del
+ecosistema Flamapy y UVLHub. No se han abordado otras líneas relacionadas, como
+la optimización avanzada del proceso de generación, nuevas estrategias de
+búsqueda o análisis posterior de los modelos generados, ya que quedan fuera de
+los objetivos definidos inicialmente.
 
 \section{Trabajo futuro}
 \label{sec:trabajo_futuro}
@@ -143,3 +243,94 @@ la tendencia identificada en el estado del
 arte~\cite{apellido2024articulo}. Qué la hace novedosa: \dots\
 Viabilidad: qué haría falta para abordarla y por qué este trabajo es un
 buen punto de partida.}
+
+A partir de las limitaciones identificadas y de las posibilidades de extensión
+del sistema desarrollado, se plantean diferentes líneas de trabajo futuro
+orientadas a mejorar la reutilización de configuraciones, la integración con
+UVLHub y la capacidad del generador para adaptarse a nuevos escenarios de uso.
+
+\subsubsection*{Exportación e importación de configuraciones}
+
+Una primera línea de trabajo consistiría en desarrollar una transformación de
+Flamapy que permita exportar la configuración seleccionada del generador en un
+formato estándar como JSON, permitiendo posteriormente importar dicha
+configuración desde UVLHub para reproducir una generación concreta.
+
+Esta extensión mejoraría la reproducibilidad de los experimentos y facilitaría
+el intercambio de configuraciones entre usuarios, evitando la necesidad de
+definir manualmente conjuntos complejos de parámetros. Además, permitiría
+compartir escenarios de generación de forma sencilla dentro del ecosistema de
+herramientas de variabilidad.
+
+La implementación de esta funcionalidad presenta una viabilidad elevada, ya que
+los parámetros del generador ya se encuentran estructurados internamente. Sería
+necesario únicamente definir un esquema estable de serialización y añadir los
+mecanismos de exportación e importación correspondientes.
+
+\subsubsection*{Publicación directa de modelos en UVLHub}
+
+Otra posible extensión consistiría en ampliar la integración con UVLHub para
+permitir subir directamente los modelos generados a la plataforma, pudiendo
+establecer su visibilidad y compartirlos con otros usuarios.
+
+Actualmente, el generador permite producir modelos UVL, pero la gestión posterior
+de estos modelos requiere pasos adicionales. La incorporación de esta
+funcionalidad permitiría centralizar el flujo completo, desde la generación
+hasta el almacenamiento y distribución de modelos de características.
+
+Esta línea presenta una viabilidad media-alta, ya que requeriría ampliar la
+comunicación entre el generador y los servicios existentes de UVLHub, además de
+definir aspectos relacionados con permisos, almacenamiento y gestión de modelos
+públicos.
+
+\subsubsection*{Evaluación con modelos reales y benchmarking}
+
+Una tercera línea de trabajo consistiría en realizar una evaluación experimental
+del generador utilizando modelos de características procedentes de dominios
+reales y comparando sus resultados con otras herramientas existentes bajo unas
+condiciones experimentales comunes.
+
+Esta extensión permitiría superar una de las limitaciones identificadas en la
+evaluación actual, basada principalmente en modelos sintéticos, y proporcionaría
+una medida más precisa de la utilidad del generador en escenarios reales.
+
+Su viabilidad es media, ya que requeriría disponer de conjuntos de datos
+adecuados, establecer una metodología experimental común y adaptar las
+herramientas comparadas para garantizar unas condiciones equivalentes.
+
+\subsubsection*{Optimización del proceso de generación}
+
+Una posible línea de trabajo futuro consistiría en optimizar el proceso interno
+de generación para mejorar el rendimiento en configuraciones con una mayor
+complejidad estructural o un volumen elevado de modelos generados.
+
+Aunque los resultados obtenidos muestran un comportamiento adecuado en los
+escenarios evaluados, el coste computacional puede incrementarse al aumentar el
+número de características, atributos o restricciones. Por ello, sería
+interesante analizar los puntos críticos del proceso de generación y aplicar
+técnicas de optimización, como mejoras en la gestión de estructuras internas,
+reducción de operaciones redundantes o paralelización de determinadas etapas.
+
+Esta extensión presenta una viabilidad media-alta, ya que no requiere modificar
+la arquitectura general del sistema, sino realizar mejoras sobre los componentes
+existentes del motor de generación. La principal dificultad reside en identificar
+aquellas operaciones que tienen mayor impacto sobre el tiempo de ejecución y
+mantener la corrección de los modelos generados tras las optimizaciones.
+
+\subsubsection*{Generación guiada mediante aprendizaje automático}
+
+Como línea de investigación más ambiciosa, se plantea la incorporación de
+técnicas de aprendizaje automático para aprender patrones presentes en modelos
+de características reales y utilizarlos durante el proceso de generación.
+
+Esta aproximación permitiría evolucionar desde una generación basada únicamente
+en parámetros definidos manualmente hacia una generación capaz de producir
+modelos sintéticos adaptados a las características de dominios concretos. De
+esta forma, se podrían obtener modelos más realistas para tareas de evaluación
+y experimentación.
+
+La viabilidad de esta línea es más reducida, ya que requeriría disponer de un
+volumen suficiente de modelos reales, definir representaciones adecuadas de los
+modelos de características y desarrollar técnicas capaces de capturar sus
+patrones estructurales. No obstante, constituye una posible evolución innovadora
+del generador desarrollado.

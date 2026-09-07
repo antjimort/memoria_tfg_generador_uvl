@@ -1,4 +1,4 @@
-\chapter{\ph{Título del apéndice}}
+\chapter{Apéndice}
 \label{app:apendice_a}
 
 \ph{Los apéndices recogen material de referencia que rompería la lectura del
@@ -8,13 +8,14 @@ representaciones gráficas o textuales del modelo del dominio, etc.}
 
 \ph{Sugerencias de contenido típico:}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item \ph{Especificación formal completa (gramática, esquema, modelo).}
   \item \ph{Ejemplo extenso de un artefacto que produce el sistema.}
   \item \ph{Manual de instalación / despliegue / uso.}
   \item \ph{Tablas de referencia muy extensas.}
   \item \ph{Figuras grandes que requieren orientación apaisada.}
 \end{itemize}
+} 
 
 \ph{Si el TFG necesita varios apéndices, duplica este archivo
 (\texttt{B\_apendice.tex}, \texttt{C\_apendice.tex}\dots) y añade
@@ -24,7 +25,60 @@ dentro del bloque \texttt{\textbackslash appendix}.}
 \ph{Para incluir bloques de código o ficheros largos, usa el entorno
 \texttt{verbatim} (ya configurado con numeración de líneas):}
 
+
 \begin{verbatim}
-[Reemplaza este bloque por el contenido literal que quieras incluir:
- fragmento de código, fichero de configuración, ejemplo completo, etc.]
+features
+    Smartwatch
+        mandatory
+            Display
+                alternative
+                    LCD
+                    OLED
+                    "E-Ink"
+            Connectivity
+                or
+                    Bluetooth
+                    "Wi-Fi"
+                    LTE
+            Sensors
+                mandatory
+                    "Heart Rate Monitor"
+                optional
+                    GPS
+                    "Blood Oxygen Sensor" {Accuracy 95}
+                    Accelerometer
+            Battery
+                alternative 
+                    Standard {Capacity 300}
+                    "Long Life" {Capacity 450}
+        optional
+            "Music Player" {Storage 2}
+            NFC
+            "Voice Assistant"
+            "Water Resistance"
+                alternative
+                    IP67
+                    IP68
+                    IPX8
+            "Watch Faces" cardinality [5..50]
+            Accessories
+                [0..2]
+                    "Leather Strap"
+                    "Metal Strap"
+                    "Silicone Strap"
+            String Color
+            Float Weight
+
+constraints
+    LTE => (GPS & Bluetooth)
+    IPX8 => (!LCD)
+    "Fall Detection" => (Accelerometer & Gyroscope)
+    "Voice Assistant" <=> "Wi-Fi"
+    sum(Capacity) >= 400
+    avg(Accuracy) >= 90
+    len("Serial Number") == 10
+    Weight > 30.0
+    Color != "Pink"
 \end{verbatim}
+\label{app:modelo-uvl}
+\caption{Ejemplo de modelo de características en UVL. Usado en la Sección \ref{sec:uvl}}

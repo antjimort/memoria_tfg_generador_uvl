@@ -18,23 +18,6 @@ bajo qué supuestos y con qué restricciones. No repitas la introducción: refer
 los objetivos (Sección~\ref{sec:objetivos}) y el alcance (Sección~\ref{sec:alcance})
 y céntrate en lo que aún no está escrito (supuestos, restricciones, criterio de cierre).}
 
-\begin{longtable}{@{}P{3.2cm} P{11cm}@{}}
-  \toprule
-  \textbf{Elemento} & \textbf{Descripción} \\
-  \midrule
-  \endhead
-  Propósito          & \ph{Una frase: qué problema resuelve este proyecto y para quién.} \\[0.3em]
-  Objetivos          & \ph{O1--O5; ya enunciados en la Sección~\ref{sec:objetivos}, no los dupliques.} \\[0.3em]
-  Alcance            & \ph{Una línea con qué entra y qué queda fuera (Sección~\ref{sec:alcance}).} \\[0.3em]
-  Supuestos          & \ph{Condiciones que se dan por ciertas: disponibilidad del tutor/a, acceso a datos o usuarios, equipo propio\dots} \\[0.3em]
-  Restricciones      & \ph{Límites no negociables: fecha de entrega, normativa del centro, presupuesto, tecnologías impuestas\dots} \\[0.3em]
-  Entregables principales & \ph{Producto software en repositorio, memoria, presentación de defensa.} \\[0.3em]
-  Criterio de cierre & \ph{Cómo se sabrá que el proyecto ha terminado: objetivos verificados, pruebas superadas, entrega en plazo.} \\
-  \bottomrule
-  \caption{Acta de constitución del proyecto.}
-  \label{tab:acta_constitucion}
-\end{longtable}
-
 \begin{table}[H]
 \centering
 \begin{tabularx}{\textwidth}{p{4cm}X}
@@ -88,20 +71,6 @@ El proyecto se considerará finalizado cuando el generador permita crear modelos
 En un TFG el listado es corto; lo importante es que ninguna fila quede sin
 expectativa concreta.}
 
-\begin{longtable}{@{}P{2.6cm} P{3.2cm} P{5.6cm} P{2.6cm}@{}}
-  \toprule
-  \textbf{Interesado} & \textbf{Rol} & \textbf{Interés / expectativa} & \textbf{Implicación} \\
-  \midrule
-  \endhead
-  \ph{Autor/a}            & \ph{Ejecución del proyecto.} & \ph{Completar el trabajo con la máxima calidad y en plazo.} & \ph{Diaria} \\[0.3em]
-  \ph{Tutor/es}           & \ph{Supervisión y validación.} & \ph{Avance constante; revisar entregables en las reuniones de seguimiento.} & \ph{Periódica} \\[0.3em]
-  \ph{Tribunal}           & \ph{Evaluación final.} & \ph{Memoria clara, defensa sólida, resultados verificables.} & \ph{Al cierre} \\[0.3em]
-  \ph{Usuarios / terceros} & \ph{Cliente, grupo de investigación, usuarios piloto\dots} & \ph{Expectativa concreta sobre el producto.} & \ph{Puntual} \\
-  \bottomrule
-  \caption{Registro de interesados del proyecto.}
-  \label{tab:interesados}
-\end{longtable}
-
 \begin{longtable}{@{}P{3cm} P{3.2cm} P{5.5cm} P{2.5cm}@{}}
   \toprule
   \textbf{Interesado} & \textbf{Rol} & \textbf{Interés / expectativa} & \textbf{Implicación} \\
@@ -142,13 +111,13 @@ expectativa concreta.}
 \ph{Justifica la metodología (o metodologías) elegida(s) para el desarrollo y para
 la redacción de la memoria. Es habitual usar enfoques distintos para cada fase.}
 
-\ph{Puntos a cubrir:}
+\ph{Puntos a cubrir:
 \begin{itemize}
   \item \ph{Metodología elegida (Waterfall, Scrum, Kanban, iterativa\dots) y por qué.}
   \item \ph{Qué alternativas consideraste y por qué las descartaste (una frase por alternativa basta).}
   \item \ph{Cómo se gestiona el control de versiones (Git, GitHub/GitLab\dots).}
   \item \ph{Si se usan herramientas de seguimiento (issues, tableros, CI), nómbralas brevemente.}
-\end{itemize}
+\end{itemize}}
 
 Para el desarrollo del proyecto se ha seguido una metodología incremental e iterativa, adaptada a la naturaleza evolutiva del generador automático de modelos de características. Debido al carácter investigador y evolutivo del proyecto, la especificación inicial se refinó progresivamente durante el desarrollo conforme se analizaban las necesidades del generador y su integración dentro del ecosistema existente. \cite{sundermann2024generating}.
 
@@ -210,25 +179,6 @@ niveles. La regla de oro: todo entregable debe poder marcarse como hecho/no hech
 sin ambigüedad. Los IDs se reutilizan en el cronograma y en el cierre para dar
 trazabilidad. Con 6--10 paquetes es suficiente. Desglosa al segundo nivel solo
 donde aporte; los paquetes hoja deben corresponder a entregables.}
-
-\begin{longtable}{@{}P{1cm} P{4.5cm} P{8.8cm}@{}}
-  \toprule
-  \textbf{ID} & \textbf{Paquete de trabajo} & \textbf{Entregable verificable} \\
-  \midrule
-  \endhead
-  1   & \ph{Gestión del proyecto}  & \ph{Plan del proyecto y registros de seguimiento.} \\[0.3em]
-  1.1 & \ph{Planificación inicial} & \ph{Acta de constitución y cronograma (línea base).} \\[0.3em]
-  1.2 & \ph{Seguimiento y control} & \ph{Registros de cambios y de riesgos actualizados.} \\[0.3em]
-  2   & \ph{Análisis y diseño}     & \ph{Catálogo de requisitos y diseño de la solución.} \\[0.3em]
-  2.1 & \ph{Requisitos}            & \ph{Catálogo de requisitos validado con el tutor/a.} \\[0.3em]
-  2.2 & \ph{Diseño de la solución} & \ph{Arquitectura y diseño documentados y aprobados.} \\[0.3em]
-  3   & \ph{Implementación}        & \ph{Producto software versionado en el repositorio.} \\[0.3em]
-  4   & \ph{Pruebas y validación}  & \ph{Suite de pruebas e informe de cobertura.} \\[0.3em]
-  5   & \ph{Memoria y defensa}     & \ph{Memoria entregada y presentación preparada.} \\
-  \bottomrule
-  \caption{Estructura de descomposición del trabajo (EDT).}
-  \label{tab:edt}
-\end{longtable}
 
 Este proyecto se podría desglosar de la siguiente manera:
 
@@ -334,7 +284,7 @@ Teniendo como fecha de inicio del proyecto el 12 de abril del 2025, obtenemos la
   3 & Desarrollo e integración del generador automático & 3 & O1--O4 & 593 h & 718 h & 05/26 & 07/26 &
   Generador implementado e integrado dentro de UVLHub con soporte para los niveles de expresividad definidos y corrección de errores detectados durante el desarrollo. \\[0.3em]
 
-  4 & Pruebas y validación de la solución & 4 & O5 & 120 h & 170 h & 05/26 & 07/26 &
+  4 & Pruebas y validación de la solución & 4 & O5 y 06 & 120 h & 170 h & 05/26 & 07/26 &
   Suite de pruebas automatizadas, validaciones funcionales y revisiones finales del sistema completadas. \\
 
   \midrule

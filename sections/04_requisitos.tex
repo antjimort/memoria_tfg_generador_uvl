@@ -479,17 +479,13 @@ RNF-03 & Ejecución eficiente del proceso de generación &
 El sistema debe minimizar la carga computacional sobre el servidor mediante la ejecución del proceso de generación en el entorno del cliente cuando sea posible. Para ello, se emplean tecnologías como Pyodide y WebAssembly (WASM), permitiendo ejecutar el código del generador directamente en el navegador y reduciendo los tiempos de respuesta asociados a la comunicación y procesamiento remoto.
 & Alta \\[0.8em]
 
-RNF-04 & Reproducibilidad de la generación &
-El sistema debe garantizar que, utilizando una misma configuración del generador y una misma semilla, las ejecuciones sucesivas produzcan modelos equivalentes. La modificación de cualquier parámetro de configuración o de la semilla puede producir resultados diferentes.
-& Media \\[0.8em]
-
-RNF-05 & Usabilidad de la interfaz de configuración &
+RNF-04 & Usabilidad de la interfaz de configuración &
 La interfaz proporcionada para configurar el generador debe permitir al usuario seleccionar y comprender los parámetros disponibles de forma clara, facilitando la creación de configuraciones válidas y reduciendo posibles errores durante el proceso de configuración.
 & Media \\[0.8em]
 
-RNF-06 & Calidad del software &
+RNF-05 & Calidad del software &
 El código desarrollado debe cumplir los mecanismos de control de calidad establecidos en el proyecto, incluyendo las comprobaciones automáticas mediante integración continua y las herramientas de análisis estático utilizadas para mejorar la legibilidad y mantenibilidad del código.
-& Media \\
+& Alta \\
 
 \bottomrule
 
@@ -710,6 +706,20 @@ entre casos de uso.}
 \ph{(Espacio reservado para el diagrama de casos de uso del sistema, no incluido
 en esta plantilla.)}
 
+\subsection{Diagrama general de casos de uso}
+\label{subsec:cu_diagrama}
+
+El diagrama de casos de uso representa las principales interacciones entre los actores externos y el sistema generador de modelos UVL. El usuario investigador o desarrollador es el encargado de configurar los parámetros del generador y, una vez finalizado el proceso, puede visualizar los modelos generados dentro de la plataforma o descargarlos para su posterior utilización. El sistema se encarga de validar la configuración proporcionada y ejecutar el proceso de generación automática de modelos de características UVL. Los modelos descargados pueden ser utilizados posteriormente por herramientas externas de análisis de variabilidad para realizar procesos de evaluación y análisis sobre los modelos generados.
+
+La Figura~\ref{fig:diagrama-casos-uso} muestra el diagrama general de casos de uso del sistema.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{diagrama_casos_uso.png}
+    \caption{Diagrama general de casos de uso del sistema. Elaboración propia}
+    \label{fig:diagrama-casos-uso}
+\end{figure}
+
 \subsection{Especificación de casos de uso principales}
 \label{subsec:cu_especificacion}
 
@@ -744,28 +754,6 @@ Postcondiciones & \ph{Estado del sistema tras la ejecución correcta.} \\
 \label{tab:uc01}
 \end{table}
 
-\begin{table}[H]
-\centering
-\small
-\renewcommand{\arraystretch}{1.35}
-\begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
-\toprule
-\multicolumn{2}{l}{\textbf{CU-02 --- \ph{Nombre del caso de uso}}} \\
-\midrule
-Actores        & \ph{Actor/es implicado/s.} \\
-Descripción    & \ph{Resumen del objetivo del caso de uso.} \\
-Precondiciones & \ph{Estado previo necesario.} \\
-Flujo principal &
-  \ph{1. Paso 1.\newline
-       2. Paso 2.\newline
-       3. Paso 3.} \\
-Flujo alternativo & \ph{Xa. Variante o error.} \\
-Postcondiciones & \ph{Estado tras la ejecución.} \\
-\bottomrule
-\end{tabular}
-\caption{Especificación del caso de uso CU-02.}
-\label{tab:uc02}
-\end{table}
 
 \begin{table}[H]
 \centering
@@ -773,22 +761,186 @@ Postcondiciones & \ph{Estado tras la ejecución.} \\
 \renewcommand{\arraystretch}{1.35}
 \begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
 \toprule
-\multicolumn{2}{l}{\textbf{CU-03 --- \ph{Nombre del caso de uso}}} \\
+\multicolumn{2}{l}{\textbf{CU-01 --- Configurar generador}} \\
 \midrule
-Actores        & \ph{Actor/es.} \\
-Descripción    & \ph{Resumen.} \\
-Precondiciones & \ph{Estado previo.} \\
+
+Actores &
+Usuario investigador o desarrollador. \\
+
+Descripción &
+Permite al usuario definir la configuración necesaria para el proceso de generación automática de modelos de características UVL. El usuario puede seleccionar los niveles de expresividad y establecer los parámetros relacionados con características, estructura jerárquica, restricciones y atributos. \\
+
+Precondiciones &
+El usuario debe acceder a la interfaz de configuración del generador disponible dentro de UVLHub. \\
+
 Flujo principal &
-  \ph{1. Paso 1.\newline
-       2. Paso 2.\newline
-       3. Paso 3.\newline
-       4. Paso 4.} \\
-Flujo alternativo & \ph{Xa. Variante.} \\
-Postcondiciones & \ph{Estado tras la ejecución.} \\
+1. El usuario accede al formulario de configuración del generador.
+
+2. El usuario establece los parámetros asociados a la generación del modelo en cada \textit{step}.
+
+3. El sistema registra la configuración proporcionada. \\
+
+Flujo alternativo &
+Si los valores introducidos no cumplen las restricciones establecidas, el sistema informa al usuario de los errores detectados durante la introducción de dichos valores o antes de pasar al siguiente \textit{step}. \\
+
+Postcondiciones &
+Si la configuración de cada \textit{step} es válida, se procede en el último \textit{step} a la generación de los modelos.\\
+
+\bottomrule
+\end{tabular}
+\caption{Especificación del caso de uso CU-01.}
+\label{tab:uc01}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
+\toprule
+\multicolumn{2}{l}{\textbf{CU-02 --- Validar configuración}} \\
+\midrule
+
+Actores &
+Sistema generador de modelos UVL. \\
+
+Descripción &
+Permite comprobar que la configuración proporcionada por el usuario cumple las reglas de negocio definidas antes de ejecutar el proceso de generación automática. \\
+
+Precondiciones &
+Debe existir una configuración del generador proporcionada por el usuario. \\
+
+Flujo principal &
+1. El sistema recibe la configuración definida por el usuario y analiza sus parámetros.
+
+3. El sistema comprueba las restricciones asociadas a características, jerarquía, restricciones y atributos en cada \textit{step}, respectivamente.
+
+4. El sistema valida las distribuciones probabilísticas y dependencias entre parámetros. \\
+
+Flujo alternativo &
+Si alguna regla de negocio no se cumple, el sistema devuelve los errores detectados e impide continuar con la generación hasta corregir la configuración. \\
+
+Postcondiciones &
+Si la configuración de cada \textit{step} es válida, se le permite al usuario pasar al siguiente \textit{step}. \\
+
+\bottomrule
+\end{tabular}
+\caption{Especificación del caso de uso CU-02.}
+\label{tab:uc02}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
+\toprule
+\multicolumn{2}{l}{\textbf{CU-03 --- Generar modelo de características UVL}} \\
+\midrule
+
+Actores &
+Sistema generador de modelos UVL. \\
+
+Descripción &
+Permite generar automáticamente un modelo de características expresado en UVL a partir de una configuración previamente validada. \\
+
+Precondiciones &
+Las dependencias necesarias deben ser cargadas correctamente al acceder al primer \textit{step}. Además, la configuración proporcionada por el usuario debe ser validada en cada \textit{step}. \\
+
+Flujo principal &
+1. Cuando el usuario llega al último \textit{step}, el sistema inicializa el proceso de generación utilizando la configuración proporcionada.
+
+2. El sistema genera, para cada modelo y de forma aleatoria, la estructura jerárquica del modelo de características, incorporando los niveles de expresividad, atributos y restricciones pertinentes, cumpliendo con la configuración seleccionada por el usuario.
+
+3. El sistema genera la representación final de los modelos en formato UVL y los almacena temporalmente para su visualización o descarga. \\
+
+Flujo alternativo &
+Si se produce un error durante el proceso de generación, el sistema informa del fallo y no genera los modelos solicitados. \\
+
+Postcondiciones &
+Existe un/unos modelo/s de características UVL generado/s correctamente disponible/s para su posterior visualización o descarga. \\
+
 \bottomrule
 \end{tabular}
 \caption{Especificación del caso de uso CU-03.}
 \label{tab:uc03}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
+\toprule
+\multicolumn{2}{l}{\textbf{CU-04 --- Visualizar modelo generado}} \\
+\midrule
+
+Actores &
+Usuario investigador o desarrollador. \\
+
+Descripción &
+Permite al usuario consultar visualmente el modelo de características generado dentro de la plataforma UVLHub. \\
+
+Precondiciones &
+Debe existir al menos un modelo generado correctamente por el sistema. \\
+
+Flujo principal &
+1. El sistema carga la representación del modelo generado.
+
+2. El sistema muestra el modelo dentro de la interfaz de UVLHub al hacer clic en el botón correspondiente.
+
+3. El usuario inspecciona la estructura y elementos generados. \\
+
+Flujo alternativo &
+Si no se ha podido realizar la generación previa a la visualización, el sistema lanza un error informativo. \\
+
+Postcondiciones &
+El usuario puede consultar el modelo generado dentro de la plataforma. \\
+
+\bottomrule
+\end{tabular}
+\caption{Especificación del caso de uso CU-04.}
+\label{tab:uc04}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}>{\bfseries\RaggedRight\arraybackslash}p{4cm} P{10cm}@{}}
+\toprule
+\multicolumn{2}{l}{\textbf{CU-05 --- Descargar modelo generado}} \\
+\midrule
+
+Actores &
+Usuario investigador o desarrollador. \\
+
+Descripción &
+Permite descargar en formato zip los modelos generados como ficheros independientes en formato UVL para su posterior utilización dentro o fuera de la plataforma. \\
+
+Precondiciones &
+Debe existir un modelo de características generado correctamente. \\
+
+Flujo principal &
+1. El usuario solicita la descarga del modelo generado haciendo clic en el botón correspondiente.
+
+2. El sistema prepara el zip con los ficheros UVL generados. El usuario puede ver el archivo en la bandeja de descargas de su navegador.
+\\
+
+Flujo alternativo &
+Si el modelo no se encuentra disponible o se produce un error durante la generación del fichero, el sistema informa al usuario y cancela la descarga. \\
+
+Postcondiciones &
+El modelo UVL queda disponible como fichero independiente para su almacenamiento o análisis mediante herramientas externas. \\
+
+\bottomrule
+\end{tabular}
+\caption{Especificación del caso de uso CU-05.}
+\label{tab:uc05}
 \end{table}
 
 \section{Matriz de trazabilidad}
@@ -827,6 +979,32 @@ RF-06 &               &               &               &               &         
 \label{tab:trazabilidad_rf_cu}
 \end{longtable}
 
+\begin{longtable}{P{1.7cm} *{5}{P{1.8cm}}}
+
+\toprule
+\textbf{} & \textbf{CU-01} & \textbf{CU-02} & \textbf{CU-03} & \textbf{CU-04} & \textbf{CU-05} \\
+\midrule
+\endhead
+
+RF-01 & \texttimes & & & & \\
+
+RF-02 & & \texttimes & & & \\
+
+RF-03 & & & \texttimes & & \\
+
+RF-04 & & & \texttimes & & \\
+
+RF-05 & & & & \texttimes & \\
+
+RF-06 & & & & & \texttimes \\
+
+\bottomrule
+
+\caption{Matriz de trazabilidad entre requisitos funcionales y casos de uso.}
+\label{tab:trazabilidad_rf_cu}
+
+\end{longtable}
+
 \subsection{Requisitos \texorpdfstring{$\leftrightarrow$}{<->} pruebas}
 \label{subsec:trazabilidad_rf_pruebas}
 
@@ -850,6 +1028,82 @@ RNF-02 & \ph{Tipo} & \ph{Test / verificación.} \\
 \label{tab:trazabilidad_rf_pruebas}
 \end{longtable}
 
+
+\begin{longtable}{P{2cm} P{4cm} P{8cm}}
+
+\toprule
+\textbf{Requisito} & \textbf{Tipo de prueba} & \textbf{Test / archivo} \\
+\midrule
+\endhead
+
+RF-01 &
+Integración / E2E &
+\texttt{test\_full\_happy\_path\_produces\_valid\_params}
+(\texttt{test\_wizard\_flow.py}) \\[0.8em]
+
+RF-02 &
+Unitaria &
+\texttt{test\_step1\_rejects\_batch\_size\_that\_could\_\break\_generation},
+\texttt{test\_step2\_rejects\_minor\_levels\_without\_required\_major\_levels},
+\texttt{test\_step3\_rejects\_invalid\_relation\_distribution}
+(\texttt{test\_validators.py}) \\[0.8em]
+
+RF-03 &
+E2E &
+\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
+(\texttt{test\_selenium.py}) \\[0.8em]
+
+RF-04 &
+Integración &
+\texttt{test\_everything\_on\_every\_family\_represented}
+(\texttt{test\_wizard\_outputs.py}) \\[0.8em]
+
+RF-05 &
+E2E &
+\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
+(\texttt{test\_selenium.py}) \\[0.8em]
+
+RF-06 &
+Integración &
+\texttt{test\_filename\_suffixes\_applied\_to\_generated\_files}
+(\texttt{test\_wizard\_outputs.py}) \\
+
+\midrule
+
+RNF-01 &
+Integración / Compatibilidad &
+Verificación mediante la ejecución del sistema dentro del ecosistema UVLHub
+y la integración con Flamapy. Los tests
+\texttt{test\_full\_happy\_path\_produces\_valid\_params}
+y los tests de generación de modelos comprueban que el generador puede
+utilizarse desde la plataforma existente. \\[0.8em]
+
+RNF-02 &
+Integración / Validación de formato &
+\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
+(\texttt{test\_selenium.py}) verifica que el sistema genera modelos
+correctamente en formato UVL y permite su posterior visualización. \\[0.8em]
+
+RNF-03 &
+Verificación estructural &
+La integración dentro del repositorio y la adaptación a la arquitectura
+existente se comprueban mediante la ejecución completa de la suite de pruebas
+del módulo generador, incluyendo los tests de flujo del wizard
+(\texttt{test\_wizard\_flow.py}). \\[0.8em]
+
+RNF-04 &
+Verificación documental &
+El cumplimiento de la planificación temporal se valida mediante el seguimiento
+del desarrollo, las revisiones periódicas y la documentación generada durante
+el proyecto. \\
+
+\bottomrule
+
+\caption{Matriz de trazabilidad entre requisitos funcionales y pruebas.}
+\label{tab:trazabilidad_rf_tests}
+
+\end{longtable}
+
 % --- Transición al siguiente capítulo ---
 \ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
 establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
@@ -857,3 +1111,5 @@ establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
 hacer el sistema. El Capítulo~\ref{chap:diseno} aborda \emph{cómo}
 satisfacerlos: la arquitectura, los modelos y las decisiones de diseño que
 dan forma a la solución».}
+
+Con los requisitos funcionales, no funcionales, reglas de negocio y restricciones del proyecto definidos y trazados, queda establecido el comportamiento esperado del sistema y las condiciones que debe cumplir la solución desarrollada. El siguiente capítulo aborda cómo satisfacer estos requisitos mediante la definición de la arquitectura del sistema, los componentes principales y las decisiones de diseño adoptadas durante el desarrollo.

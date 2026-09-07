@@ -41,6 +41,38 @@ en la Sección~\ref{sec:resultados_objetivos}. Describe:}
 «8 de 10 usuarios completaron la tarea sin ayuda en menos de 2 minutos» sí
 lo es.}
 
+La evaluación se centra en comprobar la capacidad del generador para producir
+modelos UVL con diferentes niveles de expresividad, la influencia de los
+parámetros de configuración sobre los modelos obtenidos, la incorporación de
+construcciones avanzadas del lenguaje, la integración dentro del ecosistema
+UVLHub y Flamapy, y la disponibilidad de una batería de pruebas automatizadas
+que permita validar su funcionamiento.
+
+Durante el proceso de desarrollo se han utilizado diferentes configuraciones del generador y se han analizado los modelos UVL resultantes,
+comprobando que las características seleccionadas durante la configuración se
+reflejan correctamente en los artefactos generados. Estas comprobaciones se han
+complementado con la ejecución de la suite de pruebas automatizadas y con
+validaciones manuales de los principales flujos de uso de la aplicación.
+
+La evaluación se ha realizado sobre el siguiente entorno:
+
+\begin{itemize}
+    \item \textbf{Sistema operativo:} Ubuntu 24.04.4 LTS.
+    \item \textbf{Hardware:} Slimbook Executive con procesador
+    Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark}
+    i7-13700H (20 núcleos) y 32 GB de memoria RAM.
+    \item \textbf{Navegador:} Firefox 148.0.2 (64 bits).
+    \item \textbf{Lenguaje de desarrollo:} Python 3.13.11.
+    \item \textbf{Contenedores:} Docker 29.7.2.
+\end{itemize}
+
+Adicionalmente, se realizará una evaluación del rendimiento del generador
+mediante la medición del tiempo de inicialización del entorno y del tiempo
+empleado en la generación de modelos una vez cargadas las dependencias. Para
+ello, se utilizará una configuración con un volumen elevado de modelos generados,
+con el objetivo de obtener una estimación representativa del comportamiento del
+sistema en escenarios de mayor carga.
+
 \section{Resultados}
 \label{sec:resultados_objetivos}
 
@@ -57,7 +89,7 @@ evidencia con \textbackslash ref y a dar el veredicto frente al criterio,
 sin repetir datos. Las dos subsecciones siguientes modelan ambos patrones:
 O1 ejemplifica la recapitulación y O2 la medición completa.}
 
-\subsection{\ph{Resultados sobre el objetivo O1: título descriptivo}}
+\subsection{Resultados sobre el objetivo O1}
 \label{subsec:resultados_o1}
 
 \ph{Patrón RECAPITULACIÓN, para objetivos cuyo criterio ya quedó verificado
@@ -72,58 +104,167 @@ suite completa pasa— y cierra con el veredicto frente al criterio («el
 criterio de éxito asociado al objetivo O1 se considera cumplido»), sin
 repetir datos ni añadir tablas nuevas.}
 
-\subsection{\ph{Resultados sobre el objetivo O2: título descriptivo}}
+El objetivo O1 consistía en desarrollar un generador automático capaz de
+producir modelos UVL con diferentes niveles de complejidad y expresividad,
+incluyendo construcciones avanzadas del lenguaje que permitan ampliar la
+variedad de modelos disponibles para el análisis de variabilidad.
+
+Para verificar este objetivo se han generado modelos utilizando distintas
+configuraciones del generador, comprobando que los parámetros seleccionados se
+reflejan correctamente en los modelos UVL obtenidos y que estos mantienen una
+estructura válida conforme al lenguaje.
+
+En las siguientes imágenes se puede observar que efectivamente se ha alcanzado el objetivo definido. En la primera se puede ver la configuración usada para generar los modelos con expresividad avanzada, donde se han activado todos los \textit{major levels} junto con todos sus \textit{minor levels}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.40\textwidth]{configuracion_verificar_O1.png}
+    \caption{Configuración usada para verificar O1. Elaboración propia}
+    \label{fig:configuracion-O1}
+\end{figure}
+
+Las dos siguientes imágenes muestran algunos de los modelos en cuestión, donde se puede comprobar que existen características, atributos y constraints de varios niveles de expresividad.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejemplo1_verificar_O1.png}
+    \caption{Ejemplo 1 para verificar O1. Elaboración propia}
+    \label{fig:ejemplo1-modelo-uvl}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{ejemplo2_verificar_O1.png}
+    \caption{Ejemplo 2 para verificar O1. Elaboración propia}
+    \label{fig:ejemplo2-modelo-uvl}
+\end{figure}
+
+Los resultados obtenidos permiten verificar el cumplimiento del criterio de
+éxito asociado al objetivo O1.
+
+\subsection{Resultados sobre el objetivo O2}
 \label{subsec:resultados_o2}
 
-\ph{Patrón MEDICIÓN COMPLETA, para objetivos cuyo criterio se verifica en
-este capítulo. Indica qué se ha medido para este objetivo y en qué
-condiciones (remite a la Sección~\ref{sec:diseno_evaluacion}, no las
-repitas). La Tabla~\ref{tab:resultados_o2} resume las métricas frente a sus
-umbrales.}
+El objetivo O2 consistía en desarrollar un sistema de configuración flexible que
+permitiera modificar los parámetros principales del proceso de generación y
+adaptar los modelos obtenidos a diferentes escenarios.
+
+Para verificar este objetivo se ha analizado el flujo de configuración del
+generador, comprobando que los distintos parámetros disponibles se encuentran
+organizados en diferentes etapas según su funcionalidad. La estructura del
+asistente de configuración y las diferentes vistas que permiten definir estos
+parámetros se muestran en la Sección~\ref{subsec:mapa_navegacion}.
+
+Además, se ha comprobado durante el desarrollo que las modificaciones realizadas
+sobre estos parámetros son aplicadas correctamente durante el proceso de
+generación, lo cual a su vez puede comprobarse en el ~\ref{subsec:resultados_o1}.
+
+Los resultados obtenidos permiten verificar el cumplimiento del criterio de
+éxito asociado al objetivo O2.
+
+\subsubsection*{Resultados sobre el objetivo O3}
+\label{subsec:resultados_o3}
+
+El objetivo O3 consistía en integrar la solución desarrollada dentro del
+ecosistema Flamapy y permitir su utilización desde UVLHub como herramienta de
+generación de modelos de características.
+
+La prueba de que se ha alcanzado este objetivo es la propia integración del generador como
+un plugin de Flamapy, cuya estructura propia puede comprobarse observando la imagen correspondiente en la Sección \ref{sec:tecnologias} (\textbf{Plugin generador basado en Flamapy}), así como su correcta utilización desde el flujo proporcionado por UVLHub.
+
+Además, se ha verificado que el módulo desarrollado mantiene la compatibilidad
+con las dependencias y componentes existentes del ecosistema, permitiendo su
+ejecución dentro del entorno habitual de la aplicación.
+
+Los resultados obtenidos permiten verificar el cumplimiento del criterio de
+éxito asociado al objetivo O3.
+
+\subsubsection*{Resultados sobre el objetivo O4}
+\label{subsec:resultados_o4}
+
+El objetivo O4 consistía en evaluar el comportamiento temporal del generador
+en escenarios de generación con un volumen elevado de modelos de características.
+
+Para realizar esta evaluación se ha utilizado una configuración con 1000 modelos
+a generar, incorporando diferentes niveles de expresividad del lenguaje UVL. La
+configuración empleada no representa un caso extremo en cuanto al tamaño
+individual de los modelos, ya que se han utilizado rangos moderados de
+características y restricciones, permitiendo obtener una estimación realista del
+coste de generación en un escenario habitual con un volumen elevado de modelos.
+
+La configuración utilizada durante la evaluación se muestra en la Figura
+\ref{fig:configuracion-tiempo-generacion}.
+
+\begin{figure}[H]
+      \centering
+      \makebox[\textwidth][c]{%
+            \includegraphics[width=1.1\textwidth]{resultados_prueba_O4.png}
+      }
+      \caption{Resultado temporal de la generación de modelos. Elaboración propia}
+      \label{fig:configuracion-tiempo-generacion}
+\end{figure}
+
+Los tiempos obtenidos durante la ejecución se dividen en dos fases diferenciadas:
+la carga inicial de las dependencias necesarias para ejecutar el generador y la
+generación posterior del conjunto de modelos UVL.
 
 \begin{table}[H]
 \centering
-\small
-\begin{tabular}{@{}P{4.5cm} P{2.5cm} P{4.5cm} P{2cm}@{}}
+\begin{tabular}{l c}
 \toprule
-\textbf{Métrica} & \textbf{Valor} & \textbf{Umbral (RNF / criterio)} & \textbf{¿Cumple?} \\
+\textbf{Fase} & \textbf{Tiempo obtenido} \\
 \midrule
-\ph{Tiempo medio de respuesta} & \ph{152~ms} & \ph{$\leq$ 200~ms (RNF-01)} & \ph{Sí} \\
-\ph{Métrica 2} & \ph{\dots} & \ph{\dots (Tabla~\ref{tab:criterios-exito})} & \ph{\dots} \\
-\ph{Métrica 3} & \ph{\dots} & \ph{\dots} & \ph{\dots} \\
+Carga inicial de dependencias e inicialización & 4.05 s \\
+Generación de 1000 modelos UVL & 7.8 s \\
 \bottomrule
 \end{tabular}
-\caption{\ph{Resultados de las métricas asociadas al objetivo O2.}}
-\label{tab:resultados_o2}
+\caption{Tiempos obtenidos durante la evaluación temporal del generador. Elaboración propia}
+\label{tab:tiempos-generador}
 \end{table}
 
-% Hueco para la gráfica del resultado. Descomenta y adapta:
-% \begin{figure}[H]
-%   \centering
-%   \includegraphics[width=0.8\textwidth]{resultados_o2}
-%   \caption{Pie autoexplicativo: qué se muestra, con qué datos y qué se observa.}
-%   \label{fig:resultados_o2}
-% \end{figure}
+Los resultados obtenidos muestran que el coste asociado a la generación de un
+volumen elevado de modelos es reducido una vez finalizada la fase inicial de
+carga e inicialización. En este escenario, la generación de 1000 modelos UVL se
+completa en 8.4 segundos, mostrando un comportamiento adecuado para el uso
+previsto del generador. No obstante, estos tiempos dependen de la complejidad de
+los modelos solicitados, pudiendo incrementarse en configuraciones con un mayor
+número de características, restricciones o atributos. Además, los valores
+obtenidos pueden variar en función de los recursos computacionales disponibles
+en el equipo donde se ejecute el generador.
 
-\ph{(Espacio reservado para una gráfica del resultado. Elige el tipo
-adecuado al dato: líneas para evolución o escalabilidad, barras para comparar
-alternativas, diagramas de caja para mostrar dispersión. Pie autoexplicativo
-y referencia desde el texto.)}
+\subsubsection*{Resultados sobre el objetivo O5}
+\label{subsec:resultados_o5}
 
-\ph{Interpretación crítica contra el umbral, no valoración vaga: en lugar de
-«el rendimiento salió bien», escribe «el valor de 152~ms queda por debajo del
-umbral de 200~ms fijado en el RNF-01 (Tabla~\ref{tab:rnf}), por tanto el
-criterio de éxito asociado al objetivo O2 se considera cumplido». Si una
-métrica no alcanza el umbral, dilo igual de claro y analiza la causa:
-reconocerlo vale más ante el tribunal que ocultarlo.}
+El objetivo O5 consistía en validar el correcto funcionamiento del generador
+mediante una batería de pruebas automatizadas que cubriese tanto la lógica
+interna del motor de generación como el flujo de configuración integrado en
+UVLHub.
 
-\subsection{\ph{Resultados sobre el objetivo O3: título descriptivo}}
-\label{subsec:resultados_o3}
+Para verificar este objetivo se ha ejecutado la suite de pruebas del módulo
+\textit{generator} dentro del entorno Docker de la aplicación. Estas pruebas
+validan diferentes componentes del sistema, incluyendo la generación de modelos
+UVL a partir de distintas configuraciones, la aplicación de los parámetros del
+asistente de generación, la persistencia del estado entre etapas del flujo, las
+opciones de salida generadas y el comportamiento del generador ante diferentes niveles de
+expresividad del lenguaje UVL, verificando que las configuraciones relativas a
+atributos, restricciones, cardinalidades y operadores avanzados producen los
+resultados esperados.
 
-\ph{Elige para cada objetivo el patrón que corresponda (recapitulación o
-medición completa) y añade tantas subsecciones como objetivos tenga el
-trabajo; ningún objetivo del Capítulo~\ref{chap:intro} debe quedarse sin
-resultado.}
+La ejecución completa de la suite mediante \textit{rosemary} finalizó
+correctamente, obteniéndose 134 pruebas superadas. En la Figura
+\ref{fig:tests-exitosos-O5} se muestra el resultado de dicha ejecución.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{salida_tests_O5.png}
+    \caption{Resultado de la ejecución de la suite de pruebas automatizadas. Elaboración propia}
+    \label{fig:tests-exitosos-O5}
+\end{figure}
+
+Los resultados obtenidos permiten verificar el cumplimiento del criterio de
+éxito asociado al objetivo O5, demostrando la estabilidad de las funcionalidades
+desarrolladas mediante pruebas automatizadas.
+
 
 \section{Comparación con trabajos previos}
 \label{sec:comparacion_trabajos}
@@ -145,6 +286,45 @@ fuerces: justifica por qué la comparación directa no es posible (datos,
 entorno o alcance distintos) y mantén la comparación cualitativa por
 criterios.}
 
+La Tabla~\ref{tab:comparativa-trabajos} del Capítulo~\ref{chap:estado-arte}
+recoge una comparación cualitativa entre diferentes herramientas relacionadas
+con la generación automática de modelos de características. En ella se
+consideran tres aspectos principales: la capacidad de generación automática, el
+grado de personalización ofrecido y la incorporación de construcciones de
+expresividad avanzada.
+
+Los resultados obtenidos durante la evaluación del generador desarrollado
+permiten observar que la solución propuesta cubre los tres criterios analizados.
+A diferencia de S.P.L.O.T. y FeatureIDE, cuyas capacidades de generación están
+principalmente orientadas a modelos basados en construcciones booleanas,
+el generador desarrollado permite producir modelos UVL incorporando elementos
+adicionales como atributos tipados, restricciones aritméticas, restricciones
+sobre cadenas, funciones agregadas y diferentes mecanismos de cardinalidad.
+
+En comparación con BeTTy, la solución desarrollada mantiene la capacidad de
+configuración flexible de los parámetros de generación, pero amplía el rango de
+expresividad de los modelos generados. Mientras que BeTTy permite definir
+escenarios experimentales con diferentes niveles de complejidad estructural, el
+generador desarrollado incorpora además construcciones propias de lenguajes de
+variabilidad más recientes como UVL.
+
+Además, la integración realizada dentro del ecosistema Flamapy y UVLHub supone
+una diferencia respecto a las herramientas analizadas, ya que permite utilizar
+el generador directamente dentro de una plataforma web orientada a la gestión y
+análisis de modelos de características, manteniendo la compatibilidad con las
+herramientas existentes del ecosistema.
+
+No se ha realizado una comparación cuantitativa directa en términos de tiempo de
+generación o volumen máximo de modelos, debido a que las herramientas estudiadas
+no proporcionan escenarios de evaluación homogéneos que permitan establecer una
+comparación justa, por lo que la comparación se ha centrado en las
+capacidades funcionales y de expresividad.
+
+En consecuencia, los resultados obtenidos muestran que el trabajo desarrollado
+amplía las capacidades de los generadores existentes, especialmente en cuanto a
+la generación de modelos con mayor expresividad y su integración dentro del
+ecosistema UVLHub, lo cual permite afirmar que efectivamente el trabajo realizado en este TFG no queda por detrás del resto a pesar de que herramientas como BeTTy cuenten con una mayor madurez histórica y una validación más extensa en escenarios experimentales.
+
 \section{Discusión}
 \label{sec:discusion}
 
@@ -164,6 +344,37 @@ realmente lo que se quiere evaluar?). Basta un párrafo: el tratamiento
 completo de las limitaciones se hace en la Sección~\ref{sec:limitaciones},
 no lo dupliques aquí.}
 
+Los resultados obtenidos muestran que la solución desarrollada responde al
+problema planteado inicialmente: la necesidad de disponer de un generador capaz
+de producir modelos de características con una mayor expresividad que las
+aproximaciones tradicionales basadas principalmente en construcciones
+booleanas. La integración del generador dentro del ecosistema Flamapy y UVLHub
+permite disponer de una herramienta flexible para la generación de modelos UVL
+destinados a tareas posteriores de análisis y experimentación.
+
+Durante el desarrollo se encontraron diferentes dificultades relacionadas con
+la integración y adaptación de los componentes existentes. Sin embargo, la
+evaluación final confirmó que el generador soporta correctamente las
+funcionalidades planteadas inicialmente, incluyendo los diferentes niveles de
+expresividad y las distintas configuraciones disponibles.
+
+La incorporación de construcciones avanzadas implica ciertos compromisos. Por
+un lado, aumentar la expresividad mediante atributos tipados, restricciones
+aritméticas, funciones agregadas o restricciones sobre cadenas incrementa la
+complejidad interna del generador. Por otro lado, ofrecer una configuración más
+flexible permite adaptar la generación a distintos escenarios, aunque aumenta
+el número de parámetros que el usuario debe comprender. Asimismo, una mayor
+riqueza en los modelos generados puede suponer un incremento del coste
+computacional en configuraciones más complejas.
+
+Finalmente, existen algunas amenazas a la validez de los resultados. La
+evaluación se ha realizado utilizando modelos sintéticos y configuraciones
+diseñadas para cubrir las funcionalidades principales del generador, por lo que
+los resultados podrían variar en otros escenarios. Además, los tiempos
+obtenidos dependen del entorno de ejecución y no se ha realizado una
+comparación cuantitativa directa con otras herramientas bajo condiciones
+equivalentes.
+
 % --- Transición al siguiente capítulo ---
 \ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
 establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
@@ -172,3 +383,10 @@ alcance, el Capítulo~\ref{chap:conclusiones} sintetiza el grado de
 cumplimiento de los objetivos planteados en el Capítulo~\ref{chap:intro},
 las limitaciones del trabajo y las líneas de trabajo futuro que estos
 resultados abren».}
+
+Los resultados obtenidos y la discusión realizada permiten establecer el grado de
+cumplimiento de los objetivos planteados y validar la solución desarrollada
+frente a los criterios de éxito definidos. A partir de este análisis, el
+Capítulo~9 aborda las conclusiones finales del trabajo, las limitaciones
+identificadas y las posibles líneas de trabajo futuro derivadas de los
+resultados obtenidos.

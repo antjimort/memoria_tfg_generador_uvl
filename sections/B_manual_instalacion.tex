@@ -12,7 +12,7 @@ sin contacto con el autor/a.}
 \ph{Lista del software, hardware y credenciales necesarios antes de empezar.
 Indica versiones concretas siempre que sea posible.}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item \textbf{Sistema operativo:} \ph{p.\,ej.\ Linux Ubuntu 24.04 LTS / macOS / Windows 11.}
   \item \textbf{Lenguaje y runtime:} \ph{p.\,ej.\ Python 3.x / Node 20 / Java 17.}
   \item \textbf{Gestor de paquetes:} \ph{pip / npm / maven\dots}
@@ -20,51 +20,64 @@ Indica versiones concretas siempre que sea posible.}
         almacenamiento\dots}
   \item \textbf{Otras herramientas:} \ph{Docker, Git, etc.}
 \end{itemize}
+}
+
+\begin{itemize}
+    \item \textbf{Sistema operativo:} el entorno utilizado durante el
+    desarrollo y validación del sistema ha sido Ubuntu 24.04 LTS. También es
+    posible utilizar otros sistemas compatibles con Docker.
+
+    \item \textbf{Lenguaje y runtime:} no es necesario instalar manualmente
+    Python ni sus dependencias en el sistema anfitrión, ya que el entorno de
+    ejecución se encuentra definido dentro de los contenedores del proyecto.
+
+    \item \textbf{Gestor de paquetes:} las dependencias necesarias para
+    ejecutar la aplicación y el generador se instalan automáticamente durante
+    la construcción de las imágenes Docker.
+
+    \item \textbf{Servicios externos:} no es necesario instalar manualmente
+    servicios adicionales. La configuración Docker del proyecto incluye los
+    contenedores necesarios para los servicios utilizados por UVLHub, entre
+    ellos la base de datos MariaDB, Redis, Elasticsearch, MailHog y Selenium.
+
+    \item \textbf{Otras herramientas:} es necesario disponer de Git para
+    obtener el código fuente y Docker junto con Docker Compose para construir y
+    ejecutar el entorno de desarrollo.
+\end{itemize}
 
 \section{Obtención del código fuente}
 \label{sec:obtencion_codigo}
 
 \ph{Indica el repositorio donde está alojado el código y cómo clonarlo:}
+En el siguiente enlace se puede encontra el repositorio del proyecto: https://github.com/antjimort/uvlhub
 
 \begin{verbatim}
-git clone <URL del repositorio>
-cd <nombre del proyecto>
+git clone git@github.com:antjimort/uvlhub.git
+cd uvlhub
 \end{verbatim}
 
-\section{Instalación de dependencias}
+\section{Instalación de dependencias y ejecución}
 \label{sec:instalacion_dependencias}
 
 \ph{Comandos para instalar las dependencias del proyecto en un entorno
 aislado (virtualenv, contenedor, etc.). Si hay variables de entorno o
 ficheros de configuración que el usuario debe rellenar, lístalos aquí.}
 
-\begin{verbatim}
-[Comandos de instalación de dependencias]
+Las dependencias del proyecto se gestionan mediante Docker, por lo que no es
+necesaria una instalación manual de paquetes. La construcción de los
+contenedores instala automáticamente las dependencias definidas en la
+configuración del proyecto.
 
-[Variables de entorno requeridas:
- - VAR_1 = ...
- - VAR_2 = ...]
+Este comando permite construir las imágenes utilizando el archivo de configuración correspondiente que contiene todos los subcomandos internos que lo prepara todo. Posteriormente, levanta los contenedores.
+
+\begin{verbatim}
+docker compose -f docker/docker-compose.dev.yml up --build
 \end{verbatim}
 
-\section{Configuración del entorno}
-\label{sec:configuracion_entorno}
-
-\ph{Pasos adicionales antes de poder ejecutar el sistema: creación de la base
-de datos, ejecución de migraciones, carga de datos iniciales, generación de
-claves, configuración del proxy inverso, etc.}
+Para detener y eliminar los contenedores se usa el siguiente comando:
 
 \begin{verbatim}
-[Pasos de configuración inicial]
-\end{verbatim}
-
-\section{Ejecución}
-\label{sec:ejecucion}
-
-\ph{Comando o comandos para arrancar el sistema en local. Indica también
-en qué URL/puerto queda disponible.}
-
-\begin{verbatim}
-[Comando de arranque]
+docker compose -f docker/docker-compose.dev.yml down
 \end{verbatim}
 
 \section{Despliegue en producción}
@@ -75,9 +88,16 @@ nube, PaaS\dots), describe el proceso paso a paso: construcción de la
 imagen, publicación en el registro, despliegue en el host, configuración
 del proxy/HTTPS, etc.}
 
-\begin{verbatim}
-[Pasos de despliegue en producción]
-\end{verbatim}
+La herramienta utilizada para el despliegue de la app principal ha sido Render, pero ha sido usada únicamente para las revisiones del tutor. Tambien se ha usado Redis, utilizado como almacenamiento externo para la gestión de las
+sesiones de Flask para conservar el estado
+del proceso de configuración del generador.
+
+No obstante, la plataforma utilizada no constituye un requisito del sistema,
+ya que la aplicación puede ser desplegada mediante otras alternativas
+compatibles con contenedores.
+
+El despliegue oficial de UVLHub es gestionado por DiversoLab.
+
 
 \section{Verificación de la instalación}
 \label{sec:verificacion}
@@ -85,3 +105,23 @@ del proxy/HTTPS, etc.}
 \ph{Cómo comprobar que la instalación ha sido correcta: ejecución de la
 suite de pruebas, acceso a una pantalla concreta, llamada a un endpoint
 de \textit{health check}, etc.}
+
+\section{Verificación de la instalación}
+\label{sec:verificacion-instalacion}
+
+Una vez levantados los contenedores mediante el comando indicado en la
+Sección~\ref{sec:instalacion_dependencias}, se puede comprobar que la
+instalación se ha realizado correctamente accediendo a la dirección local
+proporcionada por la aplicación durante el arranque.
+
+La consola muestra la dirección en la que se encuentra disponible el servicio
+web, normalmente mediante la dirección
+\texttt{http://172.18.0.10:5000} (la segunda que aparece). Se puede acceder a ella mediante cualquier navegador. Un ejemplo de la salida generada durante el
+inicio de la aplicación se muestra en la Figura~\ref{fig:inicio-contenedor}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{salida_contenedor.png}
+    \caption{Salida de consola tras el arranque correcto del contenedor web. Elaboración propia}
+    \label{fig:inicio-contenedor}
+\end{figure}

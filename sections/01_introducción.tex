@@ -127,6 +127,7 @@ De forma más específica, podemos desgranar los objetivos de este trabajo de la
       \item Desarrollar un sistema de configuración flexible que permita controlar las características de los modelos generados y adaptarlos a distintos escenarios de experimentación.
       \item Incorporar soporte para la generación de modelos que utilicen construcciones avanzadas del lenguaje UVL, permitiendo ampliar la variedad de casos de estudio disponibles para el análisis de variabilidad.
       \item Integrar la solución desarrollada dentro del ecosistema Flamapy y facilitar su utilización desde UVLHub como herramienta orientada a la generación y gestión de modelos de características.
+      \item Evaluar el comportamiento del generador bajo escenarios de generación con un volumen elevado de modelos, analizando el coste asociado a la inicialización del entorno y al proceso de generación.
       \item Validar el funcionamiento del generador mediante pruebas automatizadas que permitan comprobar la corrección de los modelos producidos.
 \end{enumerate}
 
@@ -157,10 +158,10 @@ para que la numeración se mantenga sola.}
   \textbf{Obj.} & \textbf{Criterio de éxito (medible)} & \textbf{Cómo se verifica} & \textbf{Cap.} \\
   \midrule
   \endhead
-  O1 & El generador permite producir modelos UVL automáticamente incorporando diferentes niveles de complejidad y expresividad del lenguaje. & Generación de modelos con configuraciones variadas y validación de que los modelos producidos cumplen la sintaxis y estructura esperada de UVL. & 6, 7 \\[0.3em]
+  O1 & El generador permite producir modelos UVL automáticamente incorporando diferentes niveles de complejidad y expresividad del lenguaje, ampliando la variedad de modelos disponibles para el análisis de variabilidad. & Generación de modelos con configuraciones variadas y validación de que los modelos producidos cumplen la sintaxis y estructura esperada de UVL. & 6, 7 \\[0.3em]
   O2 & El generador dispone de un sistema de configuración que permite modificar los parámetros principales del proceso de generación y adaptar los modelos obtenidos a distintos escenarios. & Revisión de las opciones de configuración disponibles y ejecución de pruebas con diferentes configuraciones para comprobar su efecto sobre los modelos generados. & 6, 7 \\[0.3em]
-  O3 & El generador permite crear modelos que incorporan construcciones avanzadas de UVL más allá de las relaciones básicas entre características. & Análisis de los modelos generados verificando la presencia y correcto tratamiento de atributos, restricciones y otros elementos avanzados del lenguaje. & 6, 7\\[0.3em]
-  O4 & La solución desarrollada queda integrada dentro del ecosistema Flamapy y puede ser utilizada desde UVLHub como herramienta de generación de modelos. & Verificación de la integración del plugin en Flamapy y comprobación del flujo completo de generación desde UVLHub. & 6, 7 \\[0.3em]
+  O3 & La solución desarrollada queda integrada dentro del ecosistema Flamapy y puede ser utilizada desde UVLHub como herramienta de generación de modelos. & Verificación de la integración del plugin en Flamapy y comprobación del flujo completo de generación desde UVLHub. & 6, 7 \\[0.3em]
+  O4 & Evaluar el comportamiento temporal del generador en escenarios de generación con un volumen elevado de modelos de características. & Medición del tiempo de inicialización del generador y del tiempo requerido para generar un conjunto elevado de modelos UVL bajo una configuración representativa, analizando el coste asociado a cada fase del proceso. & 8 \\
   O5 & El generador cuenta con una batería de pruebas automatizadas que permita validar su correcto funcionamiento y detectar errores en los modelos producidos. & Ejecución de la suite de pruebas automatizadas y análisis de los resultados obtenidos. & 7 \\
   \bottomrule
   \caption{Criterios de éxito de los objetivos y capítulos donde se verifican.}
