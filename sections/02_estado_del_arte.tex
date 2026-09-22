@@ -20,23 +20,6 @@ fue introducido por Apellido et al.~\cite{apellido2024articulo} y desde
 entonces se ha aplicado a \dots». Consulta \texttt{bibliography.bib}: incluye
 un modelo de cada tipo de entrada.}
 
-\begin{itemize}
-\item 2.1 Ingeniería de Líneas de Productos Software (SPL)
-\item   2.1.1 Líneas de Productos Software
-\item   2.1.2 Modelos de características
-\item   2.1.3 Análisis automático y motores de razonamiento / herramientas y ecosistema (según veamos cómo encaje mejor)
-\item 2.2 Universal Variability Language (UVL)
-\item   2.2.1 Basic structure of a UVL model 
-\item   2.2.2 Syntax: Language specification 
-\item   2.2.3 Languaje design
-\item   2.2.4 Language levels
-\item 2.3 Ecosistema de herramientas y aplicación en variabilidad software
-\item   2.3.1 Flamapy como framework de análisis de variabilidad
-\item   2.3.2 UVLHub como plataforma de gestión de modelos UVL
-\item   2.3.3 Generación automática de modelos de características
-\end{itemize}
-
-
 \section{Ingeniería de Líneas de Productos Software (SPL)}
 \label{sec:ingenieria_spl}
 
@@ -45,11 +28,11 @@ o el tipo de sistema sobre el que se construye la solución, apoyado en su
 fuente primaria, típicamente un libro de referencia~\cite{apellido2021libro}.}
 
 \ph{Cubre aquí:}
-\begin{itemize}
+\ph{\begin{itemize}
   \item \ph{Definición y origen del concepto.}
   \item \ph{Por qué es relevante para este TFG.}
   \item \ph{Conceptos auxiliares que el lector necesita conocer.}
-\end{itemize}
+\end{itemize}}
 
 
 \subsection{Líneas de Productos Software}
@@ -66,7 +49,7 @@ Debido a este hecho surge la Ingeniería de Líneas de Productos Software, defin
     \label{fig:ejemplo_spl}
 \end{figure}
 
-La existencia de elementos comunes introduce el concepto de variabilidad: "\textit{...is the ability of a software system or software artifact to be changed, customized, or configured for use in a particular context}" \cite{pohl2005}. Esta debe ser identificada, representada y gestionada durante el proceso de desarrollo, ya que permite definir qué elementos pueden formar parte de cada producto y bajo qué condiciones pueden combinarse.
+La existencia de elementos comunes y diferencias entre los productos introduce el concepto de variabilidad, definido por van Gurp, Bosch y Svahnberg como «Variability is the ability to change or customize a system» \cite{vanGurp2001}. Esta debe ser identificada, representada y gestionada durante el proceso de desarrollo, ya que permite definir qué elementos pueden formar parte de cada producto y bajo qué condiciones pueden combinarse.
 
 La gestión de esta variabilidad requiere distinguir entre dos actividades complementarias. Por una parte, la ingeniería de dominio (\textit{domain engineering}) se encarga de analizar un determinado dominio, identificar sus elementos comunes y variables, y construir los activos reutilizables que formarán la base de la línea de productos. Por otra parte, la ingeniería de aplicación (\textit{application engineering}) utiliza dichos activos para derivar productos concretos mediante la selección de las características necesarias y la resolución de las variabilidades definidas.
 
@@ -94,7 +77,7 @@ Aunque los modelos de características tradicionales permiten representar una gr
 
 Una vez definidos los modelos de características como mecanismo para representar la variabilidad de una SPL, surge la necesidad de disponer de técnicas capaces de analizar automáticamente la información contenida en dichos modelos. El análisis automático permite obtener información sobre las configuraciones representadas, comprobar propiedades del modelo y realizar operaciones de razonamiento sin necesidad de explorar manualmente cada una de las posibles variantes.
 
-Los motores de razonamiento (\textit{reasoning engine}) se encargan de realizar este análisis. Procesan los modelos de variabilidad y realizan operaciones como la comprobación de satisfacibilidad, la detección de inconsistencias o la identificación de características que no pueden formar parte de ninguna configuración válida. Por ejemplo, en un restaurante un cliente puede elegir en su primer plato Pasta o Arroz (obligatoriamente uno de ellos), y opcionalmente Salsa. No se puede establecer como restricción que se deba elegir Pasta y Arroz a la vez, ya que no tendría sentido. Los motores de razonamiento se encargan de comprobar que esto no ocurra, y lo categorizarían como \underline{no satisfacible}.
+Los motores de razonamiento (\textit{reasoning engine}) se encargan de realizar este análisis. Procesan los modelos de variabilidad y realizan operaciones como la comprobación de satisfacibilidad, la detección de inconsistencias o la identificación de características que no pueden formar parte de ninguna configuración válida. Por ejemplo, en un restaurante un cliente puede elegir en su primer plato Pasta o Arroz (obligatoriamente uno de ellos), y opcionalmente Salsa. No se puede establecer como restricción que se deba elegir Pasta y Arroz a la vez, ya que no tendría sentido si se ve desde un punto de vista natural. Los motores de razonamiento se encargan de comprobar que esto no ocurra, y lo categorizarían como \underline{no satisfacible}.
 
 \begin{figure}[H]
     \centering
@@ -111,7 +94,9 @@ Otra técnica ampliamente utilizada en el análisis automático de modelos de ca
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1\textwidth]{sat_vs_bdd.png}
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.1\textwidth]{sat_vs_bdd.png}
+    }
     \caption{Funcionamiento de cada motor de razonamiento. Elaboración propia.}
     \label{fig:sat_vs_bdd}
 \end{figure}
@@ -174,7 +159,7 @@ Además, UVL permite incorporar dos bloques opcionales en aquellos casos donde s
 \begin{itemize}
     \item \texttt{include}: permite importar extensiones adicionales, como los \textit{minor levels}.
     
-    \item \texttt{import}: permite importar submodelos de características situados en el mismo directorio, facilitando una organización más modular y limpia de los modelos y sus características.
+    \item \texttt{imports}: permite importar submodelos de características situados en el mismo directorio, facilitando una organización más modular y limpia de los modelos y sus características.
 \end{itemize}
 
 Estos dos últimos bloques deben situarse al principio del archivo UVL.
@@ -325,11 +310,11 @@ Un usuario o herramienta que requiera modelos UVL básicos puede trabajar única
 UVL define tres niveles jerárquicos de expresividad:
 
 \begin{itemize}
-    \item \textbf{Boolean level}: incluye características booleanas y restricciones lógicas.
+    \item \textbf{Boolean level}: incluye características booleanas y restricciones lógicas. También incluye la incorporación de atributos de diferentes tipos en cada característica.
     
     \item \textbf{Arithmetic level}: incorpora atributos numéricos y operaciones aritméticas.
     
-    \item \textbf{Type level}: permite trabajar con atributos de diferentes tipos, como valores numéricos o textuales, así como operaciones asociadas a dichos tipos.
+    \item \textbf{Type level}: incorpora características tipadas, que pueden tomar valores enteros, reales o textuales, y permite establecer restricciones sobre dichos valores.
 \end{itemize}
 
 Cada uno de estos niveles incluye completamente las capacidades proporcionadas por los niveles anteriores. Además, UVL incorpora niveles menores (\textit{minor levels}), que representan extensiones opcionales que añaden funcionalidades adicionales sin ser necesarias para avanzar entre los diferentes niveles principales.
@@ -342,19 +327,25 @@ El nivel booleano constituye el nivel principal más básico y representa el nú
 Por ejemplo:
 
 \begin{lstlisting}[language={}, caption={Ejemplo de modelo UVL utilizando el nivel booleano.}]
+include
+    Boolean.group-cardinality
+
 features
     Smartwatch
         optional
             GPS
+            Display
+            "Wi-Fi"
+            Bluetooth
             "Water Resistance"
             Accessories
-                [1..2]
+                [0..2]
                     "Leather Strap"
                     "Metal Strap"
                     "Silicone Strap"
 
 constraints
-    Wi-Fi || Bluetooth
+    "Wi-Fi" | Bluetooth
     "Water Resistance" => Display
 \end{lstlisting}
 
@@ -365,18 +356,18 @@ En este nivel únicamente se representa la presencia o ausencia de característi
 
 La cardinalidad de grupo (\textit{Group Cardinality}) es un nivel menor perteneciente al nivel booleano. Permite establecer que, dentro de un grupo de características, únicamente pueda seleccionarse un número determinado de elementos comprendido entre un límite inferior y superior.
 
-En el ejemplo anterior, la expresión:
+Por ejemplo, la expresión:
 
 \begin{lstlisting}[language={}, caption={Ejemplo de cardinalidad de grupo en UVL.}]
-[1..2]
+[0..2]
 \end{lstlisting}
 
-indica que pueden seleccionarse entre una y dos características del grupo \textit{Accessories}.
+indica que, cuando se selecciona la característica Accessories, pueden seleccionarse entre cero y dos de sus características hijas: Leather Strap, Metal Strap y Silicone Strap.
 
 
 \subsubsection{Arithmetic level}
 
-El nivel aritmético incluye todas las capacidades del nivel booleano y permite definir atributos numéricos asociados a características, así como restricciones basadas en operaciones aritméticas mediante operadores como \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/}, \texttt{=}, \texttt{<}, \texttt{>}, \texttt{<=} y \texttt{>=}.
+El nivel aritmético incluye las capacidades del nivel booleano y permite expresar restricciones sobre atributos numéricos asociados a las características. Para ello, se utilizan operadores aritméticos como +, -, * y /, junto con operadores de comparación como ==, !=, <, >, <= y >=.
 
 Además, este nivel incorpora dos niveles menores: \textit{Feature Cardinality} y \textit{Aggregate Functions}.
 
@@ -393,7 +384,7 @@ features
             Connectivity
                 or
                     Bluetooth
-                    Wi-Fi
+                    "Wi-Fi"
             Battery
                 alternative
                     Standard {Capacity 300}
@@ -404,7 +395,7 @@ features
             "Watch Faces" cardinality [5..20]
 
 constraints
-    ("Music Player".Storage + "Film Player".Storage) = 12
+    ("Music Player".Storage + "Film Player".Storage) == 12
     avg(Capacity) >= 300
 \end{lstlisting}
 
@@ -419,9 +410,9 @@ Para utilizar esta funcionalidad debe incluirse explícitamente mediante:
 Arithmetic.feature-cardinality
 \end{lstlisting}
 
-En el siguiente ejemplo se puede ver la forma en la que se emplea:
+En el siguiente fragmento con partes omitidas se puede ver la forma en la que se emplea:
 
-\begin{lstlisting}[language={}, caption={Ejemplo de atributos y restricciones aritméticas en UVL.}]
+\begin{lstlisting}[language={}, caption={Ejemplo de cardinalidad de característica en UVL}]
 include
     Arithmetic.feature-cardinality
 
@@ -440,7 +431,7 @@ constraints
 
 El nivel menor denominado \textit{Aggregate Functions} permite utilizar funciones agregadas como \texttt{sum()} y \texttt{avg()} dentro del bloque de restricciones.
 
-Por ejemplo:
+El siguiente fragmento con partes omitidas muestra dos restricciones agregadas de un modelo cuyas características contienen los atributos numéricos PriceEuros y Calification. La declaración de dichas características se omite para centrar el ejemplo en las restricciones.
 
 \begin{lstlisting}[language={}]
 include
@@ -455,18 +446,17 @@ constraints
 \end{lstlisting}
 
 
-En este caso, la restricción definida mediante la función \texttt{sum()} establece que la suma total de las veces que aparece el atributo \texttt{Capacity} en el árbol debe ser mayor que 400. La función \texttt{avg()} funciona de forma similar: devuelve la media de sus argumentos. Asimismo, es posible usar más de un atributo o \textit{feature} en la misma llamada a la función, separadas por coma. 
-
+En este ejemplo, sum(PriceEuros) suma los valores del atributo PriceEuros de las características seleccionadas que lo contienen, y la restricción exige que el resultado sea mayor que 200. Por su parte, avg(Calification) calcula la media de los valores del atributo Calification de las características seleccionadas que lo contienen, y exige que dicha media sea mayor que 5. Estas funciones agregan los valores de los atributos; no cuentan cuántas veces aparecen en el modelo.
 
 \subsubsection{Type level}
 
-El nivel de tipos incluye las capacidades proporcionadas por los niveles booleano y aritmético, incorporando además atributos con tipos específicos como \texttt{Integer}, \texttt{Float} y \texttt{String}. Gracias a ello, es posible asociar valores concretos a las características y establecer restricciones sobre dichos valores.
+El nivel de tipos amplía las capacidades de los niveles booleano y aritmético mediante características tipadas. Además de las características booleanas, permite declarar características de tipo Integer, Real y String, cuyos valores pueden utilizarse en restricciones. Estos tipos se indican delante del nombre de la característica y no deben confundirse con los atributos declarados entre llaves.
 
-Este nivel también incorpora el nivel menor \textit{String Constraints}, que permite realizar operaciones sobre atributos de tipo cadena mediante funciones como \texttt{len()}.
+Este nivel también incorpora el nivel menor String Constraints, que permite expresar restricciones sobre cadenas mediante funciones como len(), utilizada para obtener su longitud.
 
 Por ejemplo:
 
-\begin{lstlisting}[language={}, caption={Ejemplo de atributos tipados en UVL.}]
+\begin{lstlisting}[language={}, caption={Ejemplo de características tipadas y restricciones sobre sus valores en UVL.}]
 include
     Type.string-constraints
 
@@ -474,7 +464,7 @@ features
     Smartwatch
         mandatory
             String Color
-            Float Weight
+            Real Weight
             String "Serial Number"
 
 constraints
@@ -483,7 +473,7 @@ constraints
     Color != "Pink"
 \end{lstlisting}
 
-En este ejemplo, se definen atributos de tipo cadena y decimal asociados a características del modelo. La primera restricción establece que el atributo \textit{Serial Number} debe tener exactamente diez caracteres, mientras que las siguientes restricciones permiten comparar valores numéricos y textuales.
+En este ejemplo, Color y Serial Number son características de tipo String, mientras que Weight es una característica de tipo Real. La primera restricción exige que el valor de Serial Number tenga exactamente diez caracteres. Las otras dos establecen que el valor de Weight sea mayor que 30.0 y que el valor de Color sea distinto de "Pink".
 
 
 \section{Ecosistema de herramientas y aplicación en variabilidad software}
@@ -498,7 +488,7 @@ Flamapy es un framework desarrollado en Python orientado al análisis automátic
 
 Desde la perspectiva de herramienta, Flamapy proporciona diferentes mecanismos para facilitar su utilización en distintos escenarios. Entre ellos se encuentra una interfaz de línea de comandos (\textit{Command Line Interface}) que permite ejecutar análisis directamente sobre modelos de variabilidad, así como una fachada de Python (\textit{Python Facade}) que simplifica su integración dentro de otros desarrollos software. Además, ofrece interfaces adicionales como servicios REST mediante Swagger y soporte para ejecución en entornos web mediante WebAssembly (WASM), permitiendo utilizar sus capacidades de análisis desde diferentes aplicaciones y contextos.
 
-Como framework, Flamapy sigue una arquitectura modular basada en plugins, los cuales permiten extender sus capacidades sin modificar el núcleo principal del sistema. Esta arquitectura hace mucho más sencilla la incorporación de nuevos lenguajes de modelado, metamodelos o técnicas de análisis mediante componentes independientes que pueden integrarse dentro del ecosistema existente. Gracias a este enfoque, es posible adaptar Flamapy a diferentes necesidades relacionadas con la ingeniería de variabilidad, incorporando soporte para nuevos tipos de modelos o herramientas de razonamiento.
+Como framework, Flamapy sigue una arquitectura modular basada en \textit{plugins}, los cuales permiten extender sus capacidades sin modificar el núcleo principal del sistema. Esta arquitectura hace mucho más sencilla la incorporación de nuevos lenguajes de modelado, metamodelos o técnicas de análisis mediante componentes independientes que pueden integrarse dentro del ecosistema existente. Gracias a este enfoque, es posible adaptar Flamapy a diferentes necesidades relacionadas con la ingeniería de variabilidad, incorporando soporte para nuevos tipos de modelos o herramientas de razonamiento.
 
 Otro de los elementos principales que ofrece Flamapy son las operaciones (\textit{operations}), que representan las diferentes tareas de análisis que pueden ejecutarse sobre modelos de características. Cada operación define una funcionalidad concreta, como la comprobación de satisfacibilidad, la obtención de configuraciones válidas o el cálculo de propiedades del modelo, independientemente del formato en el que este haya sido definido. Esta separación permite reutilizar las mismas operaciones sobre diferentes tipos de modelos siempre que exista una representación compatible dentro del framework.
 
@@ -548,9 +538,20 @@ Estos módulos son originales de UVLHub. A ellos hay que añadirle también el m
 \subsection{Generación automática de modelos de características}
 \label{sec:concepto4}
 
-Ya es bien sabido que los modelos de características permiten representar la variabilidad existente dentro de una línea de productos software. Sin embargo, a medida que aumenta el número de características, restricciones y posibles configuraciones, la creación manual de estos modelos puede convertirse en una tarea costosa y difícil de gestionar.
+Ya es bien sabido que los modelos de características permiten representar la
+variabilidad existente dentro de una línea de productos software. Sin embargo,
+a medida que aumenta el número de características, restricciones y posibles
+configuraciones, la creación manual de estos modelos puede convertirse en una
+tarea costosa y difícil de gestionar.
 
-Debido a esto, surge la necesidad de disponer de mecanismos capaces de generar modelos de características de forma automática. Se ha comprobado que la generación automática es una vía bastante eficaz, ya que permite crear modelos de variabilidad siguiendo determinados parámetros o condiciones definidas previamente, reduciendo el esfuerzo necesario para construirlos y facilitando su utilización en tareas como la evaluación de herramientas de análisis o la realización de experimentos sobre diferentes escenarios de complejidad. Esta capacidad complementa las funcionalidades proporcionadas por lenguajes como UVL y frameworks de análisis como Flamapy, ya que permite no solo almacenar y analizar modelos existentes, sino también generar nuevos modelos que puedan ser posteriormente procesados dentro de estas herramientas.
+Por este motivo, la generación automática de modelos de características se ha
+utilizado como mecanismo para producir modelos sintéticos destinados, entre
+otros usos, a la evaluación y prueba de herramientas de análisis de variabilidad
+\cite{segura2011metamorphic,galindo2023llm}.
+
+Estas técnicas permiten obtener conjuntos de modelos con diferentes tamaños,
+estructuras y grados de complejidad, facilitando la realización de experimentos
+sobre distintos escenarios de evaluación.
 
 \section{Trabajos relacionados}
 \label{sec:relacionados}
@@ -573,7 +574,29 @@ Sin embargo, ninguno cubre \dots, que es precisamente lo que motiva este trabajo
 \ph{En el ámbito de \dots, los enfoques existentes se centran en \dots.
 La diferencia con la propuesta de este TFG es \dots.}
 
-Dentro del ámbito de la ingeniería de líneas de productos software existen diferentes propuestas orientadas a la generación automática de modelos de características. Estas aproximaciones han sido utilizadas principalmente para crear modelos sintéticos destinados a la evaluación de herramientas de análisis de variabilidad, la realización de experimentos controlados o el estudio de la complejidad de diferentes técnicas de razonamiento. Para analizar el estado actual de estas soluciones, se ha tomado como punto de partida el apartado \textit{Related Work} del paper proporcionado por el tutor de este TFG para el desarrollo de un nuevo generador de modelos de características basado en UVL. En dicho apartado se identifican diferentes propuestas existentes dentro de este ámbito, entre las que se encuentran S.P.L.O.T., FeatureIDE, BeTTy y ETHOM. A partir de esta información, se han realizado búsquedas individuales de cada generador, localizando las páginas web donde se encuentran disponibles sus respectivas publicaciones científicas, como ResearchGate para los trabajos asociados a BeTTy y S.P.L.O.T., ScienceDirect para FeatureIDE y ETHOM, así como las páginas oficiales de los propios proyectos cuando estas proporcionaban información adicional. A partir de estas fuentes se ha extraído la información necesaria para analizar las principales características de cada propuesta, prestando especial atención a sus capacidades de personalización, la expresividad de los modelos generados y su integración dentro de otros ecosistemas de variabilidad software. Como adelanto, se informa de que ninguno de los generadores existentes tienen la capacidad avanzada de expresividad de este generador, lo que lo diferencia claramente del resto. 
+Dentro del ámbito de la ingeniería de líneas de productos software existen diferentes propuestas orientadas a la generación automática de modelos de características. Estas aproximaciones han sido utilizadas principalmente para crear modelos sintéticos destinados a la evaluación de herramientas de análisis de variabilidad, la realización de experimentos controlados o el estudio de la complejidad de diferentes técnicas de razonamiento. Para analizar el estado actual de estas soluciones, se ha tomado como punto de partida el apartado \textit{Related Work} del paper proporcionado por los tutores de este TFG para el desarrollo de un nuevo generador de modelos de características basado en UVL\cite{sundermann2024generating}. En dicho apartado se identifican diferentes propuestas existentes dentro de este ámbito, entre las que se encuentran S.P.L.O.T., FeatureIDE, BeTTy y ETHOM. A partir de esta información, se han realizado búsquedas individuales de cada generador, localizando las páginas web donde se encuentran disponibles sus respectivas publicaciones científicas, como ResearchGate para los trabajos asociados a BeTTy y S.P.L.O.T., ScienceDirect para FeatureIDE y ETHOM, así como las páginas oficiales de los propios proyectos cuando estas proporcionaban información adicional. A partir de estas fuentes se ha extraído la información necesaria para analizar las principales características de cada propuesta, prestando especial atención a sus capacidades de personalización, la expresividad de los modelos generados y su integración dentro de otros ecosistemas de variabilidad software.
+
+\subsection{Generating Feature Models with UVL's Full Expressiveness}
+
+El trabajo desarrollado por Sundermann et al. \cite{sundermann2024generating}
+constituye el principal punto de partida del presente TFG.
+En dicho trabajo se presenta un generador automático de modelos de características
+basado en Universal Variability Language (UVL), capaz de aprovechar los diferentes
+niveles de expresividad definidos por el lenguaje.
+
+A diferencia de aproximaciones anteriores centradas principalmente en modelos
+booleanos, esta propuesta permite generar modelos que incorporan construcciones
+más avanzadas, incluyendo atributos, restricciones aritméticas y elementos
+dependientes de tipos. Para ello, los autores definen un sistema configurable que
+permite controlar diferentes aspectos relacionados con la estructura y complejidad
+de los modelos generados.
+
+El presente TFG toma esta propuesta como base para desarrollar una implementación
+integrada dentro del ecosistema Flamapy-UVLHub. Mientras que el trabajo de
+Sundermann et al. establece el enfoque de generación y la capacidad de producir
+modelos UVL expresivos, este proyecto pretende reflejarlo dentro de una plataforma
+existente, incorporando mecanismos de configuración, integración y validación
+mediante pruebas automatizadas.
 
 \subsection{S.P.L.O.T.}
 
@@ -587,11 +610,33 @@ FeatureIDE es un framework extensible orientado al desarrollo software basado en
 
 Además de sus capacidades de gestión y análisis, FeatureIDE incorpora un generador automático de modelos de características que permite crear modelos sintéticos dentro de su propio ecosistema. Sin embargo, al igual que otras propuestas existentes, su generación está principalmente limitada a construcciones pertenecientes al nivel booleano de los lenguajes de variabilidad, por lo que no permite generar modelos que incorporen toda la expresividad proporcionada por lenguajes más recientes como UVL.
 
-\subsubsection{BeTTy}
+\subsection{BeTTy}
 
 BeTTy (\textit{Benchmarking and Testing on the Automated Analysis of Feature Models}) es un framework orientado al benchmarking y evaluación de herramientas destinadas al análisis automático de modelos de características \cite{betty}. A diferencia de aproximaciones más simples, BeTTy permite configurar diferentes parámetros relacionados con la generación de modelos, facilitando la creación de escenarios experimentales adaptados a las necesidades de evaluación.
 
 Una de sus principales aportaciones es la capacidad de generar modelos con diferentes niveles de complejidad estructural y restricciones, permitiendo estudiar el comportamiento de diferentes técnicas de razonamiento sobre escenarios controlados \cite{betty}. Sin embargo, aunque proporciona una mayor flexibilidad respecto a generadores anteriores, sus capacidades siguen centradas principalmente en el nivel booleano del lenguaje de variabilidad. Por ello, permite aumentar la dificultad de análisis de los modelos generados, pero no ampliar su expresividad mediante construcciones como atributos o restricciones aritméticas.
+
+\subsection{ETHOM}
+
+ETHOM (\textit{Evolutionary algoriTHm for Optimized feature Models}) es una
+propuesta basada en algoritmos evolutivos orientada a la generación automática
+de modelos de características optimizados \cite{ethom}. A diferencia de los
+generadores puramente aleatorios, ETHOM formula la generación como un problema
+de optimización, utilizando una función de evaluación que permite buscar modelos
+con determinadas propiedades.
+
+En particular, ETHOM fue diseñado para generar modelos de características
+computacionalmente difíciles de analizar, permitiendo evaluar el comportamiento
+de herramientas de análisis de variabilidad bajo escenarios exigentes. Para ello,
+el algoritmo recibe diferentes restricciones relacionadas con el modelo a generar
+y busca configuraciones que maximicen criterios como el tiempo de ejecución o el
+consumo de memoria de las herramientas evaluadas \cite{ethom}.
+
+Esta propuesta supone una evolución respecto a la generación aleatoria de modelos,
+ya que permite crear casos de prueba adaptados a objetivos concretos de evaluación.
+Sin embargo, al estar orientado a modelos de características tradicionales, no
+contempla la generación de construcciones avanzadas propias de lenguajes con
+mayor expresividad como UVL.
 
 \subsection{Comparativa de trabajos relacionados}
 \label{subsec:comparativa_relacionados}
@@ -611,35 +656,50 @@ elegidos deberán poder respaldarse con evidencia propia en el
 Capítulo~\ref{chap:resultados}. El Capítulo~\ref{chap:resultados} retomará
 esta tabla para contrastarla con los resultados obtenidos.}
 
-% --- Transición al siguiente capítulo ---
-\ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
-establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
-«Identificado el hueco que dejan los trabajos existentes, el
-Capítulo~\ref{chap:planificacion} describe cómo se ha organizado el proyecto
-para construir la solución que lo cubre: metodología, fases, recursos y
-gestión de riesgos».}
-
 \begin{table}[H]
     \centering
-    \begin{tabularx}{\textwidth}{X c c c}
+    \renewcommand{\arraystretch}{1.2}
+    \begin{tabularx}{\textwidth}{
+        >{\raggedright\arraybackslash}X
+        >{\centering\arraybackslash}X
+        >{\centering\arraybackslash}X
+        >{\centering\arraybackslash}X
+        >{\centering\arraybackslash}X
+    }
         \toprule
         \textbf{Trabajo} &
         \textbf{Generación automática} &
         \textbf{Personalización} &
-        \textbf{Expresividad avanzada} \\
+        \textbf{Expresividad UVL} &
+        \textbf{Integración UVLHub} \\
         \midrule
         
         S.P.L.O.T. \cite{splot} &
         Sí &
         Parcial &
+        No &
         No \\
         
         FeatureIDE \cite{featureide} &
         Sí &
         Parcial &
+        No &
         No \\
         
         BeTTy \cite{betty} &
+        Sí &
+        Sí &
+        No &
+        No \\
+        
+        ETHOM \cite{ethom} &
+        Sí &
+        Sí &
+        No &
+        No \\
+        
+        Sundermann et al. \cite{sundermann2024generating} &
+        Sí &
         Sí &
         Sí &
         No \\
@@ -649,6 +709,7 @@ gestión de riesgos».}
         \textbf{Este TFG} &
         Sí &
         Sí &
+        Sí &
         Sí \\
         
         \bottomrule
@@ -656,3 +717,20 @@ gestión de riesgos».}
     \caption{Comparativa de trabajos relacionados con la generación automática de modelos de características.}
     \label{tab:comparativa_generadores}
 \end{table}
+
+
+% --- Transición al siguiente capítulo ---
+\ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
+establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
+«Identificado el hueco que dejan los trabajos existentes, el
+Capítulo~\ref{chap:planificacion} describe cómo se ha organizado el proyecto
+para construir la solución que lo cubre: metodología, fases, recursos y
+gestión de riesgos».}
+
+El presente capítulo ha establecido los fundamentos teóricos y tecnológicos
+necesarios para comprender el contexto del trabajo, así como las principales
+soluciones existentes relacionadas con la generación automática de modelos de
+características. A partir de este análisis se define el marco sobre el que se
+desarrolla la propuesta presentada en este TFG. El siguiente capítulo describe
+la planificación seguida durante el proyecto, incluyendo la metodología,
+las fases de desarrollo, los recursos empleados y la gestión de riesgos.

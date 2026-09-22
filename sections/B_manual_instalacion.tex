@@ -49,7 +49,17 @@ Indica versiones concretas siempre que sea posible.}
 \label{sec:obtencion_codigo}
 
 \ph{Indica el repositorio donde está alojado el código y cómo clonarlo:}
-En el siguiente enlace se puede encontra el repositorio del proyecto: https://github.com/antjimort/uvlhub
+El código fuente de referencia se encuentra en el repositorio oficial de
+UVLHub:
+
+\begin{center}
+\url{https://github.com/diverso-lab/uvlhub}
+\end{center}
+
+La versión documentada en esta memoria puede encontrarse en
+\texttt{https://github.com/antjimort/uvlhub}, que incorpora el componente \texttt{fm\_generator} y
+su integración en el módulo \textit{generator} de UVLHub. Para reproducir la
+versión evaluada, deben ejecutarse los siguientes comandos:
 
 \begin{verbatim}
 git clone git@github.com:antjimort/uvlhub.git
@@ -68,7 +78,10 @@ necesaria una instalación manual de paquetes. La construcción de los
 contenedores instala automáticamente las dependencias definidas en la
 configuración del proyecto.
 
-Este comando permite construir las imágenes utilizando el archivo de configuración correspondiente que contiene todos los subcomandos internos que lo prepara todo. Posteriormente, levanta los contenedores.
+El siguiente comando construye las imágenes necesarias y levanta el entorno de
+desarrollo definido para UVLHub. Durante este proceso se instala también el
+paquete \texttt{fm\_generator} y se construyen los recursos necesarios para su
+ejecución desde el navegador mediante Pyodide.
 
 \begin{verbatim}
 docker compose -f docker/docker-compose.dev.yml up --build
@@ -106,18 +119,22 @@ El despliegue oficial de UVLHub es gestionado por DiversoLab.
 suite de pruebas, acceso a una pantalla concreta, llamada a un endpoint
 de \textit{health check}, etc.}
 
-\section{Verificación de la instalación}
-\label{sec:verificacion-instalacion}
-
 Una vez levantados los contenedores mediante el comando indicado en la
 Sección~\ref{sec:instalacion_dependencias}, se puede comprobar que la
 instalación se ha realizado correctamente accediendo a la dirección local
 proporcionada por la aplicación durante el arranque.
 
-La consola muestra la dirección en la que se encuentra disponible el servicio
-web, normalmente mediante la dirección
-\texttt{http://172.18.0.10:5000} (la segunda que aparece). Se puede acceder a ella mediante cualquier navegador. Un ejemplo de la salida generada durante el
-inicio de la aplicación se muestra en la Figura~\ref{fig:inicio-contenedor}.
+La dirección de acceso local depende de los puertos publicados por la
+configuración Docker. Puede comprobarse mediante el siguiente comando:
+
+\begin{verbatim}
+docker compose -f docker/docker-compose.dev.yml ps
+\end{verbatim}
+
+El servicio debe abrirse en el navegador utilizando el puerto expuesto en el
+equipo anfitrión, normalmente mediante una dirección de la forma
+\texttt{http://localhost:<PUERTO>}. La salida del arranque permite comprobar
+que el contenedor web se ha iniciado correctamente.
 
 \begin{figure}[H]
     \centering
@@ -125,3 +142,52 @@ inicio de la aplicación se muestra en la Figura~\ref{fig:inicio-contenedor}.
     \caption{Salida de consola tras el arranque correcto del contenedor web. Elaboración propia}
     \label{fig:inicio-contenedor}
 \end{figure}
+
+\subsection{Ejecución de las pruebas automatizadas}
+
+Una vez iniciado el entorno Docker, la suite de pruebas integrada del módulo
+\textit{generator} puede ejecutarse mediante el siguiente comando:
+
+\begin{verbatim}
+docker compose -f docker/docker-compose.dev.yml exec web \
+  rosemary test generator --all
+\end{verbatim}
+
+La ejecución correcta debe finalizar sin errores. Esta suite valida el flujo del
+asistente, la generación de modelos UVL, la persistencia de parámetros y las
+opciones de salida integradas en UVLHub.
+
+Las pruebas del paquete independiente \texttt{fm\_generator} se ejecutan desde
+la raíz del repositorio mediante:
+
+\begin{verbatim}
+pytest fm_generator/tests -v
+\end{verbatim}
+
+\subsection{Medición de cobertura}
+
+La cobertura del código del módulo \textit{generator} integrado en UVLHub puede
+obtenerse ejecutando la suite mediante Rosemary dentro del contenedor web:
+
+\begin{verbatim}
+docker compose -f docker/docker-compose.dev.yml exec web \
+  rosemary test generator --all --coverage
+\end{verbatim}
+
+El informe generado incluye tanto el código de producción como los ficheros de
+prueba. Para los resultados recogidos en esta memoria se considera únicamente
+la cobertura de los ficheros de producción, tal y como se explica en la
+Sección~\ref{sec:cobertura}.
+
+La cobertura del paquete independiente \texttt{fm\_generator} puede obtenerse
+mediante el siguiente comando:
+
+\begin{verbatim}
+pytest fm_generator/tests -v --cov=fm_generator \
+  --cov-report=term-missing --cov-report=html
+\end{verbatim}
+
+El informe textual muestra las líneas no cubiertas, mientras que el informe HTML
+se genera en el directorio \texttt{htmlcov}. Los resultados de cobertura
+utilizados en esta memoria se describen en la
+Sección~\ref{sec:cobertura}.

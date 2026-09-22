@@ -131,18 +131,99 @@ No se optó por metodologías secuenciales como el modelo en cascada, ya que la 
 
 \subsubsection*{Control de versiones}
 
-El control de versiones del proyecto se ha realizado mediante Git, utilizando GitHub como plataforma de almacenamiento y gestión del código fuente. El desarrollo se ha realizado sobre la rama principal del repositorio (\texttt{main}), manteniendo un historial de cambios organizado mediante commits atómicos.
+El control de versiones del proyecto se ha realizado mediante Git, utilizando
+GitHub como plataforma de almacenamiento y seguimiento de la evolución del
+código. Debido a la evolución del proyecto y a la necesidad de integrar el
+generador dentro de diferentes versiones de UVLHub, el desarrollo quedó
+distribuido entre varios repositorios y una solicitud de incorporación de
+cambios (\textit{pull request}) en el repositorio oficial del proyecto.
 
-Cada commit representa un cambio funcional o de mantenimiento claramente identificado, siguiendo el \textit{Conventional Commits}. Esta práctica permite mantener un historial comprensible de la evolución del proyecto y facilita la trazabilidad de las modificaciones realizadas durante el desarrollo.
+Por este motivo, el repositorio
+\href{https://github.com/antjimort/uvlhub}{\texttt{antjimort/uvlhub}}
+no representa por sí solo todo el historial del Trabajo Fin de Grado. Dicho repositorio recoge principalmente la fase final de integración,
+refactorización, corrección y validación realizada entre mayo y septiembre de
+2026. La actividad desarrollada entre mayo y julio corresponde a la fase
+principal de estabilización, mientras que entre el 14 y el 18 de septiembre se
+realizaron correcciones adicionales derivadas de la revisión técnica del tutor.
 
-Se han utilizado diferentes tipos de commits en función de la naturaleza del cambio realizado, como \textit{feat} para la incorporación de nuevas funcionalidades, \textit{fix} para la corrección de errores detectados durante la validación y \textit{refactor} para modificaciones orientadas a mejorar la estructura interna del código sin alterar su comportamiento, entre otras.
+\begin{table}[H]
+\centering
+\small
+\renewcommand{\arraystretch}{1.15}
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{ejemplo_commits.png}
-    \caption{Algunos commits del proyecto. Elaboración propia.}
-    \label{fig:ejemplo_commits}
-\end{figure}
+\begin{tabularx}{\textwidth}{@{}
+    >{\raggedright\arraybackslash}p{0.25\textwidth}
+    >{\centering\arraybackslash}p{0.19\textwidth}
+    >{\raggedright\arraybackslash}X
+@{}}
+\toprule
+
+\textbf{Recurso} &
+\textbf{Periodo relevante} &
+\textbf{Papel dentro del desarrollo} \\
+
+\midrule
+
+\href{https://github.com/antjimort/fm_generator}
+{\texttt{fm\_generator}} &
+15/05/2025--21/04/2026 &
+Repositorio inicial del componente generador. Contiene 38 commits realizados
+por el autor relacionados con la implementación de niveles UVL, atributos,
+restricciones, cardinalidades y opciones de configuración. Los commits
+anteriores a mayo de 2025 no se consideran parte de la contribución del TFG. \\[0.4em]
+
+\href{https://github.com/antjimort/uvlhub_v2}
+{\texttt{uvlhub\_v2}} &
+14/02/2026--03/04/2026 &
+Repositorio transitorio utilizado durante la migración de los cambios previos
+a una nueva versión de UVLHub. En él se realizaron ajustes de migración,
+persistencia de parámetros del asistente y avances en los niveles booleano y
+aritmético del generador. \\[0.4em]
+
+\href{https://github.com/diverso-lab/uvlhub/pull/117}
+{\texttt{PR \#117}} &
+06/04/2026--19/04/2026 &
+Solicitud de incorporación de cambios en el repositorio oficial de UVLHub,
+titulada \textit{feat: boolean level ready}. La PR contiene 46 commits en
+total, de los cuales 45 fueron realizados por el autor, y fue fusionada en la
+rama \texttt{generator} el 19 de abril de 2026. \\[0.4em]
+
+\href{https://github.com/antjimort/uvlhub}
+{\texttt{uvlhub}} &
+05/2026--09/2026 &
+Repositorio utilizado durante la fase final de integración, estabilización y
+consolidación técnica. Incluye refactorizaciones de la arquitectura,
+correcciones de compatibilidad, adaptación de pruebas, automatización de
+despliegue y correcciones finales relacionadas con la validación de modelos
+UVL, PySAT y la integración del generador como \textit{plugin} de Flamapy. \\
+
+\bottomrule
+\end{tabularx}
+
+\caption{Trazabilidad de los repositorios y recursos utilizados durante el desarrollo.}
+\label{tab:trazabilidad-repositorios}
+\end{table}
+
+Los repositorios y la solicitud de incorporación de cambios anteriores no
+deben interpretarse como desarrollos independientes que puedan sumarse entre
+sí, ya que parte de los commits realizados en el repositorio
+\texttt{fm\_generator} fueron posteriormente incorporados en el PR~\#117.
+La Tabla~\ref{tab:trazabilidad-repositorios} permite identificar el origen de
+cada fase del desarrollo sin duplicar la dedicación contabilizada en el
+cronograma.
+
+La convención \textit{Conventional Commits} se adoptó progresivamente durante
+el proyecto. Por este motivo, algunos commits iniciales no siguen una
+nomenclatura completamente normalizada. Sin embargo, en las fases posteriores
+se utilizaron prefijos como \textit{feat} para la incorporación de nuevas
+funcionalidades, \textit{fix} para la corrección de errores, \textit{refactor}
+para reorganizaciones internas del código, \textit{test} para cambios en las
+pruebas, \textit{chore} para tareas de mantenimiento, \textit{style} para
+ajustes de estilo y \textit{ci} para modificaciones de integración continua.
+
+Esta organización permite mantener la trazabilidad de la evolución completa
+del generador, desde la implementación inicial como componente independiente
+hasta su integración y estabilización dentro de UVLHub.
 
 \subsubsection*{Herramientas de seguimiento}
 
@@ -240,68 +321,209 @@ La línea base tiene DOS dimensiones: el esfuerzo (columnas \textbf{Est.}\ y
 se reescriben cuando la realidad cambia: la estimación inicial se conserva y se
 compara con lo real, y los cambios significativos se registran en la
 Sección~\ref{sec:control_cambios}. La columna \textbf{EDT} indica qué paquetes de la
-Tabla~\ref{tab:edt} cubre cada fase, y la columna \textbf{Obj.}\ qué objetivo
-(O1--O5, Sección~\ref{sec:objetivos}) ataca: un objetivo sin fase es un objetivo
-sin plan. Ningún paquete de primer nivel de la EDT puede quedar sin fase: el 1.2
-es transversal a todas y el 5 se planifica en la tabla de la memoria.}
+Tabla~\ref{tab:edt} cubre cada fase, y la columna \textbf{Obj.}\ qué objetivo técnico o formativo relacionado aborda. En particular, las
+fases se vinculan principalmente con los objetivos O1--O6 definidos en la
+Sección~\ref{sec:objetivos}.}
 
 \ph{Tabla de fases del desarrollo: rellena las filas con tus propias fases.}
 
-\begin{longtable}{@{}P{0.4cm} P{2.4cm} P{1cm} P{0.9cm} P{1cm} P{1cm} P{1.6cm} P{1.6cm} P{3.9cm}@{}}
-  \toprule
-  \textbf{\#} & \textbf{Fase} & \textbf{EDT} & \textbf{Obj.} & \textbf{Est.} & \textbf{Real} & \textbf{Fin prev.} & \textbf{Fin real} & \textbf{Hito / Entregable} \\
-  \midrule
-  \endhead
-  1 & \ph{Fase 1} & \ph{1.1} & \ph{O1} & \ph{X h} & \ph{Y h} & \ph{mm/aa} & \ph{mm/aa} & \ph{Entregable de la fase 1.} \\[0.3em]
-  2 & \ph{Fase 2} & \ph{2.1--2.2} & \ph{O2} & \ph{X h} & \ph{Y h} & \ph{mm/aa} & \ph{mm/aa} & \ph{Entregable de la fase 2.} \\[0.3em]
-  3 & \ph{Fase 3} & \ph{3}   & \ph{O3} & \ph{X h} & \ph{Y h} & \ph{mm/aa} & \ph{mm/aa} & \ph{Entregable de la fase 3.} \\[0.3em]
-  4 & \ph{Fase 4} & \ph{4}   & \ph{O4} & \ph{X h} & \ph{Y h} & \ph{mm/aa} & \ph{mm/aa} & \ph{Entregable de la fase 4.} \\[0.3em]
-  \midrule
-  & \textbf{Total} & & & \textbf{\ph{X h}} & \textbf{\ph{Y h}} & & & \\
-  \bottomrule
-  \caption{Fases del desarrollo e hitos asociados (línea base de esfuerzo y calendario vs.\ valores reales).}
-  \label{tab:fases-desarrollo}
-\end{longtable}
+Teniendo como fecha de inicio del proyecto el 12 de abril de 2025, el
+cronograma real quedó dividido en varias etapas de desarrollo, integración y
+validación. La Tabla~\ref{tab:cronograma-ejecucion} recoge los periodos de
+actividad identificables a partir del historial de los repositorios y de los
+hitos de integración del proyecto.
 
-Teniendo como fecha de inicio del proyecto el 12 de abril del 2025, obtenemos la siguiente tabla:
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
 
-\begin{longtable}{@{}P{0.4cm} P{3cm} P{1.2cm} P{1.2cm} P{1cm} P{1cm} P{1.6cm} P{1.6cm} P{3.5cm}@{}}
+\begin{tabularx}{\textwidth}{@{}
+    >{\centering\arraybackslash}p{1.8cm}
+    >{\centering\arraybackslash}p{1.5cm}
+    >{\centering\arraybackslash}p{1.2cm}
+    >{\raggedright\arraybackslash}X
+    >{\raggedright\arraybackslash}X
+@{}}
+\toprule
 
-  \toprule
+\shortstack[c]{\textbf{Periodo}\\\textbf{real}} &
+\shortstack[c]{\textbf{Fin previsto}\\\textbf{del paquete}} &
+\textbf{EDT} &
+\textbf{Actividad principal} &
+\textbf{Hito o resultado} \\
 
-  \textbf{\#} & \textbf{Fase} & \textbf{EDT} & \textbf{Obj.} & \textbf{Est.} & \textbf{Real} & \textbf{Fin prev.} & \textbf{Fin real} & \textbf{Hito / Entregable} \\
+\midrule
 
-  \midrule
+04/2025 &
+04/2025 &
+1.1 &
+Análisis inicial y planificación del proyecto. &
+Planificación inicial y estudio de viabilidad del generador. \\[0.3em]
 
-  \endhead
+04/2025 &
+04/2025 &
+2.1--2.2 &
+Análisis de requisitos y diseño de la solución. &
+Requisitos definidos y prototipo inicial preparado para validar la integración. \\[0.3em]
 
-  1 & Análisis inicial y planificación del proyecto & 1.1 & O1 & 12 h & 12 h & 04/25 & 04/25 &
-  Prototipo inicial y planificación del desarrollo validada. \\[0.3em]
+05/2025--07/2025 &
+05/2026 &
+3 &
+Primera iteración del generador y de su integración inicial con UVLHub. &
+Implementación de restricciones booleanas, cardinalidades, atributos manuales,
+configuración inicial del \textit{wizard} e integración preliminar del componente. \\[0.3em]
 
-  2 & Análisis y diseño de la solución & 2.1--2.2 & O1--O2 & 25 h & 25 h & 04/25 & 04/25 &
-  Requisitos definidos, análisis de la solución propuesta y prototipo inicial desarrollado para validar la viabilidad de la integración. \\[0.3em]
+08/2025--01/2026 &
+--- &
+--- &
+Periodo de inactividad del proyecto. &
+No se realizaron actividades ni se establecieron hitos durante este intervalo. \\[0.3em]
 
-  3 & Desarrollo e integración del generador automático & 3 & O1--O4 & 593 h & 718 h & 05/26 & 07/26 &
-  Generador implementado e integrado dentro de UVLHub con soporte para los niveles de expresividad definidos y corrección de errores detectados durante el desarrollo. \\[0.3em]
+02/2026--04/2026 &
+05/2026 &
+3 &
+Reanudación del desarrollo, migración a UVLHub 2.0 e incorporación de nuevos
+niveles de expresividad. &
+Migración funcional, soporte del nivel booleano, funciones agregadas e
+integración mediante el PR~\#117, fusionado el 19 de abril de 2026. \\[0.3em]
 
-  4 & Pruebas y validación de la solución & 4 & O5 y 06 & 120 h & 170 h & 05/26 & 07/26 &
-  Suite de pruebas automatizadas, validaciones funcionales y revisiones finales del sistema completadas. \\
+05/2026--07/2026 &
+05/2026 &
+3--4 &
+Integración final, refactorización, adaptación de pruebas y validación del
+sistema. &
+Generador estabilizado, pruebas adaptadas a la nueva arquitectura y validación
+final del tutor. \\
 
-  \midrule
+14/09/2026--18/09/2026 &
+--- &
+3--4 &
+Correcciones finales y consolidación técnica posterior a la fase principal de
+validación. &
+Corrección de la generación de tipos y expresiones, validación de modelos UVL
+con \texttt{UVLReader} y PySAT, integración del generador como \textit{plugin}
+de Flamapy, reorganización de las pruebas unitarias y limpieza de elementos no
+deseados del repositorio. \\
 
-  & \textbf{Total} & & & \textbf{750 h} & \textbf{925 h} & & & \\
+\bottomrule
+\end{tabularx}
 
-  \bottomrule
+\caption{Cronograma de ejecución e hitos del proyecto.}
+\label{tab:cronograma-ejecucion}
+\end{table}
 
-  \caption{Fases del desarrollo e hitos asociados (línea base de esfuerzo y calendario vs.\ valores reales).}
+La distribución del esfuerzo se mantiene agrupada por paquetes de trabajo,
+ya que las horas reales se registraron por fases generales y no de forma
+independiente para cada una de las iteraciones temporales anteriores. Esta
+decisión evita asignar artificialmente horas concretas a periodos para los que
+no existe un registro horario detallado.
 
-  \label{tab:fases-desarrollo}
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.2}
 
-\end{longtable}
+\begin{tabularx}{\textwidth}{@{}
+    >{\centering\arraybackslash}p{0.55cm}
+    >{\raggedright\arraybackslash}X
+    >{\centering\arraybackslash}p{1.35cm}
+    >{\centering\arraybackslash}p{1.25cm}
+    >{\centering\arraybackslash}p{1.25cm}
+    >{\centering\arraybackslash}p{1.25cm}
+    >{\raggedright\arraybackslash}X
+@{}}
+\toprule
 
-\ph{Comenta la desviación: en qué fase se concentró, por qué se produjo y cómo se gestionó.}
+\textbf{\#} &
+\textbf{Fase} &
+\textbf{EDT} &
+\textbf{Obj.} &
+\shortstack[c]{\textbf{Est.}\\\textbf{(h)}} &
+\shortstack[c]{\textbf{Real}\\\textbf{(h)}} &
+\textbf{Hito / entregable} \\
 
-Como se puede observar, la tabla presenta una desviación considerable a partir de la tercera fase. Esto se debe a las complicaciones que han ido surgiendo a lo largo de la implementación del sistema y del diseño de las pruebas, como pueden ser los errores que se han ido presentando, un enfoque impreciso en el diseño de las pruebas e inconvenientes en la gestión del código.  
+\midrule
+
+1 &
+Análisis inicial y planificación del proyecto &
+1.1 &
+O1 &
+12 &
+12 &
+Prototipo inicial y planificación del desarrollo validada. \\[0.3em]
+
+2 &
+Análisis y diseño de la solución &
+2.1--2.2 &
+O1--O2 &
+25 &
+25 &
+Requisitos definidos, análisis de la solución propuesta y prototipo inicial
+desarrollado para validar la viabilidad de la integración. \\[0.3em]
+
+3 &
+Desarrollo e integración del generador automático &
+3 &
+O1--O4 &
+593 &
+703 &
+Generador implementado e integrado dentro de UVLHub con soporte para los
+niveles de expresividad definidos y corrección de errores detectados durante
+el desarrollo. \\[0.3em]
+
+4 &
+Pruebas y validación de la solución &
+4 &
+O5 y O6 &
+120 &
+170 &
+Suite de pruebas automatizadas, validaciones funcionales y revisiones finales
+del sistema completadas. \\
+
+\midrule
+
+&
+\textbf{Total} &
+&
+&
+\textbf{750} &
+\textbf{910} &
+\\
+
+\bottomrule
+\end{tabularx}
+
+\caption{Fases de desarrollo y esfuerzo asociado: línea base frente a valores reales.}
+\label{tab:fases-desarrollo}
+\end{table}
+
+La fase principal de desarrollo, integración y validación concluyó en julio
+de 2026. Posteriormente, entre el 14 y el 18 de septiembre de 2026, se
+realizó una fase adicional de correcciones y consolidación técnica como
+respuesta a las observaciones del tutor. Por tanto, el cierre técnico
+definitivo del proyecto se sitúa en septiembre de 2026.
+
+La línea base preveía finalizar las fases principales en mayo de 2026. La
+finalización de la fase principal en julio supuso una desviación de dos meses,
+mientras que el cierre técnico definitivo en septiembre representó una
+desviación acumulada de cuatro meses respecto a la previsión inicial.
+
+En términos de esfuerzo, las 910 horas reales de desarrollo superaron en
+160 horas las 750 horas inicialmente estimadas, lo que representa una
+desviación del 21,3\,\%. El esfuerzo adicional se concentró en las fases de
+desarrollo e integración del generador y de pruebas y validación, debido a
+los problemas de compatibilidad con dependencias externas, la necesidad de
+realizar refactorizaciones, la adaptación de las pruebas y las correcciones
+finales realizadas en septiembre tras la revisión del tutor.
+
+De las 910 horas de desarrollo, 400 corresponden al contrato de apoyo
+técnico asociado a TASOVA Plus y las 510 restantes son atribuibles al
+desarrollo del TFG. Junto con las 70 horas dedicadas a la redacción,
+maquetación y revisión de la memoria, la dedicación atribuible al TFG
+asciende a 580 horas.
 
 % --- Opcional: diagrama de Gantt (espacio reservado; no requiere cargar paquetes) ---
 % \begin{figure}[htbp]
@@ -319,38 +541,103 @@ descomenta el bloque anterior.}
 capítulos con hitos distintos y verificables; el desglose por capítulo individual
 es opcional. Todas las filas corresponden al paquete 5 de la EDT.}
 
-\begin{longtable}{@{}P{0.4cm} P{4.8cm} P{1cm} P{1.3cm} P{1.3cm} P{5.2cm}@{}}
-  \toprule
-  \textbf{\#} & \textbf{Capítulos} & \textbf{EDT} & \textbf{Est.} & \textbf{Real} & \textbf{Hito / Entregable} \\
-  \midrule
-  \endhead
-  1 & Caps.~1--3: introducción, estado del arte y planificación & 5 & \ph{X h} & \ph{Y h} & \ph{Borrador de contexto y plan aprobado por el tutor/a.} \\[0.3em]
-  2 & Caps.~4--7: núcleo técnico (requisitos, diseño, implementación y pruebas) & 5 & \ph{X h} & \ph{Y h} & \ph{Núcleo técnico redactado y trazable con el repositorio.} \\[0.3em]
-  3 & Caps.~8--9: resultados y conclusiones & 5 & \ph{X h} & \ph{Y h} & \ph{Memoria completa lista para revisión final y depósito.} \\
-  \midrule
-  & \textbf{Total} & & \textbf{\ph{X h}} & \textbf{\ph{Y h}} & \\
-  \bottomrule
-  \caption{Fases de redacción de la memoria (estimadas vs.\ reales).}
-  \label{tab:fases-memoria}
+
+\begin{longtable}{@{}P{1cm} P{4cm} c c c P{5cm}@{}}
+\toprule
+\textbf{\#} & \textbf{Capítulos} & \textbf{EDT} & \textbf{Est.} & \textbf{Real} & \textbf{Hito / Entregable} \\
+\midrule
+\endhead
+
+1 &
+Caps. 1--3: introducción, estado del arte y planificación
+& 5
+& 30 h
+& 33 h
+& Borrador de contexto y plan aprobado por el tutor. \\[0.3em]
+
+2 &
+Caps. 4--7: núcleo técnico (requisitos, diseño, implementación y pruebas)
+& 5
+& 25 h
+& 24 h
+& Núcleo técnico redactado y trazable con el repositorio. \\[0.3em]
+
+3 &
+Caps. 8--9: resultados y conclusiones
+& 5
+& 15 h
+& 13 h
+& Memoria completa lista para revisión final y depósito. \\
+
+\midrule
+\textbf{Total}
+&
+&
+&
+\textbf{70 h}
+&
+\textbf{70 h}
+&
+\\
+
+\bottomrule
+\caption{Fases de redacción de la memoria (estimadas vs. reales).}
+\label{tab:fases-redaccion-memoria}
 \end{longtable}
+
+Las 70 horas reales indicadas en la
+Tabla~\ref{tab:fases-redaccion-memoria} corresponden al trabajo completo de
+elaboración de la memoria, incluyendo la redacción y revisión de los capítulos,
+la organización de referencias, la preparación de tablas y figuras, la
+maquetación en \LaTeX, la revisión de referencias cruzadas y la preparación de
+los apéndices.
+
+La distribución de 33, 24 y 13 horas corresponde a bloques de capítulos y no
+a una estimación basada únicamente en su extensión. Las tareas técnicas
+necesarias para obtener resultados, ejecutar pruebas y recopilar evidencias se
+contabilizaron dentro de las fases de desarrollo y validación, evitando sumar
+dos veces el mismo esfuerzo.
 
 \ph{Tabla de resumen global: agrega las dos tablas anteriores. Los totales DEBEN
 coincidir con los de las tablas de origen (Tablas~\ref{tab:fases-desarrollo}
-y~\ref{tab:fases-memoria}).}
+y~\ref{tab:fases-redaccion-memoria}).}
 
-\begin{longtable}{@{}P{0.4cm} P{7.6cm} P{2cm} P{2cm}@{}}
-  \toprule
-  \textbf{\#} & \textbf{Fase} & \textbf{Est.} & \textbf{Real} \\
-  \midrule
-  \endhead
-  1 & Desarrollo (Tabla~\ref{tab:fases-desarrollo}) & \ph{X h} & \ph{Y h} \\[0.3em]
-  2 & Memoria (Tabla~\ref{tab:fases-memoria})       & \ph{X h} & \ph{Y h} \\
-  \midrule
-  & \textbf{Total} & \textbf{\ph{X h}} & \textbf{\ph{Y h}} \\
-  \bottomrule
-  \caption{Resumen global del proyecto (estimadas vs.\ reales).}
-  \label{tab:fases-conjunta}
-\end{longtable}
+\begin{table}[H]
+\centering
+\begin{tabular}{@{}P{4cm} c c@{}}
+\toprule
+\textbf{\# Fase} & \textbf{Est.} & \textbf{Real} \\
+\midrule
+Desarrollo (Tabla~\ref{tab:fases-desarrollo})
+& 750 h & 910 h \\[0.3em]
+
+Memoria (Tabla~\ref{tab:fases-redaccion-memoria})
+& 70 h & 70 h \\
+
+\midrule
+\textbf{Total}
+& \textbf{820 h} & \textbf{980 h} \\
+
+\bottomrule
+\end{tabular}
+\caption{Resumen global del proyecto (estimadas vs. reales).}
+\label{tab:resumen-global-proyecto}
+\end{table}
+
+El total de 980 horas representa la dedicación real acumulada durante el
+proyecto, pero no constituye íntegramente la carga académica del TFG. De este
+total, 400 horas corresponden al contrato de apoyo técnico asociado a TASOVA
+Plus y no forman parte de la dedicación académica del TFG. Las 580 horas
+restantes sí son atribuibles al TFG, incluyendo 510 horas de desarrollo y
+70 horas dedicadas a la redacción, maquetación y revisión de la memoria.
+
+Por tanto, la comparación con las 300 horas asociadas a un TFG de 12 ECTS
+debe realizarse utilizando las 580 horas propias del TFG y no las 980 horas
+acumuladas durante todo el proyecto. La dedicación específica del TFG fue
+superior a la carga académica teórica debido principalmente a la complejidad
+de la integración con UVLHub y Flamapy, la adaptación de las pruebas, las
+tareas adicionales de validación y las correcciones derivadas de las
+revisiones técnicas.
 
 \ph{Cierra la sección con una valoración global de la desviación temporal.}
 
@@ -361,31 +648,14 @@ y~\ref{tab:fases-memoria}).}
 constancia del avance. Tres filas bastan; lo que da valor es poder evidenciarlo
 después (fechas de reuniones clave, decisiones tomadas en ellas, issues cerradas).}
 
-\begin{longtable}{@{}P{3.8cm} P{2.2cm} P{2.8cm} P{5.4cm}@{}}
-  \toprule
-  \textbf{Actividad} & \textbf{Cadencia} & \textbf{Vía} & \textbf{Resultado esperado} \\
-  \midrule
-  \endhead
-  \ph{Reuniones con tutor/es} & \ph{Quincenal} & \ph{Presencial / videollamada} & \ph{Revisión del avance y acuerdos anotados.} \\[0.3em]
-  \ph{Mensajería asíncrona}   & \ph{Bajo demanda} & \ph{Correo / chat} & \ph{Resolución de dudas puntuales sin esperar a la reunión.} \\[0.3em]
-  \ph{Registro de avance}     & \ph{Continua} & \ph{Actas, issues, tablero} & \ph{Trazabilidad de decisiones y tareas completadas.} \\
-  \bottomrule
-  \caption{Plan de comunicaciones y seguimiento del proyecto.}
-  \label{tab:comunicaciones}
-\end{longtable}
-
 \ph{Cierra con una o dos frases sobre cómo funcionó en la práctica: número
 aproximado de reuniones mantenidas y un ejemplo concreto de decisión tomada en una
 de ellas (con fecha).}
 
 \begin{longtable}{@{}P{3.8cm} P{2.2cm} P{2.8cm} P{5.4cm}@{}}
-
 \toprule
-
 \textbf{Actividad} & \textbf{Cadencia} & \textbf{Vía} & \textbf{Resultado esperado} \\
-
 \midrule
-
 \endhead
 
 Reuniones con el tutor &
@@ -404,14 +674,26 @@ Repositorio Git/GitHub &
 Trazabilidad de la evolución del proyecto mediante el historial de cambios y commits realizados durante la implementación. \\
 
 \bottomrule
-
 \caption{Plan de comunicaciones y seguimiento del proyecto.}
-
 \label{tab:comunicaciones}
-
 \end{longtable}
 
-Durante el desarrollo del proyecto se han mantenido diferentes reuniones presenciales con el tutor con el objetivo de revisar el estado de la solución y validar las decisiones tomadas durante la implementación. La primera reunión relevante tuvo lugar el 5 de mayo de 2026, cuando se alcanzó aproximadamente el 80\% del desarrollo, donde se concluyó que la solución era funcionalmente aceptable, aunque presentaba ciertas deficiencias técnicas que debían ser corregidas antes de considerar finalizado el proyecto. Tras aplicar las correcciones necesarias, el 29 de junio de 2026 se realizó una segunda revisión del estado del sistema, en la que se identificaron algunos aspectos que todavía requerían ajustes menores. Finalmente, tras solucionar estas últimas cuestiones y comunicar los cambios realizados al tutor, se obtuvo su validación positiva sobre el estado final de la solución el día 10 de julio del 2026.
+Durante el desarrollo del proyecto se han mantenido diferentes reuniones
+presenciales con el tutor con el objetivo de revisar el estado de la solución
+y validar las decisiones tomadas durante la implementación. La primera reunión
+relevante tuvo lugar el 5 de mayo de 2026, cuando se alcanzó aproximadamente
+el 80\% del desarrollo. En ella se concluyó que la solución era
+funcionalmente aceptable, aunque presentaba ciertas deficiencias técnicas que
+debían ser corregidas.
+
+Tras aplicar las correcciones necesarias, el 29 de junio de 2026 se realizó
+una segunda revisión del estado del sistema y el 10 de julio se validó
+positivamente la versión principal de la solución. Posteriormente, durante la
+revisión técnica final, el tutor señaló nuevos aspectos relacionados con la
+integración como \textit{plugin} de Flamapy, la validación de los modelos
+generados y la organización de las pruebas. Estas observaciones dieron lugar
+a las correcciones realizadas entre el 14 y el 18 de septiembre de 2026,
+fecha en la que se considera cerrado técnicamente el desarrollo.
 
 \section{Gestión de riesgos}
 \label{sec:riesgos}
@@ -425,26 +707,8 @@ nivel si el impacto es Alto.}
 
 \begin{longtable}{@{}P{0.7cm} P{3.2cm} P{1.4cm} P{1.8cm} P{2.4cm} P{4.4cm}@{}}
   \toprule
-  \textbf{ID} & \textbf{Riesgo} & \textbf{Prob.} & \textbf{Impacto} & \textbf{Exposición} & \textbf{Mitigación} \\
-  \midrule
-  \endhead
-  R1 & \ph{Riesgo 1} & \ph{Alta}  & \ph{Alto}  & \ph{Alta}  & \ph{Plan de mitigación.} \\[0.3em]
-  R2 & \ph{Riesgo 2} & \ph{Media} & \ph{Medio} & \ph{Media} & \ph{Plan de mitigación.} \\[0.3em]
-  R3 & \ph{Riesgo 3} & \ph{Baja}  & \ph{Alto}  & \ph{Media} & \ph{Plan de mitigación.} \\[0.3em]
-  R4 & \ph{Riesgo 4} & \ph{Media} & \ph{Bajo}  & \ph{Baja}  & \ph{Plan de mitigación.} \\
-  \bottomrule
-  \caption{Riesgos identificados, exposición y planes de mitigación.}
-  \label{tab:riesgos}
-\end{longtable}
-
-\begin{longtable}{@{}P{0.7cm} P{3.2cm} P{1.4cm} P{1.8cm} P{2.4cm} P{4.4cm}@{}}
-
-  \toprule
-
   \textbf{ID} & \textbf{Riesgo} & \textbf{Prob.} & \textbf{Impacto} & \textbf{Exposición} & \textbf{Mitigación} \\\\
-
   \midrule
-
   \endhead
 
   R1 &
@@ -476,11 +740,8 @@ nivel si el impacto es Alto.}
   Realizar un seguimiento periódico del progreso, priorizar las tareas críticas y reservar tiempo adicional para corrección de errores y mejora de las pruebas. \\
 
   \bottomrule
-
   \caption{Riesgos identificados, exposición y planes de mitigación.}
-
   \label{tab:riesgos}
-
 \end{longtable}
 
 \subsection{Seguimiento de riesgos al cierre}
@@ -493,26 +754,8 @@ riesgo de la Tabla~\ref{tab:riesgos}, sin excepciones.}
 
 \begin{longtable}{@{}P{0.7cm} P{2.8cm} P{5.4cm} P{5.3cm}@{}}
   \toprule
-  \textbf{ID} & \textbf{¿Se materializó?} & \textbf{Respuesta aplicada} & \textbf{Riesgo residual} \\
-  \midrule
-  \endhead
-  R1 & \ph{Sí, en la fase 3} & \ph{Qué se hizo realmente.} & \ph{Qué queda pendiente.} \\[0.3em]
-  R2 & \ph{No} & \ph{La mitigación preventiva funcionó / no fue necesaria.} & \ph{---} \\[0.3em]
-  R3 & \ph{Parcialmente} & \ph{Respuesta aplicada.} & \ph{Riesgo residual.} \\[0.3em]
-  R4 & \ph{No} & \ph{No fue necesaria ninguna acción.} & \ph{---} \\
-  \bottomrule
-  \caption{Seguimiento de riesgos al cierre: materialización, respuesta y residuales.}
-  \label{tab:seguimiento_riesgos}
-\end{longtable}
-
-\begin{longtable}{@{}P{0.7cm} P{2.8cm} P{5.4cm} P{5.3cm}@{}}
-
-  \toprule
-
   \textbf{ID} & \textbf{¿Se materializó?} & \textbf{Respuesta aplicada} & \textbf{Riesgo residual} \\\\
-
   \midrule
-
   \endhead
 
   R1 &
@@ -536,11 +779,8 @@ riesgo de la Tabla~\ref{tab:riesgos}, sin excepciones.}
   El principal riesgo residual está relacionado con la posible existencia de deuda técnica pendiente. Una mayor reducción de esta deuda mediante refactorizaciones y mejoras arquitectónicas podría facilitar futuras ampliaciones y reducir el esfuerzo necesario para incorporarlas. \\
 
   \bottomrule
-
   \caption{Seguimiento de riesgos al cierre: materialización, respuesta y residuales.}
-
   \label{tab:seguimiento_riesgos}
-
 \end{longtable}
 
 \section{Control de cambios}
@@ -553,28 +793,12 @@ microajustes. Ten en cuenta que un TFG sin ningún cambio registrado resulta poc
 creíble. Si un cambio afectó al alcance, verifica que la Sección~\ref{sec:alcance}
 quedó coherente.}
 
-\begin{longtable}{@{}P{0.6cm} P{2.2cm} P{3.1cm} P{2.5cm} P{3.2cm} P{2.5cm}@{}}
-  \toprule
-  \textbf{ID} & \textbf{Fecha} & \textbf{Cambio} & \textbf{Causa} & \textbf{Impacto en la línea base} & \textbf{Aprobado por} \\
-  \midrule
-  \endhead
-  C1 & \ph{dd/mm/aa} & \ph{Alcance: qué se añadió o descartó.} & \ph{Por qué fue necesario.} & \ph{Efecto en objetivos, horas o entregables.} & \ph{Tutor/a, reunión dd/mm/aa} \\[0.3em]
-  C2 & \ph{dd/mm/aa} & \ph{Plazo: qué hito se movió.} & \ph{Causa.} & \ph{Impacto.} & \ph{Tutor/a} \\[0.3em]
-  C3 & \ph{dd/mm/aa} & \ph{Enfoque: qué decisión técnica cambió.} & \ph{Causa.} & \ph{Impacto.} & \ph{Tutor/a} \\
-  \bottomrule
-  \caption{Registro de control de cambios sobre la línea base.}
-  \label{tab:control_cambios}
-\end{longtable}
 
 \begin{longtable}{@{}P{0.6cm} P{2.2cm} P{3.1cm} P{2.5cm} P{3.2cm} P{2.5cm}@{}}
-
   \toprule
-
   \textbf{ID} & \textbf{Fecha} & \textbf{Cambio} & \textbf{Causa} & 
   \textbf{Impacto en la línea base} & \textbf{Aprobado por} \\\\
-
   \midrule
-
   \endhead
 
   C1 &
@@ -605,12 +829,20 @@ quedó coherente.}
   Modificación de la implementación del front-end y adaptación del generador al nuevo flujo de interacción, manteniendo los objetivos funcionales definidos inicialmente. &
   Tutor \\\\[0.8em]
 
+  C5 &
+  14--18/09/2026 &
+  Corrección y consolidación final del generador tras la revisión técnica del
+  tutor. &
+  Observaciones relativas a la integración como \textit{plugin} de Flamapy,
+  la validación de modelos UVL, la generación satisfacible y la organización
+  de las pruebas. &
+  Extensión del cierre técnico hasta septiembre de 2026, sin modificar el
+  alcance funcional del proyecto. &
+  Tutor \\  
+
   \bottomrule
-
   \caption{Registro de control de cambios sobre la línea base.}
-
   \label{tab:control_cambios}
-
 \end{longtable}
 
 \section{Plan de calidad}
@@ -624,12 +856,12 @@ el cumplimiento de los objetivos; el plan de calidad fija los estándares del
 proceso y del producto (código, revisiones, umbrales) con los que se trabaja a
 diario.}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item \ph{\textbf{Código:} estándares de estilo y \textit{linting} automatizado; cómo se aplican se detalla en el Capítulo~\ref{chap:implementacion}.}
   \item \ph{\textbf{Entregables:} criterio de aceptación de cada paquete de la EDT, verificado mediante las pruebas del Capítulo~\ref{chap:pruebas}.}
-  \item \ph{\textbf{Cobertura:} umbral objetivo de cobertura de pruebas (p.\,ej.\ X\,\%), medido como se describe en la Sección~\ref{sec:cobertura}.}
+  \item \ph{\textbf{Cobertura:} umbral objetivo de cobertura de pruebas (p.\ ej.\ X\,\%), medido como se describe en la Sección~\ref{sec:cobertura}.}
   \item \ph{\textbf{Memoria:} revisión de cada capítulo por el tutor/a y verificación de referencias cruzadas y bibliografía antes de la entrega.}
-\end{itemize}
+\end{itemize}}
 
 El plan de calidad definido para el proyecto establece los criterios utilizados para garantizar la calidad tanto de la solución software desarrollada como de la documentación asociada al TFG.
 
@@ -664,29 +896,12 @@ académico), el valor de mercado equivalente para una valoración realista.}
 
 \ph{Inversiones en infraestructura física y licencias de uso prolongado.}
 
-\begin{longtable}{P{4cm} P{4cm} P{2.5cm} P{2.5cm}}
-  \toprule
-  \textbf{Recurso} & \textbf{Descripción} & \textbf{Coste real} & \textbf{Valor} \\
-  \midrule
-  \endhead
-  \ph{Recurso 1} & \ph{Descripción.} & \ph{0,00\,€} & \ph{X\,€/año} \\[0.3em]
-  \ph{Recurso 2} & \ph{Descripción.} & \ph{0,00\,€} & \ph{X\,€}     \\[0.3em]
-  \midrule
-  \textbf{Total CapEx} & & \textbf{\ph{0,00\,€}} & \textbf{\ph{X\,€}} \\
-  \bottomrule
-  \caption{Costes de capital (CapEx).}
-  \label{tab:capex}
-\end{longtable}
-
 \ph{Justifica brevemente cómo se ha estimado el valor de mercado de cada recurso
 (por ejemplo, tarifa pública de un proveedor cloud o precio comercial de una licencia).}
 
 \begin{longtable}{P{4cm} P{4cm} P{2.5cm} P{2.5cm}}
-
   \toprule
-
   \textbf{Recurso} & \textbf{Descripción} & \textbf{Coste real} & \textbf{Valor} \\
-
   \midrule
 
   Equipo de desarrollo &
@@ -707,11 +922,8 @@ académico), el valor de mercado equivalente para una valoración realista.}
   \textbf{X\,€} \\
 
   \bottomrule
-
   \caption{Costes de capital (CapEx).}
-
   \label{tab:capex}
-
 \end{longtable}
 
 Los recursos utilizados durante el desarrollo no supusieron una inversión económica directa conocida, ya que se empleó principalmente infraestructura propia y herramientas basadas en software libre o de coste nulo. Por tanto, el coste real asociado a los costes de capital del proyecto es de 0,00\,€.
@@ -724,99 +936,89 @@ Los recursos utilizados durante el desarrollo no supusieron una inversión econ�
 
 \ph{Indica el rol, la tarifa por hora y la justificación de esa tarifa
 (convenio colectivo, mercado laboral de referencia, etc.). Usa como actividades
-las fases de la Tabla~\ref{tab:fases-conjunta}; los totales de horas deben
+las fases de la Tabla~\ref{tab:resumen-global-proyecto}; los totales de horas deben
 coincidir con ella.}
 
-\begin{longtable}{P{3.5cm} P{2cm} P{2cm} P{3cm} P{3cm}}
-  \toprule
-  \textbf{Actividad} & \textbf{H. estimadas} & \textbf{H. reales} &
-  \textbf{Coste estimado (€)} & \textbf{Coste real (€)} \\
-  \midrule
-  \endhead
-  \ph{Actividad 1}        & \ph{X} & \ph{Y} & \ph{0,00} & \ph{0,00} \\[0.3em]
-  \ph{Actividad 2}        & \ph{X} & \ph{Y} & \ph{0,00} & \ph{0,00} \\[0.3em]
-  \ph{Actividad 3}        & \ph{X} & \ph{Y} & \ph{0,00} & \ph{0,00} \\[0.3em]
-  \midrule
-  \textbf{Total personal} & \textbf{\ph{X}} & \textbf{\ph{Y}} & \textbf{\ph{0,00}} & \textbf{\ph{0,00}} \\
-  \bottomrule
-  \caption{Desglose de costes de personal (OpEx).}
-  \label{tab:coste_personal}
-\end{longtable}
 
-El coste de personal corresponde a la dedicación asociada al contrato de apoyo técnico vinculado al proyecto TASOVA PLUS. Dicho contrato contemplaba una dedicación de 25 horas semanales y una remuneración bruta mensual de 930,60\,€. Aunque el desarrollo del Trabajo Fin de Grado continuó posteriormente fuera del periodo financiado, únicamente se considera como coste real la cantidad correspondiente al periodo cubierto por dicho contrato.
+El coste de personal corresponde a la dedicación asociada al contrato de
+apoyo técnico vinculado al proyecto TASOVA Plus. Dicho contrato tuvo una
+duración de cuatro meses, entre abril y julio de 2025, y contemplaba una
+dedicación de 25 horas semanales junto con una remuneración bruta mensual
+de 930,60\,€.
 
-\begin{longtable}{P{3.5cm} P{2cm} P{2cm} P{3cm} P{3cm}}
+La tarifa utilizada para calcular el coste estimado se ha fijado de forma
+uniforme en 9,31\,€ por hora y se aplica a las 750 horas de desarrollo
+previstas inicialmente. Por este motivo, los costes estimados de la tabla
+se obtienen multiplicando las horas estimadas de cada fase por dicha tarifa.
 
-  \toprule
+El coste real refleja únicamente la remuneración correspondiente al
+contrato de TASOVA Plus. Las cuatro mensualidades abonadas durante el
+periodo contractual suponen un coste real total de
+\(4 \times 930,60 = 3722,40\,€\), equivalente aproximadamente a
+9,306\,€ por hora para las 400 horas contractuales. Las horas realizadas
+específicamente para el TFG se desarrollaron fuera del periodo financiado y
+no representan un coste directo adicional de personal.
 
-  \textbf{Actividad} &
-  \textbf{H. estimadas} &
-  \textbf{H. reales} &
-  \textbf{Coste estimado (€)} &
-  \textbf{Coste real (€)} \\
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.25}
 
-  \midrule
+\begin{tabularx}{\textwidth}{@{}
+    >{\raggedright\arraybackslash}X
+    >{\centering\arraybackslash}p{1.35cm}
+    >{\centering\arraybackslash}p{1.45cm}
+    >{\centering\arraybackslash}p{1.15cm}
+    >{\centering\arraybackslash}p{1.25cm}
+    >{\centering\arraybackslash}p{2.05cm}
+    >{\centering\arraybackslash}p{1.80cm}
+@{}}
+\toprule
 
-  Análisis inicial y planificación del proyecto &
-  12 &
-  12 &
-  111,67 &
-  59,56 \\[0.3em]
+\textbf{Actividad} &
+\shortstack[c]{\textbf{H.}\\\textbf{esti-}\\\textbf{madas}} &
+\shortstack[c]{\textbf{H.}\\\textbf{TASO-}\\\textbf{VA}} &
+\shortstack[c]{\textbf{H.}\\\textbf{TFG}} &
+\shortstack[c]{\textbf{H.}\\\textbf{reales}} &
+\shortstack[c]{\textbf{Coste}\\\textbf{estimado}\\\textbf{(€)}} &
+\shortstack[c]{\textbf{Coste}\\\textbf{real}\\\textbf{(€)}} \\
 
-  Análisis y diseño de la solución &
-  25 &
-  25 &
-  232,75 &
-  124,08 \\[0.3em]
+\midrule
 
-  Desarrollo e integración del generador automático &
-  593 &
-  718 &
-  5518,83 &
-  2876,50 \\[0.3em]
+Análisis inicial y planificación del proyecto &
+12 & 12 & 0 & 12 & 111,72 & 111,67 \\
 
-  Pruebas y validación de la solución &
-  120 &
-  170 &
-  1117,20 &
-  662,26 \\
+Análisis y diseño de la solución &
+25 & 25 & 0 & 25 & 232,75 & 232,65 \\
 
-  \midrule
+Desarrollo e integración del generador automático &
+593 & 363 & 340 & 703 & 5520,83 & 3378,08 \\
 
-  \textbf{Total personal} &
-  \textbf{750} &
-  \textbf{925} &
-  \textbf{6980,45} &
-  \textbf{3722,40} \\
+Pruebas y validación de la solución &
+120 & 0 & 170 & 170 & 1117,20 & 0,00 \\
 
-  \bottomrule
+\midrule
 
-  \caption{Desglose de costes de personal (OpEx).}
+\textbf{Total personal} &
+\textbf{750} &
+\textbf{400} &
+\textbf{510} &
+\textbf{910} &
+\textbf{6982,50} &
+\textbf{3722,40} \\
 
-  \label{tab:coste_personal}
+\bottomrule
+\end{tabularx}
 
-\end{longtable}
+\caption{Desglose de horas y costes de personal.}
+\label{tab:coste_personal}
+\end{table}
 
 \subsubsection*{Herramientas y servicios de desarrollo}
 
 \begin{longtable}{P{4cm} P{4cm} P{1.8cm} P{2.7cm}}
   \toprule
-  \textbf{Herramienta} & \textbf{Licencia utilizada} & \textbf{Coste real} & \textbf{Valor de mercado} \\
-  \midrule
-  \endhead
-  \ph{Herramienta 1} & \ph{Licencia.} & \ph{0\,€} & \ph{X\,€/año} \\[0.3em]
-  \ph{Herramienta 2} & \ph{Licencia.} & \ph{0\,€} & \ph{X\,€/año} \\[0.3em]
-  \midrule
-  \textbf{Total herramientas} & & \textbf{\ph{0\,€}} & \textbf{\ph{X\,€/año}} \\
-  \bottomrule
-  \caption{Costes de herramientas y servicios de desarrollo (OpEx).}
-  \label{tab:coste_herramientas}
-\end{longtable}
-
-\begin{longtable}{P{4cm} P{4cm} P{1.8cm} P{2.7cm}}
-
-  \toprule
-
   \textbf{Herramienta} &
   \textbf{Licencia utilizada} &
   \textbf{Coste real} &
@@ -847,37 +1049,17 @@ El coste de personal corresponde a la dedicación asociada al contrato de apoyo 
   \textbf{X\,€} \\
 
   \bottomrule
-
   \caption{Costes de herramientas y servicios de desarrollo (OpEx).}
-
   \label{tab:coste_herramientas}
-
 \end{longtable}
 
 \subsection*{Resumen del presupuesto (TCO)}
-
-\begin{longtable}{P{4cm} P{3cm} P{3cm} P{3cm}}
-  \toprule
-  \textbf{Categoría} & \textbf{Tipo} & \textbf{Coste real} & \textbf{Valor de mercado} \\
-  \midrule
-  \endhead
-  Infraestructura y licencias & CapEx & \ph{0,00\,€} & \ph{X\,€} \\
-  Personal                    & OpEx  & \ph{X\,€}    & \ph{X\,€} \\
-  Herramientas y servicios    & OpEx  & \ph{0,00\,€} & \ph{X\,€} \\
-  \midrule
-  \textbf{TCO total}          &       & \textbf{\ph{X\,€}} & \textbf{\ph{X\,€}} \\
-  \bottomrule
-  \caption{Resumen del presupuesto del proyecto (TCO = CapEx + OpEx).}
-  \label{tab:presupuesto_total}
-\end{longtable}
 
 \ph{Cierra la sección comentando el coste real frente al valor de mercado
 y la influencia del entorno académico (licencias educativas, equipos cedidos\dots).}
 
 \begin{longtable}{P{4cm} P{3cm} P{3cm} P{3cm}}
-
   \toprule
-
   \textbf{Categoría} &
   \textbf{Tipo} &
   \textbf{Coste real} &
@@ -908,11 +1090,8 @@ y la influencia del entorno académico (licencias educativas, equipos cedidos\do
   \textbf{X\,€} \\
 
   \bottomrule
-
   \caption{Resumen del presupuesto del proyecto (TCO = CapEx + OpEx).}
-
   \label{tab:presupuesto_total}
-
 \end{longtable}
 
 El coste real del proyecto está determinado principalmente por los costes de personal asociados al contrato de apoyo técnico vinculado al proyecto TASOVA PLUS. El resto de recursos empleados no han supuesto costes adicionales debido al uso de herramientas de código abierto y servicios con planes gratuitos. Cabe destacar que, aunque el desarrollo continuó posteriormente fuera del periodo financiado, dicho esfuerzo adicional no representa un coste económico directo dentro del presupuesto del proyecto.
@@ -923,26 +1102,54 @@ El coste real del proyecto está determinado principalmente por los costes de pe
 \ph{Cierra formalmente el plan. Primero, verifica el proyecto contra la EDT
 (Tabla~\ref{tab:edt}): todo paquete de trabajo debe estar entregado o tener un
 cambio registrado en la Sección~\ref{sec:control_cambios} que lo descarte. Después,
-resume en una frase la desviación global (Tabla~\ref{tab:fases-conjunta}) y extrae
+resume en una frase la desviación global (Tabla~\ref{tab:resumen-global-proyecto}) y extrae
 3--5 lecciones aprendidas honestas: las más valiosas son las que admiten un error
 y explican qué se haría distinto.}
-
-\begin{longtable}{@{}P{6.5cm} P{7.7cm}@{}}
-  \toprule
-  \textbf{Lección} & \textbf{Qué se haría distinto} \\
-  \midrule
-  \endhead
-  \ph{P.\,ej., se infraestimó la fase de pruebas un 40\,\%.} & \ph{Reservar un margen explícito para imprevistos en la estimación.} \\[0.3em]
-  \ph{P.\,ej., la integración continua desde el inicio evitó regresiones tardías.} & \ph{Mantenerla; automatizar también el despliegue.} \\[0.3em]
-  \ph{P.\,ej., acumular la redacción de la memoria al final generó presión.} & \ph{Redactar cada capítulo al cerrar su fase.} \\
-  \bottomrule
-  \caption{Lecciones aprendidas al cierre del proyecto.}
-  \label{tab:lecciones}
-\end{longtable}
 
 \ph{Las conclusiones (Capítulo~\ref{chap:conclusiones}) retomarán esta reflexión
 de forma resumida: no dupliques aquí lo que dirás allí, ni allí lo que ya queda
 registrado aquí.}
+
+
+Al finalizar el proyecto, todos los paquetes de trabajo definidos en la EDT han sido completados. Las fases planificadas se han ejecutado en su totalidad, sin necesidad de descartar ningún paquete de trabajo. Los cambios relevantes realizados durante el desarrollo han quedado registrados en la Sección~\ref{sec:control_cambios}, manteniendo la coherencia con el alcance inicial definido.
+
+La desviación temporal global del proyecto se ha concentrado principalmente en las fases de desarrollo e integración del generador automático y pruebas y validación de la solución, debido a la complejidad añadida durante la integración con componentes externos y a la necesidad de realizar iteraciones adicionales para asegurar el correcto funcionamiento del sistema.
+
+\begin{longtable}{P{6cm} P{6cm}}
+  \toprule
+  \textbf{Lección} & \textbf{Qué se haría distinto} \\
+  
+  \midrule
+  
+  La estimación inicial del esfuerzo necesario para las fases de integración y validación fue inferior al esfuerzo realmente requerido. &
+  Realizar una estimación más conservadora, incluyendo un margen adicional para problemas derivados de dependencias externas y correcciones durante la fase final. \\[0.5em]
+  
+  El conocimiento inicial sobre algunas tecnologías utilizadas en el proyecto no era suficiente para prever completamente las dificultades de integración. &
+  Dedicar una fase inicial más extensa al estudio de las herramientas y componentes externos antes de comenzar la implementación. \\[0.5em]
+  
+  La estrategia de pruebas podría haberse definido con mayor profundidad desde las primeras etapas del desarrollo. &
+  Diseñar desde el inicio una planificación de pruebas más completa, identificando las funcionalidades críticas y los casos de validación necesarios. \\[0.5em]
+  
+  La acumulación progresiva de cambios durante el desarrollo generó cierta deuda técnica. &
+  Realizar revisiones y refactorizaciones periódicas del código para mantener una arquitectura más mantenible durante todo el ciclo de desarrollo. \\
+  
+  \bottomrule
+  \caption{Lecciones aprendidas al cierre del proyecto.}
+  \label{tab:lecciones-aprendidas}
+\end{longtable}
+
+En conjunto, el proyecto se ha completado con una dedicación real de
+980 horas, de las cuales 910 corresponden al desarrollo y 70 a la elaboración
+de la memoria. Aunque la planificación inicial se vio afectada por un periodo
+de inactividad y por varias iteraciones adicionales de integración y
+validación, todos los paquetes de trabajo definidos en la EDT fueron
+completados.
+
+Con el proyecto planificado, ejecutado y cerrado, el siguiente capítulo
+precisa qué debe hacer exactamente la solución desarrollada. El
+Capítulo~\ref{chap:requisitos} presenta el catálogo de requisitos funcionales
+y no funcionales que sirve como base para el diseño, la implementación y la
+validación del sistema.
 
 % --- Transición al siguiente capítulo ---
 \ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
@@ -951,35 +1158,3 @@ establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
 paso es precisar QUÉ debe hacer exactamente el sistema: el
 Capítulo~\ref{chap:requisitos} traduce los objetivos en un catálogo de requisitos
 verificables».}
-
-Al finalizar el proyecto, todos los paquetes de trabajo definidos en la EDT han sido completados. Las fases planificadas se han ejecutado en su totalidad, sin necesidad de descartar ningún paquete de trabajo. Los cambios relevantes realizados durante el desarrollo han quedado registrados en la Sección~\ref{sec:control_cambios}, manteniendo la coherencia con el alcance inicial definido.
-
-La desviación temporal global del proyecto se ha concentrado principalmente en las fases de desarrollo e integración del generador automático y pruebas y validación de la solución, debido a la complejidad añadida durante la integración con componentes externos y a la necesidad de realizar iteraciones adicionales para asegurar el correcto funcionamiento del sistema.
-
-\begin{longtable}{P{6cm} P{6cm}}
-
-  \toprule
-
-  \textbf{Lección} & \textbf{Qué se haría distinto} \\
-
-  \midrule
-
-  La estimación inicial del esfuerzo necesario para las fases de integración y validación fue inferior al esfuerzo realmente requerido. &
-  Realizar una estimación más conservadora, incluyendo un margen adicional para problemas derivados de dependencias externas y correcciones durante la fase final. \\[0.5em]
-
-  El conocimiento inicial sobre algunas tecnologías utilizadas en el proyecto no era suficiente para prever completamente las dificultades de integración. &
-  Dedicar una fase inicial más extensa al estudio de las herramientas y componentes externos antes de comenzar la implementación. \\[0.5em]
-
-  La estrategia de pruebas podría haberse definido con mayor profundidad desde las primeras etapas del desarrollo. &
-  Diseñar desde el inicio una planificación de pruebas más completa, identificando las funcionalidades críticas y los casos de validación necesarios. \\[0.5em]
-
-  La acumulación progresiva de cambios durante el desarrollo generó cierta deuda técnica. &
-  Realizar revisiones y refactorizaciones periódicas del código para mantener una arquitectura más mantenible durante todo el ciclo de desarrollo. \\
-
-  \bottomrule
-
-  \caption{Lecciones aprendidas al cierre del proyecto.}
-
-  \label{tab:lecciones-aprendidas}
-
-\end{longtable}

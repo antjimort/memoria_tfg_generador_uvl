@@ -17,12 +17,12 @@ Aporta el trasfondo necesario para que un lector ajeno al tema entienda
 el resto del documento. Un lector tras leer esta sección debería poder responder a:
 ``¿de qué va este trabajo y en qué entorno se sitúa?''.}
 
-\ph{Sugerencia de contenido:}
+\ph{Sugerencia de contenido:
 \begin{itemize}
   \item \ph{Sector o disciplina (industria, investigación, educación\dots).}
   \item \ph{Tendencias o cambios recientes que motivan el problema.}
   \item \ph{Conceptos básicos imprescindibles para entender el resto.}
-\end{itemize}
+\end{itemize}}
 
 El desarrollo de software actual debe dar respuesta a sistemas cada vez más configurables, capaces de adaptarse a distintas necesidades, plataformas y contextos de uso. Dentro de este escenario, las Líneas de Productos Software (Software Product Lines, SPL) \cite{spl} ofrecen un enfoque para gestionar familias de productos relacionados a partir de los elementos que comparten y de aquellos que pueden variar entre unas configuraciones y otras. Esto permite tratar la variabilidad de forma explícita y facilita tareas como la configuración de productos, la reutilización de componentes o el análisis automático de las distintas combinaciones posibles.
 
@@ -30,7 +30,7 @@ Una de las formas más extendidas de representar esta variabilidad son los model
 
 A medida que los modelos han ganado en complejidad, también ha surgido la necesidad de disponer de formatos que permitan representarlos de manera común. Universal Variability Language (UVL) \cite{uvl} nace con este propósito y proporciona un lenguaje para describir modelos de variabilidad con diferentes grados de expresividad. Además de las relaciones habituales entre características, UVL permite incorporar construcciones más avanzadas, como atributos y restricciones, ampliando así los escenarios que pueden representarse y analizarse.
 
-En torno a estos modelos se han desarrollado distintas herramientas destinadas a facilitar su procesamiento y análisis. Entre ellas se encuentra Flamapy \cite{flamapy}, un framework desarrollado en Python que proporciona soporte para el análisis automático de modelos de características. Su arquitectura extensible, basada en plugins, permite incorporar nuevos formatos, operaciones y técnicas de análisis sin necesidad de modificar el núcleo de la herramienta, lo que facilita su evolución y su uso en diferentes líneas de investigación.
+En torno a estos modelos se han desarrollado distintas herramientas destinadas a facilitar su procesamiento y análisis. Entre ellas se encuentra Flamapy \cite{flamapy}, un framework desarrollado en Python que proporciona soporte para el análisis automático de modelos de características. Su arquitectura extensible permite incorporar nuevos formatos, operaciones y técnicas de análisis sin necesidad de modificar el núcleo de la herramienta, lo que facilita su evolución y su uso en diferentes líneas de investigación.
 
 El presente Trabajo Fin de Grado se desarrolla dentro de este ecosistema y se enmarca en la actividad investigadora de DiversoLab y en TASOVA Plus (Red en nuevas Tendencias en Arquitectura Software y Variabilidad) \cite{tasovaplus}. Este entorno promueve el desarrollo de herramientas relacionadas con la ingeniería de líneas de productos software, la arquitectura software y el análisis de variabilidad, siguiendo además principios asociados al software libre y a la ciencia abierta (Open Science).
 
@@ -45,11 +45,11 @@ y qué consecuencias tiene.}
 
 \ph{Estructura recomendada (1--3 problemas claramente delimitados):}
 
-\begin{enumerate}
+\ph{\begin{enumerate}
   \item \textbf{\ph{Limitación 1:}} \ph{descripción del problema y de su impacto.}
   \item \textbf{\ph{Limitación 2:}} \ph{descripción del problema y de su impacto.}
   \item \textbf{\ph{Limitación 3:}} \ph{descripción del problema y de su impacto.}
-\end{enumerate}
+\end{enumerate}}
 
 La evolución de los lenguajes de modelado y de los motores de razonamiento ha permitido trabajar con formas de variabilidad cada vez más complejas. Sin embargo, disponer de herramientas capaces de procesar esa complejidad no resulta suficiente por sí solo: para poder evaluarlas también es necesario contar con modelos que hagan uso de esas capacidades.
 
@@ -70,13 +70,13 @@ Es por ello que se identifican de forma explícita las siguientes limitaciones:
 Conecta el problema (sección anterior) con la solución que se va a proponer
 (sin entrar todavía en cómo se implementa).}
 
-\ph{Puntos típicos:}
+\ph{Puntos típicos:
 \begin{itemize}
   \item \ph{Por qué el enfoque elegido es adecuado.}
   \item \ph{Qué aporta respecto a soluciones existentes.}
   \item \ph{Encaje del trabajo en un contexto académico, profesional o de investigación
         (grupo de investigación, asignatura, empresa, publicación\dots).}
-\end{itemize}
+\end{itemize}}
 
 La disponibilidad de modelos de características con distintos niveles de expresividad resulta fundamental para continuar avanzando en el desarrollo y evaluación de técnicas de análisis automático de variabilidad software. Como se ha comentado anteriormente, la evolución de los lenguajes de modelado permite representar escenarios cada vez más complejos, pero esta capacidad debe estar acompañada de modelos que permitan estudiar y validar el comportamiento de las herramientas encargadas de procesarlos.
 
@@ -86,6 +86,112 @@ Desde una perspectiva académica y profesional, este Trabajo Fin de Grado repres
 
 Además, la participación en un proyecto vinculado a investigación me ha permitido adquirir experiencia en un contexto diferente al de los desarrollos software tradicionales. La necesidad de analizar información técnica, consultar documentación especializada y tomar decisiones fundamentadas ha favorecido el desarrollo de habilidades relacionadas con la búsqueda autónoma de conocimiento y la resolución de problemas abiertos.
 
+
+\section{Punto de partida y contribución propia}
+\label{sec:punto_partida}
+
+Este Trabajo Fin de Grado se desarrolla sobre un conjunto de componentes y avances
+previos que forman parte del ecosistema Flamapy-UVLHub. Por este motivo, resulta
+necesario delimitar qué elementos constituyen la base sobre la que se construye el
+trabajo y cuáles corresponden a las contribuciones realizadas durante el desarrollo
+del presente proyecto.
+
+En primer lugar, el diseño conceptual del generador de modelos de características
+no surge desde cero en este trabajo. La propuesta de generación de modelos UVL con
+diferentes niveles de expresividad está basada en el enfoque descrito por
+Sundermann et al. \cite{sundermann2024generating}, donde se presenta un generador
+capaz de producir modelos de características aprovechando las construcciones
+avanzadas del lenguaje UVL. Este trabajo previo establece las bases conceptuales
+sobre las que se desarrolla la implementación realizada en este TFG.
+
+Además, el proyecto parte de la infraestructura existente del ecosistema UVLHub y
+Flamapy. UVLHub ya proporcionaba una plataforma para la gestión y manipulación de
+modelos UVL, así como un módulo \textit{generator} inicial sobre el que se realiza
+la integración de la nueva funcionalidad.
+
+La siguiente tabla resume la procedencia de los principales elementos relacionados
+con el desarrollo:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{p{4cm}p{9cm}}
+\toprule
+\textbf{Elemento} & \textbf{Procedencia} \\
+\midrule
+
+Diseño conceptual del generador de modelos UVL con expresividad avanzada &
+Basado en el trabajo de Sundermann et al. \cite{sundermann2024generating}, donde
+se define el enfoque general de generación de modelos de características con
+soporte para las construcciones avanzadas del lenguaje UVL. \\
+
+Ecosistema Flamapy y plataforma UVLHub &
+Infraestructura previa sobre la que se desarrolla el trabajo. En Flamapy participan diferentes grupos de investigación, entre ellos los pertenecientes a las Universidades de Sevilla, Málaga, Graz y la UNED. En cuanto a UVLHub, ha sido desarrollado principalmente por DiversoLab. \\
+
+Generador de modelos de características como herramienta compatible con Flamapy &
+Implementación desarrollada principalmente en este Trabajo Fin de Grado a partir del enfoque conceptual diseñado por Sundermann et al \cite{sundermann2024generating}. Incluye
+la definición del modelo de configuración, la generación de estructuras
+jerárquicas, atributos, restricciones y la integración con las operaciones de
+Flamapy. \\
+
+Integración del generador dentro del módulo \textit{generator} de UVLHub &
+Desarrollo realizado durante este TFG, adaptando la aplicación existente para
+utilizar el nuevo componente generador independiente. \\
+
+Nueva interfaz del \textit{wizard} del generador &
+Aportación realizada por David Romero dentro del módulo
+\textit{generator} de UVLHub. Incluye la ampliación del \textit{wizard} de cinco a seis
+pasos, el panel lateral de seguimiento de la configuración actual y el componente
+\textit{slider} para facilitar la definición de distribuciones. \\
+
+Refactorización de determinados elementos de UVLHub &
+Trabajo realizado por David Romero dentro del proyecto global, incluyendo la
+reorganización de algunos ficheros del módulo generador como
+\textit{routes.py}, \textit{wizard.py} y otros elementos relacionados. Posteriormente, durante este TFG, se han realizado nuevas modificaciones arquitectónicas necesarias para integrar el generador.\\
+
+Batería de pruebas unitarias del módulo generador &
+Las pruebas relacionados con \textit{test\_engine.py},
+\textit{test\_validators.py}, \textit{test\_wizard\_outputs.py} y
+\textit{test\_wizard\_flow.py} fueron desarrollados en su mayoría por David Romero. Durante
+el desarrollo del TFG algunas de estas pruebas han sido adaptados para ajustarse a
+la nueva arquitectura del generador. \\
+
+Generador basado en modelos de lenguaje (LLM) &
+Desarrollado por David Romero dentro del ecosistema UVLHub. Aunque comparte
+entorno con el presente trabajo, queda explícitamente fuera del alcance de este
+Trabajo Fin de Grado. \\
+
+\bottomrule
+\end{tabular}
+\caption{Procedencia de los principales elementos relacionados con el desarrollo.}
+\label{tab:procedencia-elementos}
+\end{table}
+
+
+Por tanto, la contribución principal de este Trabajo Fin de Grado se centra en la
+implementación del generador configurable de modelos de características como
+componente independiente dentro de Flamapy y en su integración dentro de UVLHub.
+En concreto, las principales aportaciones realizadas durante este trabajo son:
+
+\begin{itemize}
+    \item La implementación de la lógica de generación de modelos de características
+    siguiendo el enfoque conceptual definido en trabajos previos, incorporando
+    soporte para diferentes niveles de expresividad del lenguaje UVL.
+
+    \item La creación de una arquitectura modular compatible con Flamapy,
+    separando la configuración del generador, la representación del modelo y las
+    operaciones necesarias para producir nuevos modelos.
+
+    \item La implementación del sistema de configuración asociado al generador,
+    permitiendo definir parámetros relacionados con características, jerarquía,
+    atributos y restricciones.
+
+    \item La integración del nuevo componente dentro del módulo \textit{generator} de UVLHub
+    y la adaptación de la infraestructura existente para trabajar con esta nueva
+    arquitectura.
+
+    \item La validación del funcionamiento del sistema mediante pruebas
+    automatizadas adaptadas a la implementación.
+\end{itemize}
 
 \section{Objetivos}
 \label{sec:objetivos}
@@ -108,35 +214,41 @@ registros en menos de 200~ms, dando respuesta a la Limitación~1''.}
 
 \ph{Objetivo general: ``Desarrollar/implementar/diseñar \dots con el fin de \dots''.}
 
-\begin{enumerate}[label=\textbf{O\arabic*.}]
+\ph{\begin{enumerate}[label=\textbf{O\arabic*.}]
   \item \textbf{\ph{Objetivo específico 1:}} \ph{descripción concreta y medible.}
   \item \textbf{\ph{Objetivo específico 2:}} \ph{descripción concreta y medible.}
   \item \textbf{\ph{Objetivo específico 3:}} \ph{descripción concreta y medible.}
   \item \textbf{\ph{Objetivo específico 4:}} \ph{descripción concreta y medible.}
   \item \textbf{\ph{Objetivo específico 5 (opcional):}} \ph{descripción concreta y medible.}
 \end{enumerate}
+}
 
-
-
-El objetivo principal de este trabajo es dar apoyo a la mejora de los motores de razonamiento existentes para el análisis de modelos de características mediante la obtención de una cantidad significativa y variada de modelos con expresividad avanzada. Como propuesta para conseguirlo, se pretende desarrollar un generador de modelos de características aleatorio y completamente configurable para poder cubrir todas las posibilidades en las que un modelo de características pueda ser diseñado \cite{sundermann2024generating}.
+El objetivo principal de este trabajo es dar apoyo a la mejora de los motores de razonamiento existentes para el análisis de modelos de características mediante la obtención de una cantidad significativa y variada de modelos con expresividad avanzada. Como propuesta para conseguirlo, se pretende desarrollar una herramienta de generación automática de modelos de características aleatoria y completamente configurable, compatible con el ecosistema Flamapy, capaz de producir modelos UVL con diferentes niveles de expresividad \cite{sundermann2024generating}.
 
 De forma más específica, podemos desgranar los objetivos de este trabajo de la siguiente forma:
 
 \begin{enumerate}[label=\textbf{O\arabic*.}]
-      \item Diseñar e implementar un generador automático de modelos de características capaz de producir modelos UVL con diferentes niveles de complejidad y expresividad.
-      \item Desarrollar un sistema de configuración flexible que permita controlar las características de los modelos generados y adaptarlos a distintos escenarios de experimentación.
-      \item Incorporar soporte para la generación de modelos que utilicen construcciones avanzadas del lenguaje UVL, permitiendo ampliar la variedad de casos de estudio disponibles para el análisis de variabilidad.
-      \item Integrar la solución desarrollada dentro del ecosistema Flamapy y facilitar su utilización desde UVLHub como herramienta orientada a la generación y gestión de modelos de características.
-      \item Evaluar el comportamiento del generador bajo escenarios de generación con un volumen elevado de modelos, analizando el coste asociado a la inicialización del entorno y al proceso de generación.
-      \item Validar el funcionamiento del generador mediante pruebas automatizadas que permitan comprobar la corrección de los modelos producidos.
+      \item Desarrollar un generador automático de modelos de características capaz de producir modelos UVL con diferentes niveles de complejidad y expresividad, ampliando la variedad de modelos disponibles para el análisis de variabilidad.
+
+      \item Desarrollar un sistema de configuración flexible que permita modificar los parámetros principales del proceso de generación y adaptar los modelos obtenidos a distintos escenarios.
+
+      \item Desarrollar una herramienta compatible con el ecosistema Flamapy e integrarla en UVLHub como solución para la generación configurable de modelos de características.
+
+      \item Evaluar el comportamiento temporal del generador bajo escenarios de generación con un volumen elevado de modelos, analizando el coste asociado a la inicialización del entorno y al proceso de generación.
+
+      \item Validar el funcionamiento del generador mediante una batería de pruebas automatizadas que permita comprobar la corrección de los modelos producidos y detectar posibles errores durante el proceso de generación.
 \end{enumerate}
 
-De forma paralela, el trabajo persigue una serie de objetivos formativos que se pretenden conseguir con la realización del proyecto:
+De forma complementaria, el trabajo persigue una serie de objetivos formativos
+relacionados con la aplicación de conocimientos técnicos y metodológicos durante
+el desarrollo. Su cumplimiento se evaluará de forma cualitativa a partir de las
+evidencias documentadas en la memoria, incluyendo las decisiones de diseño, la
+integración realizada, las pruebas desarrolladas y la planificación seguida.
 
 \begin{enumerate}[resume,label=\textbf{O\arabic*.}]
       \item Reutilizar el conocimiento científico en el desarrollo de herramientas software (objetivo heredado de la red TASOVA Plus)
       \item Adquirir experiencia en el desarrollo y mantenimiento de proyectos software reales mediante la participación en un entorno de investigación y código abierto.
-      \item Profundizar en el uso de tecnologías empleadas en el proyecto, especialmente Python, Flask, Docker y herramientas asociadas a integración y despliegue continuo (CI/CD).
+      \item Profundizar en el uso de tecnologías empleadas en el proyecto, especialmente Python, Flask y Docker, así como en la aplicación de pruebas automatizadas durante el desarrollo de un proyecto software integrado.
       \item Mejorar la capacidad de búsqueda, análisis y selección de información técnica relevante para resolver problemas dentro de un contexto de investigación.
       \item Aplicar buenas prácticas de planificación, gestión y documentación durante el desarrollo individual de un proyecto software de mayor duración y complejidad.
       
@@ -160,9 +272,36 @@ para que la numeración se mantenga sola.}
   \endhead
   O1 & El generador permite producir modelos UVL automáticamente incorporando diferentes niveles de complejidad y expresividad del lenguaje, ampliando la variedad de modelos disponibles para el análisis de variabilidad. & Generación de modelos con configuraciones variadas y validación de que los modelos producidos cumplen la sintaxis y estructura esperada de UVL. & 6, 7 \\[0.3em]
   O2 & El generador dispone de un sistema de configuración que permite modificar los parámetros principales del proceso de generación y adaptar los modelos obtenidos a distintos escenarios. & Revisión de las opciones de configuración disponibles y ejecución de pruebas con diferentes configuraciones para comprobar su efecto sobre los modelos generados. & 6, 7 \\[0.3em]
-  O3 & La solución desarrollada queda integrada dentro del ecosistema Flamapy y puede ser utilizada desde UVLHub como herramienta de generación de modelos. & Verificación de la integración del plugin en Flamapy y comprobación del flujo completo de generación desde UVLHub. & 6, 7 \\[0.3em]
+  O3 & La solución desarrollada proporciona una herramienta compatible con el ecosistema Flamapy y puede ser utilizada desde UVLHub como herramienta de generación de modelos de características. & Verificación de la compatibilidad con los componentes empleados de Flamapy y comprobación del flujo completo de generación desde UVLHub. & 6, 7, 8 \\[0.3em]
   O4 & Evaluar el comportamiento temporal del generador en escenarios de generación con un volumen elevado de modelos de características. & Medición del tiempo de inicialización del generador y del tiempo requerido para generar un conjunto elevado de modelos UVL bajo una configuración representativa, analizando el coste asociado a cada fase del proceso. & 8 \\
   O5 & El generador cuenta con una batería de pruebas automatizadas que permita validar su correcto funcionamiento y detectar errores en los modelos producidos. & Ejecución de la suite de pruebas automatizadas y análisis de los resultados obtenidos. & 7 \\
+  
+  O6 & El desarrollo reutiliza conocimiento científico relacionado con la
+  generación de modelos de características y lo aplica en una herramienta
+  software concreta. & Análisis del trabajo de Sundermann et al. y trazabilidad
+  de su enfoque conceptual en el diseño e implementación del generador. & 1, 2,
+  5, 6 \\[0.3em]
+
+  O7 & El desarrollo proporciona experiencia en la evolución de un proyecto
+  software real, integrado en un ecosistema de investigación y código abierto.
+  & Análisis de la integración del componente en Flamapy y UVLHub, del uso de
+  Docker y de las pruebas ejecutadas sobre ambos proyectos. & 3, 5, 6, 7, 8
+  \\[0.3em]
+
+  O8 & El desarrollo aplica Python, Flask, Docker y pruebas automatizadas en la
+  construcción e integración del generador. & Revisión de la implementación del
+  componente, de su integración en UVLHub y de la ejecución de las suites de
+  pruebas. & 5, 6, 7 \\[0.3em]
+
+  O9 & Las decisiones técnicas del proyecto se apoyan en la búsqueda, análisis
+  y selección de información técnica y científica relevante. & Revisión del
+  estado del arte, de las fuentes consultadas y de las decisiones justificadas
+  en el diseño e implementación. & 2, 5, 6 \\[0.3em]
+
+  O10 & El desarrollo individual del proyecto aplica prácticas de planificación,
+  gestión de riesgos y documentación técnica. & Revisión de la planificación,
+  de la gestión de riesgos, de la documentación elaborada y de la reflexión
+  final sobre el desarrollo. & 3, 9 \\[0.3em]
   \bottomrule
   \caption{Criterios de éxito de los objetivos y capítulos donde se verifican.}
   \label{tab:criterios-exito}
@@ -177,21 +316,25 @@ Es la sección que protege al autor de expectativas desmedidas durante la defens
 \ph{Una posible estructura:}
 
 \ph{Lo que sí se aborda:}
+\ph{
 \begin{itemize}
   \item \ph{Funcionalidad / dominio / tipo de entradas que el sistema acepta.}
   \item \ph{Restricciones cuantitativas (rangos, tamaños, plataformas\dots).}
 \end{itemize}
+}
 
 \ph{Quedan explícitamente fuera del alcance:}
+\ph{
 \begin{itemize}
   \item \ph{Funcionalidad excluida 1 (con una breve justificación).}
   \item \ph{Funcionalidad excluida 2 (con una breve justificación).}
   \item \ph{Funcionalidad excluida 3 (con una breve justificación).}
 \end{itemize}
+}
 
 Este TFG comprende el desarrollo de un generador automático de modelos de características integrado dentro del ecosistema de herramientas asociado a Flamapy y orientado principalmente a su utilización desde UVLHub. La solución desarrollada permite generar modelos expresados en UVL mediante una configuración definida por el usuario, incorporando diferentes niveles de complejidad y expresividad con el objetivo de ampliar la disponibilidad de modelos para tareas de análisis e investigación en variabilidad software.
 
-Dentro del alcance del proyecto se incluye el diseño e implementación del generador como un nuevo plugin de Flamapy, siguiendo la arquitectura extensible del framework. Asimismo, se contempla su integración dentro del módulo \textit{generator} de UVLHub, permitiendo que los usuarios de la plataforma puedan interactuar con la funcionalidad desarrollada mediante una interfaz adaptada al flujo existente de la aplicación. Esta integración incluye la definición de los mecanismos necesarios para configurar el proceso de generación, la incorporación de soporte para diferentes construcciones del lenguaje UVL y la validación del funcionamiento del generador mediante pruebas automatizadas destinadas a comprobar la corrección de los modelos producidos.
+Dentro del alcance del proyecto se incluye el diseño e implementación del generador como herramienta compatible con Flamapy, siguiendo la arquitectura extensible del framework. Asimismo, se contempla su integración dentro del módulo \textit{generator} de UVLHub, permitiendo que los usuarios de la plataforma puedan interactuar con la funcionalidad desarrollada mediante una interfaz adaptada al flujo existente de la aplicación. Esta integración incluye la definición de los mecanismos necesarios para configurar el proceso de generación, la incorporación de soporte para diferentes construcciones del lenguaje UVL y la validación del funcionamiento del generador mediante pruebas automatizadas destinadas a comprobar la corrección de los modelos producidos.
 
 En cuanto a lo que queda \textbf{fuera} del alcance del proyecto, se consideran los siguientes aspectos:
 
@@ -211,7 +354,7 @@ No describas solo el contenido (``se presentan los requisitos''), sino el papel
 de cada capítulo en el argumento de la memoria (``se establece qué debe hacer el
 sistema, base contractual del diseño'').}
 
-\begin{itemize}
+\ph{\begin{itemize}
   \item El \textbf{Capítulo~\ref{chap:estado_arte}} \ph{revisa los fundamentos
         teóricos y los trabajos relacionados, identificando el hueco que este
         trabajo cubre.}
@@ -235,6 +378,7 @@ sistema, base contractual del diseño'').}
         cumplimiento de los objetivos, reconoce las limitaciones y propone líneas
         de trabajo futuro.}
 \end{itemize}
+}
 
 % --- Transición al siguiente capítulo (último párrafo del roadmap) ---
 \ph{Remata el roadmap con un párrafo puente de 2--4 líneas que lance al lector al
@@ -253,7 +397,7 @@ El resto de la memoria se organiza como sigue:
 
     \item El \textbf{Capítulo 5} presenta el \textbf{diseño de la solución} propuesta, describiendo la arquitectura general del sistema, la organización de sus componentes y las decisiones tomadas para integrar el generador dentro del ecosistema de Flamapy y UVLHub.
 
-    \item El \textbf{Capítulo 6} detalla la \textbf{implementación} de la solución, incluyendo las tecnologías utilizadas, la estructura del plugin desarrollado, los mecanismos empleados para la generación de modelos y la integración realizada con la plataforma UVLHub.
+    \item El \textbf{Capítulo 6} detalla la \textbf{implementación} de la solución, incluyendo las tecnologías utilizadas, la estructura de la herramienta desarrollada, los mecanismos empleados para la generación de modelos y la integración realizada con la plataforma UVLHub.
 
     \item El \textbf{Capítulo 7} describe la estrategia de \textbf{pruebas} aplicada para verificar el correcto funcionamiento del sistema. En él se presentan las pruebas unitarias, de integración y de extremo a extremo utilizadas para validar la generación de modelos y la integración de la funcionalidad desarrollada.
 

@@ -21,17 +21,16 @@ registrarse e iniciar sesión.}
 
 \ph{(Espacio reservado para una captura de la pantalla de inicio.)}
 
-El sistema puede utilizarse mediante dos alternativas. En primer lugar, es
-posible ejecutar la aplicación en el entorno local siguiendo los pasos
-descritos en la Sección~\ref{sec:verificacion-instalacion} del manual de
-instalación y despliegue.
+La versión del generador descrita en este manual puede utilizarse ejecutando la
+aplicación en un entorno local, siguiendo los pasos indicados en la
+Sección~\ref{sec:verificacion-instalacion} del manual de instalación y
+despliegue.
 
-Como alternativa, se puede acceder al despliegue oficial disponible públicamente
-mediante la siguiente dirección:
-
-\begin{itemize}
-    \item \url{https://www.uvlhub.io/}
-\end{itemize}
+UVLHub dispone de una instancia pública en \url{https://www.uvlhub.io/}.
+No obstante, esta instancia puede evolucionar de forma independiente al código
+descrito en esta memoria. Por este motivo, la ejecución local mediante Docker
+constituye la forma de acceso reproducible a la versión evaluada en el presente
+trabajo.
 
 La generación de modelos no requiere que el usuario disponga de una cuenta ni
 que realice un proceso de autenticación previo.
@@ -102,35 +101,18 @@ significado y la acción recomendada para resolverlos.}
   \item \textbf{\ph{Mensaje 3}}: \ph{causa habitual y solución.}
 \end{itemize}}
 
-Durante el proceso de configuración y generación, el sistema muestra mensajes
-de error descriptivos cuando no se cumplen las reglas de negocio definidas en la Sección~\ref{sec:reglas_negocio},
-indicando al usuario la condición que debe modificarse para poder continuar.
+Durante la configuración, el asistente valida los valores introducidos en cada
+etapa antes de permitir que el usuario continúe al siguiente paso. Cuando una
+opción no cumple las reglas de negocio definidas en la
+Sección~\ref{sec:reglas_negocio}, se muestra un mensaje asociado al campo
+correspondiente indicando la condición que debe corregirse.
 
-Existe un caso particular durante la generación de modelos en el que puede
-aparecer un error no asociado a una configuración incorrecta, sino a una
-exigencia excesiva sobre los recursos disponibles. Este problema puede ocurrir,
-por ejemplo, al solicitar un número elevado de modelos con un gran número de
-características, restricciones, variables por restricción o atributos.
+Estas validaciones incluyen, entre otros casos, límites numéricos incorrectos,
+distribuciones de probabilidades que no suman uno, dependencias entre niveles de
+expresividad y rangos inválidos para cardinalidades, restricciones o atributos.
+Una vez corregidos los valores señalados, el usuario puede continuar con el
+proceso de configuración y generar los modelos solicitados.
 
-Para solucionar esta situación se recomienda revisar los parámetros de
-generación configurados, especialmente:
-\begin{itemize}
-    \item Número de modelos a generar.
-    \item Número de características.
-    \item Número de restricciones.
-    \item Número de variables por restricción.
-    \item Número de atributos.
-\end{itemize}
-
-Un ejemplo del mensaje mostrado en esta situación se presenta en la
-Figura~\ref{fig:error-generacion-modelos}.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=1\textwidth]{error_generacion_modelos.png}
-    \caption{Ejemplo de error durante la generación de modelos. Elaboración propia}
-    \label{fig:error-generacion-modelos}
-\end{figure}
 
 \section{Contacto y soporte}
 \label{sec:contacto}

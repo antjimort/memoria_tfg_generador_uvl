@@ -17,6 +17,7 @@ Tabla~\ref{tab:criterios-exito} del Capítulo~\ref{chap:intro}: sus criterios
 de éxito son el guion de esta evaluación, y cada uno debe quedar respondido
 en la Sección~\ref{sec:resultados_objetivos}. Describe:}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Entorno de ejecución}}: \ph{hardware (CPU, RAM\dots) y
         software (sistema operativo, versiones relevantes) sobre los que se
@@ -35,6 +36,7 @@ en la Sección~\ref{sec:resultados_objetivos}. Describe:}
         confianza; y si se comparan alternativas, conviene apoyar la
         comparación en un test estadístico sencillo (t-test o Wilcoxon).}
 \end{itemize}
+}
 
 \ph{Rigor: distingue siempre lo que se ha \emph{medido} de lo que es una
 \emph{impresión subjetiva}. «La interfaz es intuitiva» no es un resultado;
@@ -54,24 +56,21 @@ reflejan correctamente en los artefactos generados. Estas comprobaciones se han
 complementado con la ejecución de la suite de pruebas automatizadas y con
 validaciones manuales de los principales flujos de uso de la aplicación.
 
-La evaluación se ha realizado sobre el siguiente entorno:
+La evaluación se realizó en el siguiente entorno:
 
 \begin{itemize}
     \item \textbf{Sistema operativo:} Ubuntu 24.04.4 LTS.
-    \item \textbf{Hardware:} Slimbook Executive con procesador
-    Intel\textsuperscript{\textregistered} Core\textsuperscript{\texttrademark}
-    i7-13700H (20 núcleos) y 32 GB de memoria RAM.
     \item \textbf{Navegador:} Firefox 148.0.2 (64 bits).
-    \item \textbf{Lenguaje de desarrollo:} Python 3.13.11.
-    \item \textbf{Contenedores:} Docker 29.7.2.
+    \item \textbf{Entorno de ejecución del generador:} Pyodide 0.27.7,
+    utilizando Python 3.12.7 sobre WebAssembly.
+    \item \textbf{Contenedores:} Docker 29.7.2, empleado para ejecutar
+    UVLHub durante las pruebas de integración.
 \end{itemize}
 
-Adicionalmente, se realizará una evaluación del rendimiento del generador
-mediante la medición del tiempo de inicialización del entorno y del tiempo
-empleado en la generación de modelos una vez cargadas las dependencias. Para
-ello, se utilizará una configuración con un volumen elevado de modelos generados,
-con el objetivo de obtener una estimación representativa del comportamiento del
-sistema en escenarios de mayor carga.
+El equipo anfitrión utilizado fue un Slimbook Executive con un procesador
+Intel Core i7-13700H y 32 GB de memoria RAM. No obstante, estos datos no
+determinan directamente el rendimiento de la generación, ya que el código del
+generador se ejecuta en un único hilo de WebAssembly dentro del navegador.
 
 \section{Resultados}
 \label{sec:resultados_objetivos}
@@ -114,7 +113,9 @@ configuraciones del generador, comprobando que los parámetros seleccionados se
 reflejan correctamente en los modelos UVL obtenidos y que estos mantienen una
 estructura válida conforme al lenguaje.
 
-En las siguientes imágenes se puede observar que efectivamente se ha alcanzado el objetivo definido. En la primera se puede ver la configuración usada para generar los modelos con expresividad avanzada, donde se han activado todos los \textit{major levels} junto con todos sus \textit{minor levels}
+La Figura~\ref{fig:configuracion-O1} muestra la configuración utilizada para
+activar los niveles principales y secundarios de expresividad. Los modelos
+resultantes se incluyen en el Apéndice~\ref{app:modelos-o1}.
 
 \begin{figure}[H]
     \centering
@@ -123,21 +124,28 @@ En las siguientes imágenes se puede observar que efectivamente se ha alcanzado 
     \label{fig:configuracion-O1}
 \end{figure}
 
-Las dos siguientes imágenes muestran algunos de los modelos en cuestión, donde se puede comprobar que existen características, atributos y constraints de varios niveles de expresividad.
+Los modelos completos generados durante esta comprobación se incluyen en el
+Apéndice~\ref{app:modelos-o1}. El Listado~\ref{lst:modelo-o1-1} muestra un
+modelo con características tipadas, atributos de diferentes tipos,
+cardinalidades, restricciones aritméticas, funciones agregadas y expresiones
+sobre cadenas.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{ejemplo1_verificar_O1.png}
-    \caption{Ejemplo 1 para verificar O1. Elaboración propia}
-    \label{fig:ejemplo1-modelo-uvl}
-\end{figure}
+El Listado~\ref{lst:modelo-o1-2} presenta un segundo modelo obtenido con la
+misma configuración, pero con una estructura jerárquica y una combinación de
+atributos y restricciones diferente. Esto permite comprobar que el generador
+produce modelos distintos manteniendo los niveles de expresividad
+seleccionados.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.85\textwidth]{ejemplo2_verificar_O1.png}
-    \caption{Ejemplo 2 para verificar O1. Elaboración propia}
-    \label{fig:ejemplo2-modelo-uvl}
-\end{figure}
+Además de estas comprobaciones visuales, la prueba
+\texttt{test\_o1\_level\_combinations\_roundtrip\_to\_uvl\_and\_boolean\_sat}
+recorre las 26 combinaciones válidas de niveles principales y secundarios.
+Para cada combinación se generan tres modelos, alcanzando un total de 78
+modelos evaluados. Cada modelo se serializa a UVL y se vuelve a cargar
+mediante \texttt{UVLReader}. En las configuraciones booleanas, los modelos
+también se transforman a PySAT y se ejecutan mediante la operación de
+satisfacibilidad. Todas las combinaciones superaron correctamente este
+proceso, proporcionando evidencia automatizada de la compatibilidad de los
+modelos generados con las herramientas del ecosistema.
 
 Los resultados obtenidos permiten verificar el cumplimiento del criterio de
 éxito asociado al objetivo O1.
@@ -145,94 +153,270 @@ Los resultados obtenidos permiten verificar el cumplimiento del criterio de
 \subsection{Resultados sobre el objetivo O2}
 \label{subsec:resultados_o2}
 
-El objetivo O2 consistía en desarrollar un sistema de configuración flexible que
-permitiera modificar los parámetros principales del proceso de generación y
-adaptar los modelos obtenidos a diferentes escenarios.
+El objetivo O2 consistía en desarrollar un sistema de configuración flexible
+que permitiera modificar los parámetros principales del proceso de generación
+y adaptar los modelos obtenidos a distintos escenarios.
 
-Para verificar este objetivo se ha analizado el flujo de configuración del
-generador, comprobando que los distintos parámetros disponibles se encuentran
-organizados en diferentes etapas según su funcionalidad. La estructura del
-asistente de configuración y las diferentes vistas que permiten definir estos
-parámetros se muestran en la Sección~\ref{subsec:mapa_navegacion}.
+Para verificar este objetivo se analizaron pruebas que comprueban tanto la
+propagación de los parámetros a través del asistente de configuración como su
+efecto sobre la estructura y el contenido de los modelos UVL generados. La
+Tabla~\ref{tab:evidencias-o2} resume las comprobaciones realizadas.
 
-Además, se ha comprobado durante el desarrollo que las modificaciones realizadas
-sobre estos parámetros son aplicadas correctamente durante el proceso de
-generación, lo cual a su vez puede comprobarse en el ~\ref{subsec:resultados_o1}.
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}p{4.2cm}
+>{\raggedright\arraybackslash}p{5.2cm}
+>{\raggedright\arraybackslash}X
+@{}}
+\toprule
+\textbf{Funcionalidad} & \textbf{Prueba automatizada} &
+\textbf{Comprobación realizada} \\
+\midrule
 
-Los resultados obtenidos permiten verificar el cumplimiento del criterio de
-éxito asociado al objetivo O2.
+Propagación de la configuración
+& \texttt{test\_step2\_configuration\_is\_propagated\_to\_step3}
+& Comprueba que las opciones seleccionadas en el segundo paso se trasladan correctamente al siguiente. \\
 
-\subsubsection*{Resultados sobre el objetivo O3}
+Cardinalidad de grupo
+& \texttt{test\_group\_cardinality\_off\_produces\_no\_group\_relations} y
+\texttt{test\_group\_cardinality\_on\_with\_weight\_produces\_group\_groups}
+& Verifica la ausencia o generación de relaciones de cardinalidad de grupo. \\
+
+Cardinalidad de características
+& \texttt{test\_feature\_cardinality\_off\_produces\_none} y
+\texttt{test\_feature\_cardinality\_on\_produces\_some}
+& Comprueba que la opción modifica la salida UVL generando o eliminando cardinalidades. \\
+
+Niveles aritmético y de tipos
+& \texttt{test\_arithmetic\_level\_produces\_arith\_constraints},
+\texttt{test\_string\_level\_produces\_len\_constraints}
+& Verifica la generación de expresiones aritméticas y restricciones mediante \texttt{len}. \\
+
+Distribución de atributos
+& \texttt{test\_dist\_boolean\_only\_produces\_only\_boolean\_attrs},
+\texttt{test\_dist\_integer\_only\_produces\_integer\_attrs} y
+\texttt{test\_real\_attribute\_distribution\_generates\_real\_attributes}
+& Comprueba que las distribuciones configuradas determinan los tipos de atributos generados. \\
+
+Cantidad de restricciones y variables
+& \texttt{test\_min\_max\_constraints\_respected} y
+\texttt{test\_min\_vars\_per\_constraint\_respected}
+& Comprueba que la cantidad de restricciones y variables respeta los límites definidos. \\
+
+Semillas
+& \texttt{test\_determinism\_same\_seed\_same\_output} y
+\texttt{test\_different\_seed\_different\_output}
+& Verifica la reproducibilidad con la misma semilla y la variación con semillas diferentes. \\
+
+\bottomrule
+\end{tabularx}
+\caption{Pruebas técnicas del efecto de los parámetros de configuración.}
+\label{tab:evidencias-o2}
+\end{table}
+
+Las pruebas anteriores no se limitan a comprobar que el asistente acepta los
+valores introducidos, sino que verifican su efecto sobre los modelos
+generados. Por ejemplo, al activar la cardinalidad de grupo se generan las
+relaciones correspondientes, mientras que al activar el nivel aritmético
+aparecen expresiones numéricas en las restricciones. De esta forma, existe una
+relación verificable entre la configuración seleccionada, el comportamiento del
+generador y el contenido del modelo UVL obtenido.
+
+El criterio de éxito asociado al objetivo O2 se considera cumplido, ya que las
+pruebas confirman tanto la correcta propagación de los parámetros por el flujo
+de configuración como su influencia efectiva en los modelos generados.
+
+\subsection{Resultados sobre el objetivo O3}
 \label{subsec:resultados_o3}
 
-El objetivo O3 consistía en integrar la solución desarrollada dentro del
-ecosistema Flamapy y permitir su utilización desde UVLHub como herramienta de
-generación de modelos de características.
+El objetivo O3 consistía en integrar el generador dentro del ecosistema
+Flamapy y permitir su utilización desde UVLHub como herramienta de generación
+de modelos de características.
 
-La prueba de que se ha alcanzado este objetivo es la propia integración del generador como
-un plugin de Flamapy, cuya estructura propia puede comprobarse observando la imagen correspondiente en la Sección \ref{sec:tecnologias} (\textbf{Plugin generador basado en Flamapy}), así como su correcta utilización desde el flujo proporcionado por UVLHub.
+La integración se verifica mediante el flujo real de ejecución utilizado por
+la aplicación. Los parámetros almacenados por UVLHub se convierten en una
+instancia de \texttt{FmgeneratorModel} mediante
+\texttt{from\_flat\_dict}. Posteriormente, el \textit{wrapper} importa directamente la operación
+\texttt{GenerateFeatureModel}, crea una instancia y la ejecuta con el modelo
+de configuración recibido. Como resultado se obtiene un
+\texttt{FeatureModel} compatible con el metamodelo de Flamapy.
 
-Además, se ha verificado que el módulo desarrollado mantiene la compatibilidad
-con las dependencias y componentes existentes del ecosistema, permitiendo su
-ejecución dentro del entorno habitual de la aplicación.
+De forma independiente, la prueba \newline
+\texttt{test\_generate\_feature\_model\_is\_discoverable\_by\_flamapy}
+verifica que Flamapy también localiza esta operación mediante
+\texttt{DiscoverMetamodels}. Así, se comprueba tanto su uso efectivo desde
+UVLHub como su registro como operación descubrible dentro del ecosistema
+Flamapy.
 
-Los resultados obtenidos permiten verificar el cumplimiento del criterio de
-éxito asociado al objetivo O3.
+Esta integración se comprobó mediante las pruebas recogidas en la
+Tabla~\ref{tab:evidencias-o3}.
 
-\subsubsection*{Resultados sobre el objetivo O4}
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}p{6.4cm}
+>{\raggedright\arraybackslash}X
+@{}}
+\toprule
+\textbf{Prueba} & \textbf{Evidencia obtenida} \\
+\midrule
+
+{\ttfamily\scriptsize\shortstack[l]{
+test\_wrapper\_generates\_feature\_model\_\\
+with\_received\_arguments}}
+&
+Comprueba que el \textit{wrapper} recibe los parámetros y genera un modelo de
+características. \\
+
+{\ttfamily\scriptsize\shortstack[l]{
+test\_wrapper\_build\_one\_model\_\\
+delegates\_to\_feature\_model\_generator}}
+&
+Verifica que la generación se delega al componente
+\texttt{GenerateFeatureModel}. \\
+
+{\ttfamily\scriptsize\shortstack[l]{
+test\_wrapper\_serializes\_uvl\_\\
+and\_reads\_includes}}
+&
+Comprueba la serialización del modelo mediante Flamapy y la conservación de las
+declaraciones \texttt{include}. \\
+
+{\ttfamily\scriptsize\shortstack[l]{
+test\_o1\_level\_combinations\_\\
+roundtrip\_to\_uvl\_and\_boolean\_sat}}
+&
+Genera 78 modelos, los serializa, los vuelve a cargar mediante
+\texttt{UVLReader} y transforma los modelos booleanos a PySAT. \\
+
+Suite de UVLHub
+&
+220 pruebas superadas, incluyendo los flujos del \textit{wizard} y la
+generación desde la aplicación. \\
+
+{\ttfamily\scriptsize\shortstack[l]{
+test\_generate\_feature\_model\_is\_\\
+discoverable\_by\_flamapy}}
+&
+Comprueba que \texttt{DiscoverMetamodels} localiza la operación
+\texttt{GenerateFeatureModel}, que esta puede ejecutarse y que devuelve un
+\texttt{FeatureModel} válido. \\
+
+Suite de \texttt{fm\_generator}
+&
+44 pruebas superadas sobre el paquete independiente, incluyendo la
+comprobación de descubrimiento de la operación por Flamapy. \\
+
+\bottomrule
+\end{tabularx}
+\caption{Pruebas técnicas de integración con Flamapy y UVLHub.}
+\label{tab:evidencias-o3}
+\end{table}
+
+La evidencia anterior demuestra que el componente no se limita a estar
+presente en la estructura del proyecto, sino que es utilizado durante la
+ejecución, produce un \texttt{FeatureModel} de Flamapy y genera modelos UVL
+que pueden ser consumidos posteriormente por otras herramientas del
+ecosistema.
+
+Por tanto, el criterio de éxito asociado al objetivo O3 se considera cumplido.
+
+\subsection{Resultados sobre el objetivo O4}
 \label{subsec:resultados_o4}
 
 El objetivo O4 consistía en evaluar el comportamiento temporal del generador
-en escenarios de generación con un volumen elevado de modelos de características.
+en un escenario con un volumen elevado de modelos de características.
 
-Para realizar esta evaluación se ha utilizado una configuración con 1000 modelos
-a generar, incorporando diferentes niveles de expresividad del lenguaje UVL. La
-configuración empleada no representa un caso extremo en cuanto al tamaño
-individual de los modelos, ya que se han utilizado rangos moderados de
-características y restricciones, permitiendo obtener una estimación realista del
-coste de generación en un escenario habitual con un volumen elevado de modelos.
-
-La configuración utilizada durante la evaluación se muestra en la Figura
-\ref{fig:configuracion-tiempo-generacion}.
+Para ello se utilizó una configuración fija de 1000 modelos UVL, manteniendo
+constantes los niveles de expresividad, el número de características, los
+atributos y las restricciones. La configuración utilizada se muestra en la
+Figura~\ref{fig:configuracion-tiempo-generacion}.
 
 \begin{figure}[H]
       \centering
       \makebox[\textwidth][c]{%
             \includegraphics[width=1.1\textwidth]{resultados_prueba_O4.png}
       }
-      \caption{Resultado temporal de la generación de modelos. Elaboración propia}
+      \caption{Configuración utilizada para la evaluación temporal. Elaboración propia.}
       \label{fig:configuracion-tiempo-generacion}
 \end{figure}
 
-Los tiempos obtenidos durante la ejecución se dividen en dos fases diferenciadas:
-la carga inicial de las dependencias necesarias para ejecutar el generador y la
-generación posterior del conjunto de modelos UVL.
+La evaluación se repitió diez veces con la misma configuración. En cada
+repetición se registraron por separado el tiempo de inicialización del entorno,
+incluyendo la carga de Pyodide y sus dependencias, y el tiempo posterior de
+generación de los 1000 modelos UVL.
+
+Los tiempos se midieron manualmente utilizando el cronómetro de un teléfono
+móvil, cuya resolución permite registrar valores con dos decimales. No obstante,
+la toma manual introduce un margen de error asociado al tiempo de reacción,
+por lo que se realizaron diez repeticiones y se analizaron medidas de
+tendencia central y dispersión.
+
+La Tabla~\ref{tab:tiempos-generador} recoge la media, la mediana, la
+desviación típica muestral y el rango observado en cada fase. El tiempo total
+se ha calculado sumando, en cada repetición, los tiempos de inicialización y
+generación correspondientes.
 
 \begin{table}[H]
 \centering
-\begin{tabular}{l c}
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}X
+>{\centering\arraybackslash}p{0.75cm}
+>{\centering\arraybackslash}p{1.35cm}
+>{\centering\arraybackslash}p{1.35cm}
+>{\centering\arraybackslash}p{1.45cm}
+>{\centering\arraybackslash}p{2.1cm}
+@{}}
 \toprule
-\textbf{Fase} & \textbf{Tiempo obtenido} \\
+\textbf{Fase} & \textbf{N} & \textbf{Media} &
+\textbf{Mediana} & \textbf{Desv. típica} & \textbf{Rango} \\
 \midrule
-Carga inicial de dependencias e inicialización & 4.05 s \\
-Generación de 1000 modelos UVL & 7.8 s \\
+Inicialización del entorno
+& 10 & 4,28\,s & 4,32\,s & 0,24\,s & 3,95--4,65\,s \\
+
+Generación de 1000 modelos UVL
+& 10 & 9,16\,s & 9,12\,s & 0,19\,s & 8,85--9,46\,s \\
+
+\midrule
+\textbf{Tiempo total}
+& \textbf{10} & \textbf{13,44\,s} & \textbf{13,48\,s} &
+\textbf{0,34\,s} & \textbf{12,80--14,10\,s} \\
 \bottomrule
-\end{tabular}
-\caption{Tiempos obtenidos durante la evaluación temporal del generador. Elaboración propia}
+\end{tabularx}
+\caption{Resultados de las diez repeticiones de la evaluación temporal.}
 \label{tab:tiempos-generador}
 \end{table}
 
-Los resultados obtenidos muestran que el coste asociado a la generación de un
-volumen elevado de modelos es reducido una vez finalizada la fase inicial de
-carga e inicialización. En este escenario, la generación de 1000 modelos UVL se
-completa en 8.4 segundos, mostrando un comportamiento adecuado para el uso
-previsto del generador. No obstante, estos tiempos dependen de la complejidad de
-los modelos solicitados, pudiendo incrementarse en configuraciones con un mayor
-número de características, restricciones o atributos. Además, los valores
-obtenidos pueden variar en función de los recursos computacionales disponibles
-en el equipo donde se ejecute el generador.
+La inicialización del entorno presentó un tiempo medio de 4,28 segundos y una
+desviación típica de 0,24 segundos. Una vez cargadas las dependencias, la
+generación de los 1000 modelos UVL presentó un tiempo medio de 9,16 segundos,
+con una desviación típica de 0,19 segundos. El tiempo total medio, considerando
+ambas fases, fue de 13,44 segundos.
 
-\subsubsection*{Resultados sobre el objetivo O5}
+La generación mostró una variabilidad reducida, ya que los tiempos observados
+se situaron entre 8,85 y 9,46 segundos. La inicialización presentó una
+dispersión ligeramente superior, debido principalmente a la carga de Pyodide y
+de sus dependencias. Estos resultados permiten distinguir el coste inicial de
+preparación del entorno del coste propio de generar los modelos.
+
+La ejecución se realizó en Firefox mediante Pyodide 0.27.7, utilizando Python
+3.12.7 sobre WebAssembly. La generación se ejecuta en un único hilo de
+WebAssembly, por lo que los resultados caracterizan el comportamiento de esta
+configuración concreta y no deben interpretarse como un límite general del
+generador. El tiempo puede aumentar al utilizar modelos con un mayor número de
+características, atributos o restricciones.
+
+\subsection{Resultados sobre el objetivo O5}
 \label{subsec:resultados_o5}
 
 El objetivo O5 consistía en validar el correcto funcionamiento del generador
@@ -251,20 +435,87 @@ atributos, restricciones, cardinalidades y operadores avanzados producen los
 resultados esperados.
 
 La ejecución completa de la suite mediante \textit{rosemary} finalizó
-correctamente, obteniéndose 134 pruebas superadas. En la Figura
-\ref{fig:tests-exitosos-O5} se muestra el resultado de dicha ejecución.
+correctamente, obteniéndose 220 pruebas superadas en UVLHub. A estas se añaden las
+44 pruebas del paquete \texttt{fm\_generator}, por lo que la
+suite completa reúne 264 pruebas automatizadas, todas superadas. En la Figura~\ref{fig:tests-uvlhub} se muestra el resultado de la ejecución
+de las pruebas de UVLHub, mientras que la Figura~\ref{fig:tests-fm-generator}
+muestra la ejecución de las pruebas del
+\texttt{fm\_generator}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.1\textwidth]{salida_tests_O5.png}
-    \caption{Resultado de la ejecución de la suite de pruebas automatizadas. Elaboración propia}
-    \label{fig:tests-exitosos-O5}
+    \caption{Resultado de la ejecución de la suite de pruebas del módulo \textit{generator}. Elaboración propia}
+    \label{fig:tests-uvlhub}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{salida_tests_O5_2.png}
+    \caption{Resultado de la ejecución de la suite de pruebas del \texttt{fm\_generator}. Elaboración propia}
+    \label{fig:tests-fm-generator}
 \end{figure}
 
 Los resultados obtenidos permiten verificar el cumplimiento del criterio de
 éxito asociado al objetivo O5, demostrando la estabilidad de las funcionalidades
 desarrolladas mediante pruebas automatizadas.
 
+\subsection{Resultados sobre los objetivos formativos O6--O10}
+\label{subsec:resultados_objetivos_formativos}
+
+Los objetivos O6--O10 se refieren a competencias adquiridas durante el
+desarrollo del proyecto. A diferencia de los objetivos funcionales, no se
+evalúan mediante una métrica de rendimiento, sino mediante evidencias
+documentales y técnicas generadas durante el trabajo.
+
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}
+>{\centering\arraybackslash}p{0.9cm}
+>{\raggedright\arraybackslash}p{3.8cm}
+>{\raggedright\arraybackslash}X
+@{}}
+\toprule
+\textbf{Obj.} & \textbf{Evidencia} & \textbf{Resultado} \\
+\midrule
+O6 & Estudio del enfoque de generación propuesto por Sundermann et al. y
+adaptación de sus bases conceptuales al componente implementado. &
+El conocimiento científico revisado se ha aplicado en el diseño y desarrollo
+del generador. \\
+
+O7 & Integración de un componente nuevo en los proyectos Flamapy y UVLHub,
+utilización de Docker y adaptación de pruebas existentes. &
+El desarrollo se ha realizado sobre un ecosistema software real, con código
+previo y componentes reutilizables. \\
+
+O8 & Implementación en Python, adaptación de rutas y asistentes de Flask,
+ejecución mediante Docker y desarrollo de pruebas automatizadas. &
+Las tecnologías principales del proyecto se han utilizado de forma práctica
+durante la construcción e integración de la solución. \\
+
+O9 & Consulta de bibliografía científica, documentación técnica de Flamapy,
+UVL y Pyodide, y justificación de decisiones de diseño. &
+Las decisiones técnicas se han apoyado en información seleccionada y analizada
+durante el desarrollo. \\
+
+O10 & Planificación del trabajo, gestión de riesgos, documentación de diseño,
+implementación, pruebas y resultados. &
+El proyecto se ha gestionado y documentado de forma continuada durante sus
+distintas fases. \\
+\bottomrule
+\end{tabularx}
+\caption{Evidencias asociadas a los objetivos formativos. Elaboración propia.}
+\label{tab:evidencias-objetivos-formativos}
+\end{table}
+
+La Tabla~\ref{tab:evidencias-objetivos-formativos} permite considerar
+alcanzados los objetivos formativos planteados. Estas evidencias no pretenden
+medir de forma cuantitativa el nivel individual de competencia adquirido, sino
+documentar las actividades, decisiones y artefactos mediante los que dichas
+competencias se han aplicado durante el desarrollo del proyecto.
 
 \section{Comparación con trabajos previos}
 \label{sec:comparacion_trabajos}
@@ -286,7 +537,7 @@ fuerces: justifica por qué la comparación directa no es posible (datos,
 entorno o alcance distintos) y mantén la comparación cualitativa por
 criterios.}
 
-La Tabla~\ref{tab:comparativa-trabajos} del Capítulo~\ref{chap:estado-arte}
+La Tabla~\ref{tab:comparativa_generadores} del Capítulo~\ref{chap:estado_arte}
 recoge una comparación cualitativa entre diferentes herramientas relacionadas
 con la generación automática de modelos de características. En ella se
 consideran tres aspectos principales: la capacidad de generación automática, el
@@ -368,12 +619,14 @@ riqueza en los modelos generados puede suponer un incremento del coste
 computacional en configuraciones más complejas.
 
 Finalmente, existen algunas amenazas a la validez de los resultados. La
-evaluación se ha realizado utilizando modelos sintéticos y configuraciones
-diseñadas para cubrir las funcionalidades principales del generador, por lo que
-los resultados podrían variar en otros escenarios. Además, los tiempos
-obtenidos dependen del entorno de ejecución y no se ha realizado una
-comparación cuantitativa directa con otras herramientas bajo condiciones
-equivalentes.
+evaluación confirma la compatibilidad sintáctica de los modelos generados con
+UVL y con las transformaciones empleadas, pero no determina si dichos modelos
+son representativos de dominios reales ni si resultan adecuados como conjunto de
+evaluación para motores de razonamiento. Asimismo, los resultados temporales se
+han obtenido con una única configuración de generación y en un entorno concreto,
+por lo que podrían variar al modificar el tamaño o la complejidad de los
+modelos. Tampoco se ha realizado una comparación cuantitativa directa con otras
+herramientas bajo condiciones experimentales equivalentes.
 
 % --- Transición al siguiente capítulo ---
 \ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda

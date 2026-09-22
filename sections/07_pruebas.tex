@@ -20,6 +20,7 @@ elegido y entorno en el que se ejecutan. Adapta los niveles al tipo de TFG
 
 \ph{Niveles de la pirámide aplicados en este TFG (incluye los que apliquen):}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Pruebas unitarias}}: \ph{base de la pirámide. Verifican
         unidades aisladas (funciones, clases, módulos). Son las más numerosas
@@ -33,6 +34,7 @@ elegido y entorno en el que se ejecutan. Adapta los niveles al tipo de TFG
   \item \textbf{\ph{Pruebas de aceptación (opcional)}} : \ph{cotejan el sistema
         frente a los requisitos del Capítulo~\ref{chap:requisitos}.}
 \end{itemize}
+}
 
 \ph{Comenta brevemente el entorno de pruebas: si las dependencias externas
 son reales, simuladas o efímeras (en memoria, contenedores desechables,
@@ -79,6 +81,7 @@ crítico del TFG). Indica qué grupos de casos cubre, no la lista exhaustiva.}
 
 \ph{Grupos de casos típicos:}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Caso nominal}}: \ph{entrada válida que debe producir el
         resultado esperado.}
@@ -89,6 +92,7 @@ crítico del TFG). Indica qué grupos de casos cubre, no la lista exhaustiva.}
   \item \textbf{\ph{Reglas de negocio}}: \ph{combinaciones que activan
         restricciones específicas del dominio.}
 \end{itemize}
+}
 
 \ph{Si la lógica del módulo no se reduce a un booleano, comenta también qué
 información complementaria se valida (mensajes, códigos de error, listas de
@@ -125,7 +129,7 @@ grupos de casos cubiertos son:
     parámetros utilizado por UVLHub hacia la estructura interna del generador.
 
     \item \textbf{Validadores del asistente de configuración:}
-    se prueban los métodos de validación de cada paso del wizard
+    se prueban los métodos de validación de cada paso del \textit{wizard}
     (\texttt{validate\_step1\_form} a
     \texttt{validate\_step5\_form}), comprobando casos como límites inválidos
     de modelos o características, distribuciones incorrectas, configuraciones
@@ -133,7 +137,7 @@ grupos de casos cubiertos son:
 
     \item \textbf{Gestión del estado y construcción de parámetros:}
     se valida la persistencia temporal de la configuración almacenada en la
-    sesión de Flask mediante las funciones de gestión del estado del wizard.
+    sesión de Flask mediante las funciones de gestión del estado del \textit{wizard}.
     También se comprueba la normalización de distribuciones y la correcta
     propagación de los valores entre pasos mediante los constructores de
     parámetros.
@@ -146,6 +150,7 @@ grupos de casos cubiertos son:
 \ph{Describe las pruebas que ejercitan varios componentes a la vez.
 Conviene separarlas según los componentes que combinan.}
 
+\ph{
 \begin{itemize}
   \item \ph{Pruebas sobre el contrato con la base de datos / capa de
         persistencia (ORM, esquemas, transacciones).}
@@ -155,20 +160,21 @@ Conviene separarlas según los componentes que combinan.}
   \item \ph{Pruebas sobre integraciones con servicios externos
         (proveedores de identidad, almacenamiento, APIs de terceros\dots).}
 \end{itemize}
+}
 
 \ph{Documenta también las pruebas de casos negativos
 (valores fuera de rango, restricciones violadas, datos incompletos\dots).}
 
 Las pruebas de integración se han centrado en verificar la comunicación entre
 los diferentes módulos que intervienen en el proceso de generación, desde la
-configuración realizada mediante el wizard de UVLHub hasta la obtención del
+configuración realizada mediante el \textit{wizard} de UVLHub hasta la obtención del
 modelo UVL generado.
 
 Los principales casos cubiertos son:
 
 \begin{itemize}
 
-    \item \textbf{Integración del wizard con la capa de servicios:}
+    \item \textbf{Integración del \textit{wizard} con la capa de servicios:}
     se prueba el recorrido completo del asistente mediante las rutas
     \texttt{/generator/random/step1} a
     \texttt{/generator/random/step6}, verificando la interacción entre los
@@ -176,13 +182,13 @@ Los principales casos cubiertos son:
     encargados de procesar cada etapa.
 
     \item \textbf{Integración de la configuración persistida con el generador:}
-    se comprueba que la configuración almacenada durante el flujo del wizard se
+    se comprueba que la configuración almacenada durante el flujo del \textit{wizard} se
     recupera correctamente mediante el endpoint
     \texttt{/generator/random/params-json} y puede ser transformada en una
     instancia válida de \texttt{FmgeneratorModel}.
 
     \item \textbf{Integración del modelo de parámetros con la generación UVL:}
-    se valida que una configuración completa procedente del wizard es utilizada
+    se valida que una configuración completa procedente del \textit{wizard} es utilizada
     correctamente por \texttt{GenerateFeatureModel}, generando artefactos UVL
     que reflejan las opciones seleccionadas, como niveles UVL, cardinalidades,
     tipos de atributos, restricciones y opciones de nomenclatura.
@@ -239,7 +245,7 @@ El flujo principal validado es el siguiente:
     elementos necesarios para comenzar la configuración.
 
     \item \textbf{Ejecución del proceso de generación:}
-    se automatiza la interacción con el wizard completo, comprobando la
+    se automatiza la interacción con el \textit{wizard} completo, comprobando la
     transición entre las diferentes vistas y la correcta respuesta de la
     interfaz ante las acciones del usuario.
 
@@ -274,95 +280,137 @@ del usuario:
 \section{Cobertura y métricas de calidad}
 \label{sec:cobertura}
 
-\ph{Indica las métricas que has usado para evaluar la calidad de la suite
-y, si procede, los umbrales mínimos exigidos en CI.}
+La calidad de la solución se ha evaluado mediante pruebas automatizadas y
+cobertura de líneas, utilizando \texttt{pytest} y \texttt{coverage.py}. Se ha
+establecido un umbral mínimo del \textbf{80\,\%} sobre el código de producción.
 
-\ph{Métricas habituales:}
+Este umbral busca mantener una cobertura honesta. Las líneas no cubiertas
+corresponden principalmente a comprobaciones defensivas, configuraciones
+inválidas bloqueadas por el \textit{wizard} y rutas de error cuya ejecución
+forzada no aportaría evidencia funcional relevante.
 
-\begin{itemize}
-  \item \ph{Cobertura de líneas / ramas.}
-  \item \ph{Número de pruebas y desglose por nivel de la pirámide.}
-  \item \ph{Resultado del análisis estático (linter, tipado).}
-\end{itemize}
-
-\ph{Comenta también qué se excluye de la medición
-(ficheros generados, plantillas, código de migración, dependencias externas\dots).}
-
-\ph{Resume la suite completa en la Tabla~\ref{tab:resumen_suite}: el tribunal
-debe poder ver de un vistazo cuántas pruebas hay, de qué tipo y con qué
-resultado.}
+La medición excluye las dependencias externas, las cachés, los artefactos
+generados, los ficheros auxiliares de carga y los propios tests. Aunque los
+informes incluyen estos ficheros para facilitar el análisis, no se utilizan
+para calcular la cobertura del código de producción.
 
 \begin{table}[H]
 \centering
 \small
-\begin{tabular}{@{}P{4.5cm} P{3cm} P{3cm} P{3cm}@{}}
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}X
+>{\centering\arraybackslash}p{1.25cm}
+>{\centering\arraybackslash}p{1.55cm}
+>{\centering\arraybackslash}p{1.45cm}
+@{}}
 \toprule
-\textbf{Nivel} & \textbf{N.º de pruebas} & \textbf{Resultado} & \textbf{Cobertura} \\
+\textbf{Fichero} &
+\textbf{Líneas} &
+\textbf{Sin cubrir} &
+\textbf{Cobertura} \\
 \midrule
-Unitarias         & \ph{N} & \ph{N/N pasan} & \ph{X\,\%} \\
-Integración       & \ph{N} & \ph{N/N pasan} & \ph{X\,\%} \\
-Extremo a extremo & \ph{N} & \ph{N/N pasan} & \ph{---} \\
+
+\path{app/features/generator/__init__.py}
+& 2 & 0 & 100\,\% \\
+
+\path{app/features/generator/assets/js/}
+\path{fmgen_wrapper.py}
+& 49 & 0 & 100\,\% \\
+
+\path{app/features/generator/routes.py}
+& 214 & 6 & 97\,\% \\
+
+\path{app/features/generator/wizard.py}
+& 810 & 158 & 80\,\% \\
+
+\path{fm_generator/src/.../models/models.py}
+& 325 & 42 & 87\,\% \\
+
+\path{fm_generator/src/.../operations/}
+\path{generate_feature_model.py}
+& 666 & 73 & 89\,\% \\
+
 \midrule
-\textbf{Total}    & \textbf{\ph{N}} & \textbf{\ph{N/N pasan}} & \textbf{\ph{X\,\%}} \\
+\textbf{Código de producción de UVLHub}
+& \textbf{1075} & \textbf{164} & \textbf{85\,\%} \\
+
+\textbf{Código de producción de \texttt{fm\_generator}}
+& \textbf{997} & \textbf{115} & \textbf{88\,\%} \\
+
+\midrule
+\textbf{Total de código de producción}
+& \textbf{2072} & \textbf{279} & \textbf{87\,\%} \\
+
+\bottomrule
+\end{tabularx}
+\caption{Cobertura de líneas del código de producción del generador.}
+\label{tab:cobertura_ficheros}
+\end{table}
+
+El informe de UVLHub muestra una cobertura global del 91\,\%, pero dicho valor
+incluye también los ficheros de prueba. Al excluirlos, el código de producción
+del generador alcanza un 85\,\%. Del mismo modo, el informe del paquete
+\texttt{fm\_generator} muestra un 91\,\% incluyendo sus tests, mientras que la
+cobertura específica del código de producción es del 88\,\%.
+
+Los ficheros con menor cobertura son \texttt{wizard.py}, con un 80\,\%, y
+\texttt{models.py}, con un 87\,\%. A pesar de ello, los caminos principales de
+validación, persistencia de parámetros, generación, serialización y lectura de
+modelos se encuentran cubiertos. El motor
+\texttt{GenerateFeatureModel}, responsable de construir los modelos, alcanza
+un 89\,\%.
+
+La suite completa está formada por 220 pruebas de UVLHub y 44 pruebas del
+paquete \texttt{fm\_generator}, todas superadas en sus respectivas ejecuciones.
+Las dos ejecuciones del paquete independiente no representan pruebas
+adicionales, sino una repetición de las mismas pruebas, una de ellas con
+medición de cobertura.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}P{7cm} r r@{}}
+\toprule
+\textbf{Conjunto de pruebas} & \textbf{N.º de pruebas} &
+\textbf{Resultado} \\
+\midrule
+Pruebas de UVLHub &
+220 & 220/220 pasan \\
+
+Pruebas de \texttt{fm\_generator} &
+44 & 44/44 pasan \\
+
+\midrule
+\textbf{Total de la suite} &
+\textbf{264} & \textbf{264/264 pasan} \\
 \bottomrule
 \end{tabular}
-\caption{Resumen de la suite de pruebas por nivel de la pirámide.}
+\caption{Resumen de la suite automatizada de pruebas.}
 \label{tab:resumen_suite}
 \end{table}
 
-\ph{No te limites a enumerar cifras: interprétalas. Una cobertura del X\,\%
-no dice nada por sí sola. Indica qué módulos quedan menos cubiertos y por qué
-es asumible (código trivial, generado, de difícil automatización\dots), y qué
-te dice la distribución de pruebas por nivel sobre la fiabilidad de la suite
-(¿la base de la pirámide es realmente la más ancha?).}
+La suite combina pruebas unitarias sobre validadores, constructores,
+persistencia de parámetros y reglas del motor, con pruebas de integración del
+flujo del \textit{wizard} y de la generación de modelos. Además, incluye
+12 pruebas con Selenium para verificar los flujos principales desde la
+interfaz web.
 
+Destaca la prueba asociada al objetivo O1, que recorre 26 combinaciones válidas
+de niveles principales y secundarios. Para cada combinación se generan tres
+modelos, lo que supone 78 modelos en total. Cada modelo se serializa a UVL y
+se vuelve a cargar mediante \texttt{UVLReader}. En las configuraciones
+booleanas, además, el modelo se transforma a PySAT y se ejecuta la operación
+de satisfacibilidad. Esta prueba comprueba la compatibilidad del resultado con
+las herramientas que consumirán posteriormente los modelos generados.
 
-\ph{Cierra el eslabón con los objetivos: indica qué criterios de la
-Tabla~\ref{tab:criterios-exito} quedan verificados por esta suite,
-apoyándote en la matriz de la Tabla~\ref{tab:trazabilidad_rf_pruebas}.}
-
-En este trabajo no se ha utilizado una métrica de cobertura de código basada en
-líneas o ramas ejecutadas. Durante el desarrollo se ha priorizado la realización
-de pruebas que aportasen una mayor evidencia sobre el correcto funcionamiento
-del sistema, incluyendo comprobaciones automáticas sobre los comportamientos
-críticos y pruebas manuales de los flujos principales de la aplicación, frente
-al cálculo de una métrica de cobertura cuya obtención no aportaba información
-adicional suficiente en este contexto.
-
-La suite de pruebas permite verificar principalmente los siguientes aspectos:
-
-\begin{itemize}
-
-    \item La generación correcta de modelos UVL a partir de configuraciones
-    diferentes, comprobando que los niveles de expresividad seleccionados se
-    reflejan en los modelos obtenidos.
-
-    \item La correcta propagación de los parámetros definidos durante el flujo
-    de configuración hasta el motor de generación, incluyendo validaciones,
-    normalización de valores y restricciones entre opciones incompatibles.
-
-    \item La generación de construcciones avanzadas del lenguaje UVL, como
-    atributos, restricciones booleanas, expresiones aritméticas, funciones de
-    agregación y restricciones sobre cadenas.
-
-    \item La integración del generador dentro de UVLHub, verificando el flujo
-    completo desde la configuración realizada por el usuario hasta la obtención
-    del modelo generado.
-
-\end{itemize}
-
-Los resultados obtenidos permiten verificar los criterios de éxito asociados a
-los objetivos definidos en la Tabla~\ref{tab:criterios-exito}. En particular, las
-pruebas realizadas proporcionan evidencia de cumplimiento para la generación de
-modelos UVL con diferentes niveles de expresividad (O1), la configuración del
-proceso de generación mediante diferentes parámetros (O2), la integración de la
-solución dentro del ecosistema UVLHub y Flamapy (O3) y la existencia de una
-batería automatizada de validación del funcionamiento del generador (O5).
-
-Además, la correspondencia entre requisitos y pruebas queda recogida en la
-matriz de trazabilidad de la Tabla~\ref{tab:trazabilidad_rf_tests}, donde se
-relacionan los principales requisitos funcionales y no funcionales con los
-casos de prueba encargados de verificar su cumplimiento.
+La suite aporta evidencia para los objetivos de generación de modelos con
+diferentes niveles de expresividad (O1), configuración del proceso de
+generación (O2), integración con UVLHub y Flamapy (O3) y disponibilidad de una
+batería automatizada de validación (O5). La relación detallada entre
+requisitos y pruebas se recoge en la
+Tabla~\ref{tab:trazabilidad_rf_tests}.
 
 % --- Transición al siguiente capítulo ---
 \ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda

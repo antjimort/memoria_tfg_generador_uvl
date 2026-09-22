@@ -25,6 +25,7 @@ a~\ref{chap:pruebas}). Evita el «se ha cumplido» sin soporte: todo
 cumplimiento debe poder verificarse en un capítulo anterior. Dedica un
 párrafo a cada objetivo, en el mismo orden en que se enunciaron.}
 
+\ph{
 \begin{itemize}
   \item \ph{El \textbf{primer objetivo} \dots se ha cumplido mediante
         \dots, como muestra la Tabla/Figura~\dots\ del
@@ -39,33 +40,7 @@ párrafo a cada objetivo, en el mismo orden en que se enunciaron.}
         \emph{parcialmente} mediante \dots, como se discute en la
         Sección~\ref{sec:limitaciones}.}
 \end{itemize}
-
-\ph{La siguiente tabla sintetiza el cumplimiento y cierra la cadena
-abierta por la Tabla~\ref{tab:criterios-exito} del
-Capítulo~\ref{chap:intro}: mismos objetivos, mismos criterios de éxito,
-ahora con su grado de cumplimiento y la evidencia que lo acredita.
-La columna «Grado» usa la escala Completo / Parcial / No alcanzado:
-«Completo» significa que el criterio se cumple íntegramente con la
-evidencia citada; «Parcial», que se cumple solo en parte, explicando qué
-falta en la Sección~\ref{sec:limitaciones}; «No alcanzado», que el
-criterio no se ha cumplido, analizando la causa en la
-Sección~\ref{sec:limitaciones}. Admitir un «Parcial» con remisión honesta
-a la Sección~\ref{sec:limitaciones} es señal de madurez, no de debilidad.}
-
-\begin{longtable}{@{}P{1cm} P{5.5cm} P{2cm} P{5cm}@{}}
-  \toprule
-  \textbf{Obj.} & \textbf{Criterio de éxito} & \textbf{Grado} & \textbf{Evidencia (ref.)} \\
-  \midrule
-  \endhead
-  O1 & \ph{Criterio de éxito del objetivo 1.} & \ph{Completo} & \ph{Tabla/Figura/Sección que lo acredita.} \\[0.3em]
-  O2 & \ph{Criterio de éxito del objetivo 2.} & \ph{Completo} & \ph{Evidencia.} \\[0.3em]
-  O3 & \ph{Criterio de éxito del objetivo 3.} & \ph{Completo} & \ph{Evidencia.} \\[0.3em]
-  O4 & \ph{Criterio de éxito del objetivo 4.} & \ph{Completo} & \ph{Evidencia.} \\[0.3em]
-  O5 & \ph{Criterio de éxito del objetivo 5.} & \ph{Parcial}  & \ph{Evidencia y remisión a la Sección~\ref{sec:limitaciones}.} \\
-  \bottomrule
-  \caption{Grado de cumplimiento de los objetivos y evidencia asociada.}
-  \label{tab:cumplimiento-objetivos}
-\end{longtable}
+}
 
 \ph{3. \textbf{Aportaciones más amplias}: comenta brevemente la contribución
 del trabajo más allá del producto en sí. Por ejemplo, aplicación de un
@@ -93,47 +68,92 @@ generar modelos con construcciones avanzadas del lenguaje UVL y validar su
 correcto funcionamiento mediante pruebas automatizadas.
 
 Los resultados obtenidos en el Capítulo~\ref{chap:resultados} permiten concluir
-que los objetivos planteados inicialmente han sido alcanzados. El objetivo O1,
-relacionado con la generación automática de modelos UVL con distintos niveles de
-expresividad, se ha cumplido mediante la generación y validación de modelos con
-diferentes configuraciones, como se muestra en la Sección~\ref{subsec:resultados_o1}.
+que los objetivos funcionales y formativos planteados inicialmente han sido
+alcanzados.
+
+El objetivo O1, relacionado con la generación automática de modelos UVL con
+distintos niveles de expresividad, se ha cumplido mediante la generación y
+validación de modelos con diferentes configuraciones. La prueba asociada
+recorre las combinaciones válidas de niveles de expresividad y verifica la
+serialización y recarga de los modelos generados
+(Sección~\ref{subsec:resultados_o1}).
 
 El objetivo O2 se ha cumplido mediante la incorporación de un sistema de
-configuración flexible que permite adaptar el proceso de generación a distintos
-escenarios. Por su parte, el objetivo O3 se ha alcanzado mediante la integración
-del generador como plugin de Flamapy y su utilización desde UVLHub, permitiendo
-su incorporación dentro del flujo habitual de la plataforma
-(Secciones~\ref{subsec:resultados_o2} y~\ref{subsec:resultados_o3}).
+configuración que permite modificar los parámetros principales del proceso de
+generación. Las pruebas técnicas verifican que las configuraciones seleccionadas
+producen efectos observables sobre la jerarquía, las cardinalidades, los
+atributos y las restricciones generadas
+(Sección~\ref{subsec:resultados_o2}).
 
-El objetivo O4, centrado en la evaluación del rendimiento del generador, se ha
-verificado mediante la medición del coste de generación en escenarios con un
-volumen elevado de modelos, obteniendo resultados adecuados para el uso
-previsto de la herramienta (Sección~\ref{subsec:resultados_o4}). Finalmente, el
-objetivo O5 se ha cumplido mediante la ejecución de una batería de pruebas
-automatizadas que valida las principales funcionalidades del generador y sus
-diferentes flujos de configuración
-(Sección~\ref{subsec:resultados_o5}).
+El objetivo O3 se ha alcanzado mediante la integración del generador con
+Flamapy y UVLHub. La evidencia técnica verifica tanto la generación desde el
+\textit{wrapper} ejecutado en UVLHub como el descubrimiento de la operación
+\texttt{GenerateFeatureModel} mediante \texttt{DiscoverMetamodels}
+(Sección~\ref{subsec:resultados_o3}).
+
+El objetivo O4 se ha verificado mediante diez repeticiones de una evaluación
+temporal con 1000 modelos UVL. La evaluación distingue el coste de
+inicialización del entorno del tiempo propio de generación
+(Sección~\ref{subsec:resultados_o4}).
+
+El objetivo O5 se ha cumplido mediante la ejecución satisfactoria de las suites
+automatizadas de UVLHub y del paquete \texttt{fm\_generator}, que reúnen 264
+pruebas superadas (Sección~\ref{subsec:resultados_o5}).
+
+Respecto a los objetivos formativos, O6 se ha alcanzado mediante la aplicación
+del enfoque científico revisado en el diseño del generador. O7 y O8 se han
+cumplido a través de la participación en la evolución de un proyecto software
+real, utilizando Python, Flask, Docker y pruebas automatizadas. Por su parte,
+O9 se ha abordado mediante la consulta y análisis de bibliografía y
+documentación técnica, mientras que O10 se ha materializado en la planificación,
+documentación y seguimiento del proyecto. Las evidencias correspondientes se
+recogen en la Sección~\ref{subsec:resultados_objetivos_formativos}.
 
 La Tabla~\ref{tab:grado-cumplimiento-objetivos} resume el grado de cumplimiento
 de los objetivos definidos.
 
-\begin{table}[H]
-\centering
-\small
-\begin{tabular}{@{}P{1cm} P{6cm} P{2cm}@{}}
+\begin{longtable}{@{}P{0.9cm} P{4.9cm} P{1.8cm} P{5.5cm}@{}}
 \toprule
-\textbf{Obj.} & \textbf{Objetivo} & \textbf{Grado} \\
+\textbf{Obj.} & \textbf{Objetivo} & \textbf{Grado} &
+\textbf{Evidencia} \\
 \midrule
-O1 & Generación automática de modelos UVL con expresividad avanzada. & Completo \\
-O2 & Configuración flexible del proceso de generación. & Completo \\
-O3 & Integración con Flamapy y UVLHub. & Completo \\
-O4 & Evaluación temporal del generador. & Completo \\
-O5 & Validación mediante pruebas automatizadas. & Completo \\
+\endhead
+
+O1 & Generación automática de modelos UVL con expresividad avanzada. &
+Completo & Sección~\ref{subsec:resultados_o1}. \\[0.5em]
+
+O2 & Configuración flexible del proceso de generación. &
+Completo & Sección~\ref{subsec:resultados_o2}. \\[0.5em]
+
+O3 & Integración con Flamapy y UVLHub. &
+Completo & Sección~\ref{subsec:resultados_o3}. \\[0.5em]
+
+O4 & Evaluación temporal del generador. &
+Completo & Sección~\ref{subsec:resultados_o4}. \\[0.5em]
+
+O5 & Validación mediante pruebas automatizadas. &
+Completo & Sección~\ref{subsec:resultados_o5}. \\[0.5em]
+
+O6 & Reutilización de conocimiento científico en el desarrollo software. &
+Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
+
+O7 & Experiencia en un proyecto software real y de código abierto. &
+Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
+
+O8 & Aplicación práctica de Python, Flask, Docker y pruebas automatizadas. &
+Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
+
+O9 & Búsqueda, análisis y selección de información técnica relevante. &
+Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
+
+O10 & Planificación, gestión y documentación del proyecto. &
+Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\
+
 \bottomrule
-\end{tabular}
-\caption{Grado de cumplimiento de los objetivos. Elaboración propia}
+\caption{Grado de cumplimiento de los objetivos y evidencia asociada.
+Elaboración propia.}
 \label{tab:grado-cumplimiento-objetivos}
-\end{table}
+\end{longtable}
 
 Como aportación principal, este trabajo proporciona una solución integrada para
 la generación automática de modelos UVL con mayor expresividad que los
@@ -164,6 +184,7 @@ el patrón \emph{causa} (decisión, restricción de tiempo o de recursos)
 + \emph{efecto} práctico + \emph{por qué es asumible o cómo se
 mitigaría}. Organízalas en tres categorías:}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Limitación técnica:}} \ph{qué no hace el sistema o
         dónde rinde peor: p.\,ej., rendimiento no evaluado bajo carga
@@ -178,16 +199,16 @@ mitigaría}. Organízalas en tres categorías:}
         trabajo y por qué, de forma coherente con lo declarado en la
         Sección~\ref{sec:alcance}.}
 \end{itemize}
+} 
 
 \ph{Cada limitación es candidata natural a una línea de la
 Sección~\ref{sec:trabajo_futuro}: si una limitación no genera línea
 futura ni se justifica como asumible, queda coja.}
 
 A pesar de los resultados obtenidos, existen ciertas limitaciones que deben
-tenerse en cuenta al interpretar el alcance del trabajo realizado. Estas
-limitaciones no afectan al cumplimiento de los objetivos planteados, pero
-delimitan los escenarios en los que se han validado las capacidades del
-generador.
+tenerse en cuenta al interpretar el alcance del trabajo realizado. Estas limitaciones 
+delimitan el alcance de las conclusiones obtenidas y los
+escenarios en los que se ha validado la solución.
 
 Desde un punto de vista técnico, la evaluación del generador se ha realizado
 sobre configuraciones representativas, pero no se ha estudiado su comportamiento
@@ -197,15 +218,16 @@ computacional en configuraciones con un número elevado de características,
 atributos o restricciones. No obstante, la arquitectura desarrollada permite
 continuar optimizando y ampliando el generador para este tipo de escenarios.
 
-Respecto a la validación, las pruebas realizadas se han basado principalmente
-en modelos sintéticos generados mediante la propia herramienta y en escenarios
-diseñados para cubrir las funcionalidades implementadas. Por tanto, aunque la
-suite de pruebas automatizadas permite validar el comportamiento esperado del
-sistema, no se ha evaluado todavía su comportamiento con modelos reales
-procedentes de dominios específicos ni mediante estudios con usuarios finales.
-Además, no se ha realizado una comparación cuantitativa directa con otras
-herramientas debido a la ausencia de condiciones experimentales homogéneas que
-permitieran obtener resultados comparables.
+Respecto a la validación, las pruebas realizadas permiten comprobar que los
+modelos generados se serializan correctamente en UVL, pueden volver a cargarse
+mediante \texttt{UVLReader} y, en las configuraciones booleanas, pueden
+transformarse a PySAT. Estas comprobaciones aportan evidencia sobre la validez
+sintáctica y la compatibilidad de los modelos con las herramientas del
+ecosistema. Sin embargo, no se ha realizado una evaluación específica de la
+calidad de los modelos generados en términos de consistencia semántica,
+representatividad respecto a dominios reales o utilidad práctica para evaluar
+motores de razonamiento. Tampoco se ha comparado el comportamiento de distintos
+razonadores utilizando los modelos producidos como conjunto de evaluación.
 
 Finalmente, en cuanto al alcance del trabajo, la solución desarrollada se ha
 centrado en la generación automática de modelos UVL y su integración dentro del
@@ -283,20 +305,26 @@ comunicación entre el generador y los servicios existentes de UVLHub, además d
 definir aspectos relacionados con permisos, almacenamiento y gestión de modelos
 públicos.
 
-\subsubsection*{Evaluación con modelos reales y benchmarking}
+\subsubsection*{Validación de representatividad y evaluación con razonadores}
 
-Una tercera línea de trabajo consistiría en realizar una evaluación experimental
-del generador utilizando modelos de características procedentes de dominios
-reales y comparando sus resultados con otras herramientas existentes bajo unas
-condiciones experimentales comunes.
+Una línea de trabajo futuro consistiría en evaluar la calidad de los modelos
+generados tomando como referencia colecciones de modelos de características
+procedentes de dominios reales. El objetivo no sería utilizar estos modelos como
+entrada del generador, sino comparar sus propiedades estructurales y de
+expresividad con las de los modelos producidos, por ejemplo en número de
+características, profundidad, relaciones, atributos y restricciones.
 
-Esta extensión permitiría superar una de las limitaciones identificadas en la
-evaluación actual, basada principalmente en modelos sintéticos, y proporcionaría
-una medida más precisa de la utilidad del generador en escenarios reales.
+Esta evaluación permitiría determinar hasta qué punto las configuraciones del
+generador producen modelos representativos de escenarios reales. Asimismo,
+permitiría definir perfiles de generación basados en características observadas
+en conjuntos de referencia, aumentando la utilidad de la herramienta para la
+experimentación.
 
-Su viabilidad es media, ya que requeriría disponer de conjuntos de datos
-adecuados, establecer una metodología experimental común y adaptar las
-herramientas comparadas para garantizar unas condiciones equivalentes.
+Como paso posterior, los modelos generados podrían utilizarse para evaluar
+motores de razonamiento bajo condiciones controladas. Esto permitiría analizar
+el impacto de diferentes niveles de expresividad sobre operaciones como la
+comprobación de satisfacibilidad, el cálculo de configuraciones o las
+transformaciones entre metamodelos.
 
 \subsubsection*{Optimización del proceso de generación}
 
@@ -329,8 +357,7 @@ modelos sintéticos adaptados a las características de dominios concretos. De
 esta forma, se podrían obtener modelos más realistas para tareas de evaluación
 y experimentación.
 
-La viabilidad de esta línea es más reducida, ya que requeriría disponer de un
-volumen suficiente de modelos reales, definir representaciones adecuadas de los
-modelos de características y desarrollar técnicas capaces de capturar sus
-patrones estructurales. No obstante, constituye una posible evolución innovadora
-del generador desarrollado.
+Su viabilidad es media, ya que requeriría disponer de colecciones de referencia
+adecuadas, definir métricas de comparación y establecer una metodología
+experimental para evaluar los razonadores en condiciones equivalentes.
+No obstante, constituye una posible evolución innovadora del generador desarrollado.

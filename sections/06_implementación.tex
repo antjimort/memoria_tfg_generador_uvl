@@ -40,11 +40,11 @@ existente desarrollada utilizando Flask. Por este motivo, la tecnología utiliza
 debe permitir mantener la arquitectura actual basada en rutas, servicios y plantillas
 Jinja2, evitando introducir cambios estructurales innecesarios en la aplicación.
 
-\subsection*{Necesidad técnica 2: Desarrollo del plugin generador}
+\subsection*{Necesidad técnica 2: Desarrollo de la herramienta generadora}
 
 La lógica de generación debe implementarse siguiendo la arquitectura de extensiones
 proporcionada por Flamapy. Para ello, la tecnología utilizada debe permitir desarrollar
-un plugin independiente que encapsule la configuración del generador y la operación
+una herramienta independiente que encapsule la configuración del generador y la operación
 encargada de producir modelos de características expresados en UVL.
 
 \subsection*{Necesidad técnica 3: Ejecución y despliegue reproducible}
@@ -57,11 +57,13 @@ un entorno remoto.
 
 \subsubsection*{Comparativa de tecnologías del backend}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Tecnología A}}: \ph{descripción y ventajas/inconvenientes.}
   \item \textbf{\ph{Tecnología B}}: \ph{descripción y ventajas/inconvenientes.}
   \item \textbf{\ph{Tecnología C}}: \ph{descripción y ventajas/inconvenientes.}
 \end{itemize}
+}
 
 \begin{itemize}
 
@@ -84,11 +86,13 @@ un entorno remoto.
 
 \subsubsection*{Comparativa de tecnologías del frontend}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Tecnología A}}: \ph{descripción y ventajas/inconvenientes.}
   \item \textbf{\ph{Tecnología B}}: \ph{descripción y ventajas/inconvenientes.}
   \item \textbf{\ph{Tecnología C}}: \ph{descripción y ventajas/inconvenientes.}
 \end{itemize}
+}
 
 \begin{itemize}
 
@@ -116,10 +120,12 @@ en UVLHub.
 
 \subsubsection*{Análisis de la base de datos}
 
+\ph{
 \begin{enumerate}
   \item \textbf{\ph{Opción A}}: \ph{justificación.}
   \item \textbf{\ph{Opción B}}: \ph{justificación.}
 \end{enumerate}
+}
 
 El sistema desarrollado no requiere una base de datos propia, ya que la
 naturaleza del generador no implica el almacenamiento permanente de
@@ -130,11 +136,13 @@ persistencia adicional, lo que hace innecesario realizar aquí una comparación.
 
 \subsubsection*{Plataformas de despliegue}
 
+\ph{
 \begin{itemize}
   \item \textbf{\ph{Plataforma A}}: \ph{descripción y casuística.}
   \item \textbf{\ph{Plataforma B}}: \ph{descripción y casuística.}
   \item \textbf{\ph{Plataforma C}}: \ph{descripción y casuística.}
 \end{itemize}
+}
 
 \begin{itemize}
 
@@ -163,16 +171,18 @@ persistencia adicional, lo que hace innecesario realizar aquí una comparación.
 
 \subsubsection*{Tecnologías finales seleccionadas}
 
+\ph{
 \begin{itemize}
   \item \textbf{Desarrollo}: \ph{tecnologías elegidas para backend / frontend.}
   \item \textbf{Base de datos}: \ph{motor elegido.}
   \item \textbf{Contenedor}: \ph{tecnología de contenerización (Docker, Podman\dots).}
   \item \textbf{Despliegue}: \ph{plataforma final.}
 \end{itemize}
+}
 
 \begin{itemize}
     \item \textbf{Desarrollo backend:} Python, Flask y Flamapy, utilizando la
-    arquitectura de plugins proporcionada por este último.
+    estructura base para la creación de extensiones proporcionada por este último.
 
     \item \textbf{Desarrollo frontend:} Plantillas Jinja2, JavaScript y Bootstrap,
     manteniendo la arquitectura visual existente de UVLHub.
@@ -197,6 +207,7 @@ en que aparece.}
 
 \ph{Sugerencia de bloques:}
 
+\ph{
 \begin{itemize}
   \item \ph{Backend (framework, gestión de dependencias, configuración).}
   \item \ph{Autenticación (estrategia, almacenamiento de credenciales,
@@ -209,6 +220,7 @@ en que aparece.}
   \item \ph{Suite de pruebas (framework, marcadores, comandos).}
   \item \ph{Automatización CI/CD (proveedor y workflows principales).}
 \end{itemize}
+}
 
 Tras la selección de tecnologías realizada en el apartado anterior, esta sección
 describe cómo se han utilizado durante la implementación del sistema, indicando
@@ -219,27 +231,23 @@ los principales componentes en los que aparecen.
 La implementación del backend de UVLHub está desarrollada utilizando Python y
 Flask. Dentro del módulo \textit{generator} se encuentran las rutas encargadas
 de gestionar el flujo de configuración del generador, implementadas en el
-archivo \texttt{app/modules/generator/routes.py}, así como los servicios
-internos definidos en \texttt{app/modules/generator/services.py}, responsables
+archivo \texttt{app/features/generator/routes.py}, así como los servicios
+internos definidos en \texttt{app/features/generator/wizard.py}, responsables
 de reconstruir y validar la configuración introducida por el usuario.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.30\textwidth]{estructura_generator.png}
+    \includegraphics[width=0.30\textwidth]{estructura_modulo_generator.png}
     \caption{Estructura del módulo generator de UVLHub. Elaboración propia}
     \label{fig:estructura_generator}
 \end{figure}
 
-Además, Flask proporciona el mecanismo de \textit{session}, utilizado durante el
-flujo de configuración para mantener temporalmente el estado de los parámetros
-del generador entre los diferentes pasos del \textit{wizard}. Esta información
-es posteriormente utilizada para construir la configuración necesaria antes de
-iniciar el proceso de generación.
+Además, Flask proporciona el mecanismo de \textit{session}, utilizado durante el flujo de configuración para mantener temporalmente los parámetros del generador en forma de diccionario entre los diferentes pasos del \textit{wizard}. El servidor expone esta información en formato JSON mediante el endpoint \texttt{/generator/random/params-json}. Posteriormente, el navegador utiliza estos parámetros para construir la instancia de \texttt{FmgeneratorModel} mediante \texttt{from\_flat\_dict}, dentro del archivo \texttt{fmgen\_wrapper.py} ejecutado con Pyodide.
 
 
-\subsection*{Plugin generador basado en Flamapy}
+\subsection*{Generador compatible con Flamapy}
 
-La lógica principal de generación se ha implementado como un plugin compatible
+La lógica principal de generación se ha implementado como un componente compatible
 con la arquitectura de extensiones proporcionada por Flamapy. Este componente
 se encuentra dentro del directorio \texttt{fm\_generator} del proyecto UVLHub y
 contiene el modelo de configuración del generador mediante la clase
@@ -247,15 +255,17 @@ contiene el modelo de configuración del generador mediante la clase
 representar los parámetros específicos de generación.
 
 La ejecución del proceso se encapsula en la operación
-\textit{GenerateFeatureModel}, ubicada dentro del módulo de operaciones del
-plugin, que utiliza la configuración definida en
-\textit{FmgeneratorModel} para producir modelos de características expresados
-en formato UVL mediante su método \textit{execute()}.
+\texttt{GenerateFeatureModel}, ubicada dentro del módulo de operaciones
+de la herramienta. Su método \texttt{execute} utiliza la configuración
+definida en \texttt{FmgeneratorModel} para construir un objeto
+\texttt{FeatureModel}, que se recupera mediante \texttt{get\_result}.
+La conversión de este objeto a formato UVL se realiza posteriormente
+mediante \texttt{UVLWriter}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.30\textwidth]{estructura_fm_generator.png}
-    \caption{Estructura del plugin generador basado en Flamapy. Elaboración propia}
+    \caption{Estructura de la herramienta generadora basada en Flamapy. Elaboración propia}
     \label{fig:estructura_fm_generator}
 \end{figure}
 
@@ -267,12 +277,12 @@ UVLHub, utilizando plantillas Jinja2 integradas con Flask para la generación de
 las vistas, junto con JavaScript y Bootstrap para gestionar la interacción y los
 componentes visuales de la aplicación. Las diferentes pantallas que forman el
 flujo tipo \textit{wizard} se encuentran definidas como plantillas HTML dentro
-del directorio \texttt{app/modules/generator/templates/generator}.
+del directorio \texttt{app/features/generator/templates/generator}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.30\textwidth]{templates_generator.png}
-    \caption{Plantillas HTML utilizadas para los pasos del wizard. Elaboración propia}
+    \caption{Plantillas HTML utilizadas para los pasos del \textit{wizard}. Elaboración propia}
     \label{fig:templates_generator}
 \end{figure}
 
@@ -283,9 +293,9 @@ Para permitir la ejecución del generador directamente en el navegador del
 usuario se ha utilizado Pyodide, un entorno basado en WebAssembly que permite
 ejecutar código Python en el cliente. Los scripts encargados de configurar
 Pyodide y cargar las dependencias necesarias para la generación se encuentran
-en el directorio \texttt{app/modules/generator/assets/js}, donde también se
-incluyen los paquetes \textit{wheel} necesarios para la ejecución del plugin
-generador.
+en el directorio \texttt{app/features/generator/assets/js}, donde también se
+incluyen los paquetes \textit{wheel} necesarios para la ejecución de la herramienta
+generadora.
 
 \begin{figure}[H]
     \centering
@@ -353,19 +363,26 @@ los controles establecidos.
 las reglas del dominio (validador, motor de reglas, planificador\dots).}
 
 \ph{Cubre:}
+\ph{
 \begin{itemize}
   \item \ph{Función o clase principal y su contrato (entrada/salida).}
   \item \ph{Estructura del resultado (campos, tipos, semántica).}
   \item \ph{Cómo lo consumen otros módulos (API, generadores\dots).}
 \end{itemize}
+}
 
 El módulo de validación se estructura en dos niveles diferenciados. Por un lado, el servicio 
 \texttt{GeneratorWizardService} del módulo \texttt{generator} realiza una primera validación durante el proceso de configuración, comprobando que los valores introducidos por el usuario cumplen las restricciones básicas necesarias para continuar el flujo.
 
 Por otro lado, el modelo de dominio \texttt{FmgeneratorModel} incorpora la validación semántica de la configuración completa del generador, comprobando la coherencia entre sus diferentes parámetros antes de iniciar la generación.
 
-La generación de modelos de características se encapsula en la operación 
-\texttt{GenerateFeatureModel}, que recibe una instancia validada de \texttt{FmgeneratorModel} y devuelve uno o varios objetos \texttt{FeatureModel} compatibles con el metamodelo de FlamaPy. Antes de ejecutar la generación, el método \texttt{execute()} realiza una última validación mediante:
+La generación de modelos de características se encapsula en la
+operación \texttt{GenerateFeatureModel}, que recibe una instancia de
+\texttt{FmgeneratorModel} y genera un único objeto \texttt{FeatureModel}
+por ejecución. El método \texttt{execute} devuelve la propia operación,
+mientras que \texttt{get\_result} permite recuperar el modelo generado.
+Antes de ejecutar la generación, el método \texttt{execute} realiza
+una última validación mediante:
 
 \begin{lstlisting}[language=Python]
 self.model.validate()
@@ -377,7 +394,7 @@ garantizando que únicamente configuraciones consistentes alcanzan la fase de ge
 \label{subsec:validacion_sintactica}
 
 La validación sintáctica se encuentra implementada principalmente en el fichero 
-\texttt{services.py}, mediante un conjunto de funciones asociadas a cada paso del asistente de configuración:
+\texttt{wizard.py}, mediante un conjunto de funciones asociadas a cada paso del asistente de configuración:
 
 \begin{lstlisting}[language=Python]
 validate_step1_form()
@@ -471,7 +488,7 @@ name(Attribute) \neq \emptyset
 Para atributos con dominio definido mediante rangos:
 
 \[
-MIN\_ATTRIBUTE\_VALUE \leq MAX\_ATTRIBUTE\_VALUE
+0 \leq MIN\_ATTRIBUTE\_VALUE \leq MAX\_ATTRIBUTE\_VALUE
 \]
 
 Además, la posibilidad de utilizar un atributo dentro de una restricción depende de los niveles activos del generador:
@@ -488,11 +505,11 @@ UseInConstraints(Attribute_{String})
 
 De esta forma, la validación evita configuraciones incompatibles antes de que sean procesadas por la lógica de generación.
 
-\subsection{Validación semántica / restricciones de dominio}
+\subsection{Validación semántica y restricciones de dominio}
 \label{subsec:validacion_semantica}
 
 La validación semántica se encuentra encapsulada en el modelo 
-\texttt{FmgeneratorModel}, definido dentro del plugin 
+\texttt{FmgeneratorModel}, definido dentro de 
 \texttt{fm\_generator}. Este modelo agrupa la configuración completa del generador mediante diferentes bloques especializados:
 
 \begin{table}[H]
@@ -526,6 +543,11 @@ FmgeneratorModel.validate()
 
 que comprueba la coherencia global de la configuración antes de iniciar la generación.
 
+En las comprobaciones de normalización, cada probabilidad debe
+pertenecer al intervalo $[0,1]$. La implementación admite una
+diferencia absoluta de hasta $10^{-6}$ entre la suma de las
+probabilidades y uno, para contemplar las imprecisiones de la
+representación numérica.
 
 \subsubsection*{Coherencia de niveles UVL}
 
@@ -597,14 +619,27 @@ P(AND)+P(OR)+P(Implication)+P(Equivalence)=1
 \]
 
 
-Cuando está activo el nivel aritmético:
+Cuando está activo el nivel aritmético, la distribución de operaciones
+se valida teniendo en cuenta si las funciones agregadas están
+habilitadas. Si están desactivadas:
 
 \[
-P(+)+P(-)+P(*)+P(/)=1
+P(+) + P(-) + P(*) + P(/) = 1
 \]
 
+Si las funciones agregadas están activadas, sus probabilidades se
+incorporan a la misma distribución:
+
 \[
-P(=)+P(<)+P(>)+P(\leq)+P(\geq)=1
+P(+) + P(-) + P(*) + P(/)
++ P(\mathrm{sum}) + P(\mathrm{avg}) = 1
+\]
+
+La distribución de operadores de comparación se valida de forma
+separada:
+
+\[
+P(\texttt{==}) + P(<) + P(>) + P(\leq) + P(\geq) = 1
 \]
 
 
@@ -615,7 +650,7 @@ La configuración de atributos diferencia entre generación aleatoria y definici
 Para atributos aleatorios:
 
 \[
-1 \leq MIN\_ATTRIBUTES \leq MAX\_ATTRIBUTES
+0 \leq MIN\_ATTRIBUTES \leq MAX\_ATTRIBUTES
 \]
 
 y la distribución de tipos debe cumplir:
@@ -628,11 +663,11 @@ P(Boolean)+P(Integer)+P(Real)+P(String)=1
 Para atributos definidos manualmente:
 
 \[
-MIN\_ATTRIBUTES = NULL
+MIN\_ATTRIBUTES = NONE
 \]
 
 \[
-MAX\_ATTRIBUTES = NULL
+MAX\_ATTRIBUTES = NONE
 \]
 
 Además, la utilización de atributos en restricciones depende de los niveles disponibles:
@@ -647,6 +682,15 @@ UseInConstraints(Attribute_{String})
 \Rightarrow Type\_Level \land String\_Constraints
 \]
 
+En el modo de definición manual, cada elemento de
+\texttt{attributes\_list} puede incluir el parámetro
+\texttt{attach\_probability}, que determina la probabilidad de asociar el
+atributo a una característica. Cuando se proporciona, su valor debe
+cumplir:
+
+\[
+0 \leq attach\_probability(Attribute) \leq 1
+\]
 
 \subsubsection{Consumo por otros módulos}
 
@@ -680,7 +724,7 @@ donde se incluyen casos que comprueban el rechazo de configuraciones inconsisten
 la representación intermedia.}
 
 La generación se encuentra encapsulada en la operación 
-\texttt{GenerateFeatureModel}, perteneciente al plugin 
+\texttt{GenerateFeatureModel}, perteneciente a 
 \texttt{fm\_generator}. Esta operación recibe como entrada una instancia validada de 
 \texttt{FmgeneratorModel}, que contiene todos los parámetros necesarios para controlar la generación, y produce como resultado un objeto 
 \texttt{FeatureModel}.
@@ -700,7 +744,10 @@ La ejecución principal se realiza mediante el método:
 GenerateFeatureModel.execute()
 \end{lstlisting}
 
-que valida nuevamente la configuración recibida y coordina las diferentes fases necesarias para construir el modelo final en formato UVL.
+que valida nuevamente la configuración recibida y coordina las
+diferentes fases necesarias para construir el objeto
+\texttt{FeatureModel}, cuya transformación a formato UVL se realiza
+posteriormente.
 
 \subsection{Cálculos o transformaciones específicas}
 \label{subsec:calculos}
@@ -873,9 +920,7 @@ de la herramienta destino.}
 
 \subsubsection*{Preparación de la configuración}
 
-Los parámetros definidos mediante el asistente son transformados en una
-instancia de \texttt{FmgeneratorModel}. Antes de iniciar la generación, dicha
-configuración es validada para garantizar su coherencia.
+Los parámetros definidos mediante el asistente se obtienen del servidor en formato JSON. En el navegador, el archivo \texttt{fmgen\_wrapper.py}, ejecutado dentro de Pyodide, utiliza el método \texttt{from\_flat\_dict} para transformarlos en una instancia de \texttt{FmgeneratorModel}. Antes de iniciar la generación, dicha configuración se valida para comprobar la coherencia entre sus parámetros.
 
 
 \subsubsection*{Generación del modelo intermedio}
@@ -924,29 +969,37 @@ requerida y semántica básica.}
 \ph{Bloques sugeridos:}
 
 \ph{Páginas / vistas:}
+\ph{
 \begin{itemize}
   \item \ph{\texttt{GET /ruta\_publica}}: \ph{descripción.}
   \item \ph{\texttt{GET /ruta\_protegida}}: \ph{descripción.}
 \end{itemize}
+}
 
 \ph{Endpoints de lógica principal:}
+\ph{
 \begin{itemize}
   \item \ph{\texttt{POST /api/\dots}}: \ph{descripción y respuestas (200, 4xx, 5xx).}
   \item \ph{\texttt{GET  /api/\dots}}: \ph{descripción.}
 \end{itemize}
+}
 
 \ph{Endpoints de autenticación:}
+\ph{
 \begin{itemize}
   \item \ph{\texttt{POST /api/auth/register}}: \ph{descripción.}
   \item \ph{\texttt{POST /api/auth/login}}: \ph{descripción.}
   \item \ph{\texttt{POST /api/auth/logout}}: \ph{descripción.}
 \end{itemize}
+}
 
 \ph{Endpoints de gestión de recursos del usuario:}
+\ph{
 \begin{itemize}
   \item \ph{\texttt{POST /api/\dots}}: \ph{descripción.}
   \item \ph{\texttt{GET  /api/\dots}}: \ph{descripción.}
 \end{itemize}
+}
 
 \subsubsection*{Endpoints de entrada al generador}
 
@@ -956,9 +1009,6 @@ requerida y semántica básica.}
 
     \item \textbf{GET /generator/random}: redirige al primer paso del flujo de
     generación aleatoria.
-
-    \item \textbf{GET /generator/llm}: muestra la interfaz correspondiente al
-    modo de generación basado en modelos de lenguaje.
 \end{itemize}
 
 
