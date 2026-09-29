@@ -1,25 +1,9 @@
 \chapter{Manual de usuario}
 \label{app:manual_usuario}
 
-\ph{Este apéndice está dirigido al usuario final del sistema. A diferencia
-del manual de instalación, no asume conocimientos técnicos y se centra en
-\emph{cómo usar} el sistema una vez en marcha. Incluye capturas de pantalla
-de las acciones principales cuando completes la memoria final.}
-
 \section{Acceso al sistema}
 \label{sec:acceso}
 
-\ph{Indica la URL (o forma de acceso) del sistema y los pasos para
-registrarse e iniciar sesión.}
-
-\ph{\begin{itemize}
-  \item \ph{URL de acceso: \url{https://example.org}}
-  \item \ph{Registro de cuenta nueva.}
-  \item \ph{Inicio de sesión.}
-  \item \ph{Recuperación de contraseña (si aplica).}
-\end{itemize}}
-
-\ph{(Espacio reservado para una captura de la pantalla de inicio.)}
 
 La versión del generador descrita en este manual puede utilizarse ejecutando la
 aplicación en un entorno local, siguiendo los pasos indicados en la
@@ -42,27 +26,16 @@ La pantalla inicial de UVLHub se muestra en la Figura~\ref{fig:inicio-uvlhub}.
     \makebox[\textwidth][c]{%
         \includegraphics[width=1.2\textwidth]{inicio_uvlhub.png}
     }
-    \caption{Pantalla inicial de UVLHub. Elaboración propia}
+    \caption{Pantalla inicial de UVLHub. Captura realizada por el autor.}
     \label{fig:inicio-uvlhub}
 \end{figure}
 
 \section{Funcionalidad principal}
 \label{sec:funcionalidad_principal}
 
-\ph{Describe paso a paso cómo realizar la tarea principal del sistema.
-Conviene incluir capturas o anotaciones que destaquen los botones y campos
-relevantes.}
-
-\ph{\begin{enumerate}
-  \item \ph{Paso 1: dónde hacer clic, qué introducir.}
-  \item \ph{Paso 2: qué pantalla aparece y qué hacer en ella.}
-  \item \ph{Paso 3: cómo confirmar la acción.}
-  \item \ph{Paso 4: cómo verificar el resultado.}
-\end{enumerate}}
 
 La funcionalidad principal del sistema consiste en la generación automática de
-modelos de características mediante un asistente de configuración
-(\textit{wizard}). La estructura completa del flujo de generación y las
+modelos de características mediante un asistente de configuración. La estructura completa del flujo de generación y las
 pantallas correspondientes a cada etapa pueden consultarse en la
 Sección~\ref{subsec:mapa_navegacion}.
 
@@ -92,15 +65,6 @@ dispone de diferentes opciones sobre los modelos generados:
 \section{Mensajes de error y resolución de incidencias}
 \label{sec:errores}
 
-\ph{Lista de errores frecuentes que puede encontrar el usuario, con su
-significado y la acción recomendada para resolverlos.}
-
-\ph{\begin{itemize}
-  \item \textbf{\ph{Mensaje 1}}: \ph{causa habitual y solución.}
-  \item \textbf{\ph{Mensaje 2}}: \ph{causa habitual y solución.}
-  \item \textbf{\ph{Mensaje 3}}: \ph{causa habitual y solución.}
-\end{itemize}}
-
 Durante la configuración, el asistente valida los valores introducidos en cada
 etapa antes de permitir que el usuario continúe al siguiente paso. Cuando una
 opción no cumple las reglas de negocio definidas en la
@@ -113,12 +77,28 @@ expresividad y rangos inválidos para cardinalidades, restricciones o atributos.
 Una vez corregidos los valores señalados, el usuario puede continuar con el
 proceso de configuración y generar los modelos solicitados.
 
+Cuando se activa la opción \textit{Ensure satisfiable}, la generación puede
+detenerse si el sistema no encuentra un modelo que el comprobador SAT confirme
+como satisfacible tras 20 intentos para ese modelo. En ese caso, el asistente
+muestra un mensaje de error y detiene el lote. Este resultado no demuestra que
+la configuración sea insatisfacible; indica que no se ha obtenido un modelo
+confirmado dentro del límite de intentos establecido.
+
+Como indica el mensaje de la Figura~\ref{fig:error-generacion-sat}, se puede
+simplificar la configuración, reducir el número de restricciones o desactivar
+\textit{Ensure satisfiable} y volver a generar. Si se desactiva esta opción, el
+sistema no realiza la comprobación SAT de los modelos generados.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1.1\textwidth]{error_generacion_sat.png}
+    \caption{Mensaje mostrado cuando no se obtiene un modelo confirmado como
+    satisfacible tras 20 intentos. Captura realizada por el autor.}
+    \label{fig:error-generacion-sat}
+\end{figure}
 
 \section{Contacto y soporte}
 \label{sec:contacto}
-
-\ph{Vía de contacto para incidencias o soporte (correo, formulario,
-repositorio de issues), si la hubiese.}
 
 Para cualquier duda relacionada con el funcionamiento del sistema o para
 reportar errores no contemplados en este manual, se puede contactar con el

@@ -2,17 +2,54 @@
 \markboth{Resumen}{}
 \addcontentsline{toc}{chapter}{Resumen}
 
-Este Trabajo de Fin de Grado aborda la evolución e integración de un generador configurable de modelos de características en el entorno UVLHub, una plataforma orientada a la gestión y manipulación de modelos escritos en Universal Variability Language (UVL). La necesidad de este componente surge de la escasez de modelos UVL expresivos y configurables que permitan evaluar herramientas de análisis de variabilidad software, especialmente aquellos que incorporan niveles avanzados del lenguaje como atributos y restricciones complejas. Partiendo de enfoques previos de generación de modelos UVL, se ha desarrollado e integrado un nuevo componente generador de modelos de características siguiendo la arquitectura ofrecida por Flamapy, separando la definición de los modelos, su configuración y las operaciones de generación. Además, se ha adaptado el módulo generador de UVLHub para delegar la lógica de generación en este nuevo componente independiente, mejorando la reutilización, mantenibilidad y capacidad de evolución del sistema. La solución ha sido implementada utilizando Flask (Python) y desplegada mediante contenedores Docker para garantizar un entorno reproducible. Como resultado, se ha conseguido desacoplar el generador de la aplicación principal manteniendo la funcionalidad existente y adaptando la infraestructura de pruebas asociada al módulo. El sistema cuenta además con una batería de 134 pruebas automatizadas superadas y pruebas de interfaz mediante Pytest y Selenium que validan el flujo completo de generación. La principal aportación del trabajo consiste en proporcionar una base más flexible y mantenible para la generación de modelos UVL destinados a la evaluación y desarrollo de herramientas de análisis de variabilidad.
+Este Trabajo de Fin de Grado aborda el desarrollo y la integración de un
+generador configurable de modelos de características en UVLHub, una plataforma
+orientada a la gestión y manipulación de modelos escritos en Universal
+Variability Language (UVL). El trabajo responde a la necesidad de disponer de
+modelos UVL expresivos y configurables con los que evaluar herramientas de
+análisis de variabilidad software, incluidos modelos con atributos y
+restricciones complejas. Para ello, se ha desarrollado un componente
+generador independiente siguiendo el sistema de extensiones de Flamapy. Este
+componente separa la configuración del generador de las operaciones que
+construyen los modelos. Además, se ha adaptado el módulo de UVLHub para
+delegar en él la lógica de generación, lo que facilita su reutilización y
+mantenimiento. La solución se ha implementado con Python y Flask. El entorno
+de desarrollo local se ha definido mediante Docker Compose y se ha desplegado
+una instancia de revisión en Render. También se ha adaptado la infraestructura
+de pruebas del módulo. La opción de generación con comprobación SAT limita
+la generación al nivel booleano y verifica la satisfacibilidad de los modelos
+generados. La solución se ha comprobado mediante 264 pruebas automatizadas superadas, incluidas pruebas de interfaz con pytest y Selenium. La principal aportación es una base modular para generar
+modelos UVL destinada a la evaluación y el desarrollo de herramientas de
+análisis de variabilidad.
 
 \vspace{1.5em}
-\noindent\textbf{Palabras clave:} SPL, UVL, UVLHub, Flamapy, Modelos de Características, generación automática de modelos, Python, Docker, pruebas automatizadas.
+\noindent\textbf{Palabras clave:} SPL, UVL, UVLHub, Flamapy, modelos de
+características, generación automática de modelos, Python, Docker, pruebas
+automatizadas.
 
 % --- Versión en inglés (en página aparte: \chapter* abre página nueva) ---
 \chapter*{Abstract}
 \markboth{Abstract}{}
 \addcontentsline{toc}{chapter}{Abstract}
 
-This project addresses the development and integration of a configurable feature model generator within the UVLHub environment, a platform designed for the management and manipulation of models written in the Universal Variability Language (UVL). The need for this component arises from the scarcity of expressive and configurable UVL models that enable the evaluation of software variability analysis tools, especially those that incorporate advanced language features such as attributes and complex constraints. Building on previous approaches to UVL model generation, a new feature model generator component has been developed and integrated, following the architecture provided by Flamapy, which separates model definition, configuration, and generation operations.In addition, the UVLHub generator module has been adapted to delegate the generation logic to this new independent component, improving the system's reusability, maintainability, and scalability. The solution was implemented using Flask (Python) and deployed via Docker containers to ensure a reproducible environment. As a result, the generator has been decoupled from the main application while maintaining existing functionality and adapting the testing infrastructure associated with the module. Plus, the system includes a suite of 134 successfully passed automated tests and interface tests using Pytest and Selenium that validate the entire generation workflow. The main contribution of this work is to provide a more flexible and maintainable foundation for generating UVL models intended for the evaluation and development of variability analysis tools.
+This Final Degree Project addresses the development and integration of a
+configurable feature model generator into UVLHub, a platform for managing and
+manipulating models written in the Universal Variability Language (UVL). The
+work responds to the need for expressive and configurable UVL models with
+which to evaluate software variability analysis tools, including models with
+attributes and complex constraints. To this end, an independent generator
+component was developed following Flamapy's plugin architecture. The component
+separates the generator configuration from the operations that build the
+models. The UVLHub generator module was also adapted to delegate its generation
+logic to this component, facilitating reuse and maintenance. The solution was
+implemented with Python and Flask. The local development environment was
+defined with Docker Compose, and a review instance was deployed on Render. The
+module's testing infrastructure was also adapted. The SAT-checked generation
+option limits generation to the Boolean level and checks the satisfiability of
+the generated models. The solution was verified by 264 passing automated tests, including interface tests using pytest and Selenium. The main contribution is a modular foundation for
+generating UVL models to support the evaluation and development of variability
+analysis tools.
 
 \vspace{1.5em}
-\noindent\textbf{Keywords:} SPL, UVL, UVLHub, Flamapy, Feature Models, automatic model generation, Python, Docker, automated testing.
+\noindent\textbf{Keywords:} SPL, UVL, UVLHub, Flamapy, feature models,
+automatic model generation, Python, Docker, automated testing.

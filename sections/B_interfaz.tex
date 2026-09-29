@@ -1,0 +1,199 @@
+\chapter{Interfaz del generador de modelos UVL}
+\label{app:interfaz-generador}
+
+Este apéndice reúne las capturas del asistente de configuración integrado en UVLHub y los bocetos iniciales elaborados durante el desarrollo. Su descripción general y la atribución del trabajo previo se encuentran en la Sección~\ref{sec:ui_ux}. Las capturas documentan la interfaz desde la que se utiliza el componente generador; la ampliación del asistente a seis pasos, el panel lateral y el selector visual de distribuciones proceden del trabajo previo de David Romero.
+
+\section{Recorrido por el asistente}
+
+\subsection*{Paso 1: Batch}
+El primer paso establece el número de modelos, la semilla y las opciones de nomenclatura. Véase la Figura~\ref{fig:step1}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step1.png}
+    }
+    \caption{Interfaz del paso Batch. Captura realizada por el autor.}
+    \label{fig:step1}
+\end{figure}
+
+\subsection*{Paso 2: Language levels}
+El segundo paso permite activar los niveles principales y secundarios de expresividad UVL. Véase la Figura~\ref{fig:step2}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step2.png}
+    }
+    \caption{Interfaz del paso Language levels. Captura realizada por el autor.}
+    \label{fig:step2}
+\end{figure}
+
+\subsection*{Paso 3: Feature tree}
+Este paso configura el número de características, la profundidad del árbol y la distribución de relaciones jerárquicas. Véanse las Figuras~\ref{fig:step3} y \ref{fig:step3-detalle}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step3_1.png}
+    }
+    \caption{Configuración del árbol de características, primera vista. Captura realizada por el autor.}
+    \label{fig:step3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step3_2.png}
+    }
+    \caption{Configuración del árbol de características, segunda vista. Captura realizada por el autor.}
+    \label{fig:step3-detalle}
+\end{figure}
+
+\subsection*{Paso 4: Constraints}
+Esta vista reúne la cantidad de restricciones, sus tipos y las distribuciones de operadores. Véanse las Figuras~\ref{fig:step4} y \ref{fig:step4-detalle}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step4_1.png}
+    }
+    \caption{Configuración de restricciones, primera vista. Captura realizada por el autor.}
+    \label{fig:step4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step4_2.png}
+    }
+    \caption{Configuración de restricciones, segunda vista. Captura realizada por el autor.}
+    \label{fig:step4-detalle}
+\end{figure}
+
+\subsection*{Paso 5: Attributes}
+El quinto paso configura la generación de atributos y la distribución de sus tipos. Véanse las Figuras~\ref{fig:step5} y \ref{fig:step5-detalle}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step5_1.png}
+    }
+    \caption{Configuración de atributos, primera vista. Captura realizada por el autor.}
+    \label{fig:step5}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step5_2.png}
+    }
+    \caption{Configuración de atributos, segunda vista. Captura realizada por el autor.}
+    \label{fig:step5-detalle}
+\end{figure}
+
+\subsection*{Paso 6: Output}
+El último paso permite activar, cuando corresponde, la opción de satisfacibilidad para modelos booleanos, seleccionar los sufijos de los archivos y generar los modelos. Los resultados pueden visualizarse o descargarse. Véanse las Figuras~\ref{fig:step6}, \ref{fig:step6-detalle-1} y \ref{fig:step6-detalle-2}.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step6_1.png}
+    }
+    \caption{Opciones de salida del generador. Captura realizada por el autor.}
+    \label{fig:step6}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step6_2.png}
+    }
+    \caption{Salida del generador, segunda vista. Captura realizada por el autor.}
+    \label{fig:step6-detalle-1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step6_3.png}
+    }
+    \caption{Salida del generador, tercera vista. Captura realizada por el autor.}
+    \label{fig:step6-detalle-2}
+\end{figure}
+
+La Figura~\ref{fig:diagrama-navegacion} resume las vistas y el recorrido entre ellas.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{diagrama_navegacion.png}
+    }
+    \caption{Mapa de navegación del generador UVL. Elaboración propia.}
+    \label{fig:diagrama-navegacion}
+\end{figure}
+
+\section{Prototipos visuales iniciales}
+\label{app:prototipos-iniciales}
+
+Los siguientes bocetos corresponden a una fase inicial del trabajo y no describen por completo la interfaz final. Se incluyen para mostrar la evolución de la propuesta visual. Las Figuras~\ref{fig:wireframe-step1}, \ref{fig:wireframe-step2},
+\ref{fig:wireframe-step3}, \ref{fig:wireframe-step4} y
+\ref{fig:wireframe-step5} presentan los cinco bocetos iniciales.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step1_prototipo.png}
+    }
+    \caption{Boceto inicial del paso 1. Elaboración propia.}
+    \label{fig:wireframe-step1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step2_prototipo.png}
+    }
+    \caption{Boceto inicial del paso 2. Elaboración propia.}
+    \label{fig:wireframe-step2}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step3_prototipo.png}
+    }
+    \caption{Boceto inicial del paso 3. Elaboración propia.}
+    \label{fig:wireframe-step3}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step4_prototipo.png}
+    }
+    \caption{Boceto inicial del paso 4. Elaboración propia.}
+    \label{fig:wireframe-step4}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{step5_prototipo.png}
+    }
+    \caption{Boceto inicial del paso 5. Elaboración propia.}
+    \label{fig:wireframe-step5}
+\end{figure}
+
+\section{Selector visual de distribuciones}
+
+El selector representa gráficamente las probabilidades con las que se generan determinados elementos. La Figura~\ref{fig:selector_distribuciones} recoge su aspecto en la interfaz integrada.
+
+\begin{figure}[H]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{componente_selector_distribuciones.png}
+    }
+    \caption{Selector visual de distribuciones. Captura realizada por el autor.}
+    \label{fig:selector_distribuciones}
+\end{figure}

@@ -22,72 +22,6 @@
 % escribes y borrarlas al terminar.
 % ----------------------------------------------------------------------
 
-% Artículo de revista (fuente ideal: revisada por pares; doi si existe)
-@article{apellido2024articulo,
-  author  = {Apellido, Nombre and Apellido, Nombre2},
-  title   = {Título de ejemplo de un artículo de revista},
-  journal = {Nombre de la revista},
-  year    = {2024},
-  volume  = {12},
-  number  = {3},
-  pages   = {45--67},
-  doi     = {10.1000/ejemplo.2024}
-}
-
-% Ponencia en congreso (muy habitual en informática)
-@inproceedings{apellido2023congreso,
-  author    = {Apellido, Nombre},
-  title     = {Título de ejemplo de una ponencia},
-  booktitle = {Actas del Congreso de Ejemplo (SIGLAS 2023)},
-  year      = {2023},
-  publisher = {Editorial del congreso},
-  pages     = {1--10},
-  doi       = {10.1000/ejemplo.2023}
-}
-
-% Libro (fuentes seminales o de referencia)
-@book{apellido2021libro,
-  author    = {Apellido, Nombre},
-  title     = {Título de ejemplo de un libro},
-  year      = {2021},
-  edition   = {2},
-  publisher = {Editorial},
-  isbn      = {978-0-00-000000-0}
-}
-
-% Recurso web / documentación oficial (urldate OBLIGATORIO)
-@online{organizacion2025recurso,
-  author  = {{Nombre de la Organización}},
-  title   = {Título de la página o documentación de ejemplo},
-  year    = {2025},
-  url     = {https://www.ejemplo.org/documentacion},
-  urldate = {2026-06-11}
-}
-
-% Software o repositorio de código (con url y versión)
-@software{autor2024software,
-  author  = {Apellido, Nombre},
-  title   = {Nombre del software de ejemplo},
-  version = {2.1},
-  year    = {2024},
-  url     = {https://github.com/usuario/repositorio},
-  urldate = {2026-06-11}
-}
-
-% Otro TFG / TFM / tesis (p. ej. depositado en idUS)
-@thesis{apellido2022tfm,
-  author      = {Apellido, Nombre},
-  title       = {Título de ejemplo de un trabajo académico},
-  type        = {Trabajo Fin de Máster},
-  institution = {Universidad de Sevilla},
-  year        = {2022},
-  url         = {https://idus.us.es/handle/ejemplo},
-  urldate     = {2026-06-11}
-}
-
-
-%----------------------------------------------------------------
-
 @online{spl,
   author  = {José Antonio Zamudio},
   title   = {Líneas de Producto Software para acelerar el desarrollo de aplicaciones relacionadas},
@@ -100,24 +34,30 @@
   author  = {David Benavides and Chico Sundermann and Kevin Feichtinger and José A. Galindo and Rick Rabiser and Thomas Thüm},
   title   = {{UVL}: Feature modelling with the Universal Variability Language},
   journal = {ELSEVIER},
-  year    = {2025},
-  volume  = {225},
-  doi     = {10.1016/j.jss.2024.112326}
+  doi = {10.1016/j.jss.2024.112326},
+  journaltitle = {Journal of Systems and Software},
+  volume       = {225},
+  eid          = {112326},
+  date         = {2025},
+}
+
+@inproceedings{flama2023,
+  author    = {Galindo, José A. and Horcas, José-Miguel and Felfernig,
+               Alexander and Fernandez-Amoros, David and Benavides, David},
+  title     = {{FLAMA}: A Collaborative Effort to Build a New Framework for the Automated Analysis of Feature Models},
+  booktitle = {SPLC '23: Proceedings of the 27th ACM International Systems and Software Product Line Conference},
+  volume    = {B2},
+  pages     = {16--19},
+  year      = {2023},
+  publisher = {Association for Computing Machinery},
+  doi       = {10.1145/3579028.3609008}
 }
 
 @online{flamapy,
-  author  = {Universidad de Sevilla and Universidad de Málaga and University of Graz and UNED},
-  title   = {Flamapy: The cutting-edge Python-based tool for Automated Analysis of Feature Models using UVL and more},
+  author  = {{Flamapy}},
+  title   = {Flamapy},
   url     = {https://www.flamapy.org/},
-  urldate = {2026-08-05}
-}
-
-@online{spl,
-  author  = {José Antonio Zamudio},
-  title   = {Líneas de Producto Software para acelerar el desarrollo de aplicaciones relacionadas},
-  year    = {2023},
-  url     = {https://ingenieriadesoftware.es/lineas-producto-software/},
-  urldate = {2026-08-05}
+  urldate = {2026-09-22}
 }
 
 @online{tasovaplus,
@@ -127,11 +67,43 @@
   urldate = {2026-08-05}
 }
 
+@article{uvlhub2024,
+  author    = {Romero-Organvidez, David and Galindo, José A. and Sundermann,
+               Chico and Horcas, José-Miguel and Benavides, David},
+  title     = {{UVLHub}: A feature model data repository using {UVL} and {Open Science} principles},
+  journal   = {Journal of Systems and Software},
+  volume    = {216},
+  pages     = {112150},
+  year      = {2024},
+  publisher = {Elsevier},
+  doi       = {10.1016/j.jss.2024.112150}
+}
+
 @online{uvlhub,
   title   = {UVLHub, a repository of feature models in UVL (Universal Variability Language) format, integrated with Zenodo and flamapy, and developed following Open Science},
   year    = {2023},
   url     = {https://docs.uvlhub.io/},
   urldate = {2026-08-05}
+}
+
+@inproceedings{uvlparser2023,
+  author    = {Sundermann, Chico and Vill, Stefan and Thüm, Thomas
+               and Feichtinger, Kevin and Agarwal, Prankur and Rabiser, Rick
+               and Galindo, José A. and Benavides, David},
+  title     = {{UVLParser}: Extending {UVL} with Language Levels and Conversion Strategies},
+  booktitle = {Proceedings of the 27th ACM International Systems and Software Product Line Conference},
+  series    = {SPLC '23},
+  pages     = {39--42},
+  year      = {2023},
+  publisher = {Association for Computing Machinery},
+  doi       = {10.1145/3579028.3609013}
+}
+
+@online{uvlhub_docs,
+  author  = {{UVLHub}},
+  title   = {UVLHub documentation},
+  url     = {https://docs.uvlhub.io/},
+  urldate = {2026-09-22}
 }
 
 @article{segura2011metamorphic,
@@ -193,14 +165,6 @@
   doi       = {10.1109/WICSA.2001.948406}
 }
 
-@online{lineas_producto_software_web,
-  author = {Ingeniería de Software},
-  title = {Líneas de Producto Software},
-  year = {2025},
-  url = {https://ingenieriadesoftware.es/lineas-producto-software/},
-  urldate = {2026-08-15}
-}
-
 @book{pohl2005,
   author = {Pohl, Klaus and Böckle, Günter and van der Linden, Frank J.},
   title = {Software Product Line Engineering: Foundations, Principles and Techniques},
@@ -225,17 +189,6 @@
     pages = {615--636}
 }
 
-@article{benavides2025uvl,
-  title={UVL: Feature modelling with the Universal Variability Language},
-  author={Benavides, David and Sundermann, Chico and Feichtinger, Kevin and Galindo, Jos{\'e} A. and Rabiser, Rick and Th{\"u}m, Thomas},
-  journal={The Journal of Systems and Software},
-  volume={225},
-  pages={112326},
-  year={2025},
-  publisher={Elsevier},
-  doi={10.1016/j.jss.2025.112326}
-}
-
 @article{bryant1986,
   author = {Bryant, Randal E.},
   title = {Graph-Based Algorithms for Boolean Function Manipulation},
@@ -245,22 +198,6 @@
   number = {8},
   pages = {677--691},
   doi = {10.1109/TC.1986.1676819}
-}
-
-@online{wiki_uvlhub,
-    author = {Universidad de Sevilla},
-    title = {Proyecto - 24/25: Documentación general de UVLHub},
-    url = {https://1984.lsi.us.es/wiki-egc/index.php/Proyecto_-_24/25#Documentaci.C3.B3n_general},
-    note = {Wiki de la asignatura Evolución y Gestión de la Configuración}
-}
-
-@inproceedings{mendonca2009splot,
-    author = {Mendonça, Marco and Branco, Moisés and Cowan, Donald},
-    title = {S.P.L.O.T.: Software Product Lines Online Tools},
-    booktitle = {Proceedings of the 24th ACM SIGPLAN Conference Companion on Object Oriented Programming Systems Languages and Applications},
-    year = {2009},
-    pages = {761--762},
-    publisher = {ACM}
 }
 
 @inproceedings{splot,
@@ -301,9 +238,97 @@
 }
 
 @online{rosemary,
-  author  = {UVLHub},
-  title   = {Rosemary: UVLHub Generation Framework Documentation},
-  year    = {2026},
+  author  = {{UVLHub}},
+  title   = {Rosemary CLI},
   url     = {https://docs.uvlhub.io/rosemary},
-  urldate = {2026-09-05}
+  urldate = {2026-09-22}
+}
+
+@online{pyodide,
+  author  = {{Pyodide developers}},
+  title   = {Pyodide},
+  url     = {https://pyodide.org/en/0.27.7/},
+  urldate = {2026-09-22}
+}
+
+@online{webassembly,
+  author  = {{WebAssembly Community Group}},
+  title   = {WebAssembly},
+  url     = {https://webassembly.org/},
+  urldate = {2026-09-22}
+}
+
+@online{flask,
+  author  = {{Pallets Projects}},
+  title   = {Flask Documentation},
+  url     = {https://flask.palletsprojects.com/en/stable/},
+  urldate = {2026-09-22}
+}
+
+@online{docker,
+  author  = {{Docker}},
+  title   = {Docker Documentation},
+  url     = {https://docs.docker.com/},
+  urldate = {2026-09-22}
+}
+
+@online{selenium,
+  author  = {{Selenium contributors}},
+  title   = {Selenium Documentation},
+  url     = {https://www.selenium.dev/documentation/},
+  urldate = {2026-09-22}
+}
+
+@online{bootstrap,
+  author  = {{Bootstrap contributors}},
+  title   = {Bootstrap Documentation},
+  url     = {https://getbootstrap.com/docs/5.3/},
+  urldate = {2026-09-22}
+}
+
+@online{render,
+  author  = {{Render}},
+  title   = {Render Documentation},
+  url     = {https://render.com/docs},
+  urldate = {2026-09-22}
+}
+
+@online{conventionalcommits,
+  author  = {{Conventional Commits}},
+  title   = {Conventional Commits},
+  url     = {https://www.conventionalcommits.org/en/v1.0.0/},
+  urldate = {2026-09-22}
+}
+
+@book{pmi2021pmbok,
+  author    = {{Project Management Institute}},
+  title     = {A Guide to the Project Management Body of Knowledge (PMBOK Guide) -- Seventh Edition and The Standard for Project Management},
+  edition   = {7},
+  year      = {2021},
+  publisher = {Project Management Institute},
+  isbn      = {9781628256673}
+}
+
+@misc{egc2024_instalacion_uvlhub,
+  author       = {{Wiki de EGC}},
+  title        = {Práctica 1: Instalación del sistema base},
+  year         = {2024},
+  howpublished = {Material docente del curso 2024/2025},
+  note         = {Diapositivas 15--16. Consultado el 24 de septiembre de 2026},
+  url          = {https://1984.lsi.us.es/wiki-egc/images/egc/c/ca/EGC_2024-25_P1.pdf}
+}
+
+@misc{grado_software_us,
+  author       = {{Universidad de Sevilla}},
+  title        = {Grado en Ingeniería Informática -- Ingeniería del Software},
+  howpublished = {\url{https://www.us.es/estudiar/que-estudiar/oferta-de-grados/grado-en-ingenieria-informatica-ingenieria-del-software}},
+  note         = {Consultado el 28 de septiembre de 2026}
+}
+
+@misc{rd1125_2003,
+  author       = {{Gobierno de España}},
+  title        = {Real Decreto 1125/2003, de 5 de septiembre},
+  year         = {2003},
+  howpublished = {\url{https://www.boe.es/buscar/act.php?id=BOE-A-2003-17643}},
+  note         = {Artículo 4}
 }

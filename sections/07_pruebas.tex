@@ -1,48 +1,24 @@
 \chapter{Pruebas y validación}
 \label{chap:pruebas}
 
-\ph{Este capítulo describe cómo se ha verificado que el sistema cumple los
-requisitos. Las secciones siguen el orden clásico de la \emph{pirámide de
-pruebas}: de la base (muchas pruebas, rápidas y baratas) a la cumbre (pocas,
-lentas y caras). En la base están las pruebas unitarias, en el medio las
-de integración y en la cima las de extremo a extremo / aceptación.
-Delimita el alcance desde el principio: este capítulo responde a la pregunta
-de la \emph{verificación} («¿hemos construido bien el sistema?»); la
-\emph{evaluación} de los resultados frente a los objetivos del trabajo y su
-discusión se realiza en el Capítulo~\ref{chap:resultados}.}
 
 \section{Estrategia de pruebas}
 \label{sec:estrategia_pruebas}
 
-\ph{Resumen del enfoque adoptado: niveles de pruebas usados, framework
-elegido y entorno en el que se ejecutan. Adapta los niveles al tipo de TFG
-(software, hardware, modelo de IA, estudio empírico\dots).}
-
-\ph{Niveles de la pirámide aplicados en este TFG (incluye los que apliquen):}
-
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Pruebas unitarias}}: \ph{base de la pirámide. Verifican
-        unidades aisladas (funciones, clases, módulos). Son las más numerosas
-        y rápidas; deben ser deterministas y no depender de servicios externos.}
-  \item \textbf{\ph{Pruebas de integración}}: \ph{nivel intermedio. Comprueban
-        que varios componentes funcionan juntos correctamente, incluyendo
-        contratos con servicios externos (BD, APIs internas\dots).}
-  \item \textbf{\ph{Pruebas de extremo a extremo / sistema}}: \ph{cumbre de la
-        pirámide. Validan flujos completos desde la perspectiva del usuario o
-        cliente. Son las menos numerosas porque son las más lentas y frágiles.}
-  \item \textbf{\ph{Pruebas de aceptación (opcional)}} : \ph{cotejan el sistema
-        frente a los requisitos del Capítulo~\ref{chap:requisitos}.}
-\end{itemize}
-}
-
-\ph{Comenta brevemente el entorno de pruebas: si las dependencias externas
-son reales, simuladas o efímeras (en memoria, contenedores desechables,
-mocks\dots) y cómo se garantiza el aislamiento entre tests.}
 
 La estrategia de pruebas aplicada tiene como objetivo verificar el correcto
 funcionamiento del generador integrado en UVLHub, validando tanto los
 componentes individuales como el flujo completo de configuración y generación.
+
+La suite de pruebas utilizada combina trabajo previo y aportaciones realizadas
+durante este TFG. Las pruebas \texttt{test\_engine.py},
+\texttt{test\_validators.py}, \texttt{test\_wizard\_outputs.py} y
+\texttt{test\_wizard\_flow.py} fueron desarrolladas mayoritariamente por David
+Romero. Por su parte, durante este trabajo se desarrollaron las pruebas
+\texttt{test\_selenium.py}, \texttt{test\_wizard\_persisters.py},
+\texttt{test\_wizard\_state.py}, \texttt{test\_wizard\_builders.py} y
+\texttt{test\_params\_contract.py}, además de adaptar pruebas existentes para
+validar la integración con el nuevo componente generador.
 
 Las pruebas desarrolladas se organizan en los siguientes niveles:
 
@@ -54,7 +30,7 @@ Las pruebas desarrolladas se organizan en los siguientes niveles:
 
     \item \textbf{Pruebas de integración}: comprueban la interacción entre los
     distintos componentes del módulo \texttt{generator}, incluyendo la gestión
-    del estado del \textit{}, la persistencia de parámetros y la generación de
+    del estado del asistente, la persistencia de parámetros y la generación de
     salidas.
 
     \item \textbf{Pruebas de sistema}: verifican el funcionamiento completo del
@@ -67,285 +43,282 @@ Las pruebas desarrolladas se organizan en los siguientes niveles:
 
 \end{itemize}
 
-La ejecución de las pruebas automatizadas se realiza mediante la suite de tests
-del proyecto, utilizando el entorno definido mediante Docker para garantizar la
-disponibilidad de las dependencias necesarias y la reproducibilidad de los
-resultados.
+La suite integrada de UVLHub se ejecutó en el contenedor web de Docker con
+Python 3.13.15 y \texttt{pytest} 9.0.3. La suite independiente de
+\texttt{fm\_generator} se ejecutó desde la raíz del repositorio con Python
+3.13.11 y \texttt{pytest} 9.0.3. Esta separación permite verificar el módulo
+integrado con los servicios de UVLHub y el componente generador por separado.
+
+Los comandos siguientes reproducen las ejecuciones documentadas en el
+Apéndice~\ref{app:manual_instalacion}. Se ejecutan desde la raíz del repositorio,
+con el entorno Docker previamente levantado mediante
+\texttt{docker compose -f docker/docker-compose.dev.yml up --build}. En la
+primera pareja se ejecutan las suites; en la segunda se generan los informes
+de cobertura correspondientes.
+
+\begin{verbatim}
+docker compose -f docker/docker-compose.dev.yml exec web \
+  rosemary test generator --all
+pytest fm_generator/tests -v
+
+
+
+docker compose -f docker/docker-compose.dev.yml exec web \
+  rosemary coverage generator --all
+pytest fm_generator/tests -v --cov=fm_generator \
+  --cov-report=term-missing --cov-report=html
+\end{verbatim}
+
+La ejecución de una suite y su repetición con cobertura contienen los mismos
+tests; esta segunda ejecución no se contabiliza como un conjunto de casos
+adicional. Los casos de Selenium necesitan los servicios del entorno Docker.
 
 \section{Pruebas unitarias}
 \label{sec:pruebas_unitarias}
 
-\ph{Describe cómo se prueban los componentes centrales del sistema en
-aislamiento (la lógica de negocio, el algoritmo principal o el módulo más
-crítico del TFG). Indica qué grupos de casos cubre, no la lista exhaustiva.}
 
-\ph{Grupos de casos típicos:}
+Las pruebas de esta sección ejercitan las funciones de generación y las piezas
+del asistente sin recorrer la interfaz del navegador. Se describen por fichero
+para identificar los casos y la responsabilidad que comprueba cada uno.
 
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Caso nominal}}: \ph{entrada válida que debe producir el
-        resultado esperado.}
-  \item \textbf{\ph{Entradas inválidas}}: \ph{datos mal formados, fuera de
-        rango o con campos ausentes.}
-  \item \textbf{\ph{Casos límite}}: \ph{valores en la frontera del dominio
-        admisible.}
-  \item \textbf{\ph{Reglas de negocio}}: \ph{combinaciones que activan
-        restricciones específicas del dominio.}
-\end{itemize}
-}
+\subsection{\texttt{test\_engine.py} del paquete \texttt{fm\_generator}}
 
-\ph{Si la lógica del módulo no se reduce a un booleano, comenta también qué
-información complementaria se valida (mensajes, códigos de error, listas de
-campos afectados\dots).}
+Este fichero pertenece a la suite independiente de \texttt{fm\_generator} y
+comprueba el comportamiento de \texttt{GenerateFeatureModel} y
+de los modelos producidos. \path{test_num_models_respected},
+\path{test_feature_count_in_range} y
+\path{test_max_tree_depth_respected} verifican los límites
+configurados; \path{test_determinism_same_seed_same_output} y
+\path{test_different_seed_different_output} ejercitan el uso de
+semillas. Los casos sobre cardinalidades, atributos y restricciones contrastan
+la presencia o ausencia de las construcciones UVL según los niveles activados.
+Por ejemplo, \path{test_arithmetic_level_produces_arith_constraints}
+y \path{test_string_level_produces_len_constraints} comprueban
+salidas de mayor expresividad. La prueba
+\path{test_generate_feature_model_is_discoverable_by_flamapy}
+comprueba también el descubrimiento de la operación mediante Flamapy.
 
-Las pruebas unitarias se han centrado en validar los componentes internos del
-generador y la lógica asociada al asistente de configuración. Los principales
-grupos de casos cubiertos son:
+\subsection{\texttt{test\_validators.py}}
 
-\begin{itemize}
+Agrupa casos negativos para los formularios de los pasos 1 a 5 y un caso de
+aceptación de las opciones del paso 6. Entre los casos se encuentran
+\path{test_step1_rejects_non_numeric_values},
+\path{test_step2_rejects_minor_levels_without_required_major_levels},
+\path{test_step3_rejects_invalid_relation_distribution} y
+\path{test_step4_rejects_invalid_boolean_operator_distribution}.
+Las parametrizaciones comprueban varios valores incorrectos por caso, incluidos
+rangos invertidos, campos no numéricos y distribuciones inválidas, y verifican
+que se señalen los campos afectados.
 
-    \item \textbf{Generador de modelos de características:}
-    se valida la operación
-    \texttt{GenerateFeatureModel.execute}, comprobando que los parámetros del
-    objeto \texttt{FmgeneratorModel} se aplican correctamente durante la
-    generación. Se verifican aspectos como el número de modelos generados, la
-    reproducibilidad mediante semillas, los límites de características y
-    profundidad del árbol, así como la generación de relaciones jerárquicas,
-    atributos y restricciones según los niveles UVL habilitados.
+\subsection{\texttt{test\_wizard\_builders.py}}
 
-    \item \textbf{Generación de restricciones y atributos:}
-    se comprueba que la activación de los diferentes niveles del generador
-    produce únicamente los elementos permitidos. Se validan restricciones
-    booleanas, aritméticas y de tipo string, además de operadores agregados
-    (\texttt{sum}, \texttt{avg}), funciones sobre cadenas y distribución de
-    tipos de atributos. También se verifica que los atributos configurados para
-    no participar en restricciones no aparecen en las expresiones generadas.
+Los casos de este fichero verifican la reconstrucción de valores al abrir un
+paso del asistente. \path{test_build_step1_values_uses_saved_parameters}
+contrasta los datos recuperados con los guardados;
+\path{test_build_step3_normalises_feature_cardinality_values}
+comprueba la normalización de cardinalidades; y
+\path{test_build_step6_values_reads_output_options} verifica las
+opciones finales. También se prueban los valores por defecto y las entradas
+vacías o de distintos tipos.
 
-    \item \textbf{Validación del modelo de parámetros:}
-    se prueban las comprobaciones realizadas por
-    \texttt{FmgeneratorModel}, incluyendo la validación de distribuciones de
-    probabilidad, rangos de generación y coherencia entre niveles activados.
-    Además, se comprueba la correcta conversión desde el diccionario plano de
-    parámetros utilizado por UVLHub hacia la estructura interna del generador.
+\subsection{\texttt{test\_wizard\_persisters.py}}
 
-    \item \textbf{Validadores del asistente de configuración:}
-    se prueban los métodos de validación de cada paso del \textit{wizard}
-    (\texttt{validate\_step1\_form} a
-    \texttt{validate\_step5\_form}), comprobando casos como límites inválidos
-    de modelos o características, distribuciones incorrectas, configuraciones
-    incompatibles entre niveles y restricciones imposibles de generar.
+Verifica la actualización de la configuración temporal al completar los
+formularios. \path{test_apply_step1_persists_batch_fields} comprueba
+los datos generales; \path{test_apply_step2_type_enables_arithmetic}
+comprueba la dependencia entre niveles; y
+\path{test_apply_step6_output_persists_checkboxes} comprueba las
+casillas de salida. Otros casos cubren distribuciones de relaciones y atributos,
+desactivación de probabilidades no aplicables y conversión de valores inválidos.
 
-    \item \textbf{Gestión del estado y construcción de parámetros:}
-    se valida la persistencia temporal de la configuración almacenada en la
-    sesión de Flask mediante las funciones de gestión del estado del \textit{wizard}.
-    También se comprueba la normalización de distribuciones y la correcta
-    propagación de los valores entre pasos mediante los constructores de
-    parámetros.
+\subsection{\texttt{test\_wizard\_state.py}}
 
-\end{itemize}
+Sus cuatro funciones comprueban el guardado y la recuperación del estado de
+cada paso. \path{test_save_step_state_preserves_checkbox_false_values}
+verifica que los valores falsos no desaparecen;
+\path{test_save_step_state_does_not_overwrite_other_steps}
+comprueba el aislamiento entre pasos; y
+\path{test_step_state_is_preserved_after_returning_to_previous_step}
+reproduce la navegación hacia atrás.
 
 \section{Pruebas de integración}
 \label{sec:pruebas_integracion}
 
-\ph{Describe las pruebas que ejercitan varios componentes a la vez.
-Conviene separarlas según los componentes que combinan.}
 
-\ph{
-\begin{itemize}
-  \item \ph{Pruebas sobre el contrato con la base de datos / capa de
-        persistencia (ORM, esquemas, transacciones).}
-  \item \ph{Pruebas sobre la capa de servicios o API
-        (códigos de respuesta, contratos de entrada/salida, autenticación,
-        control de acceso entre usuarios).}
-  \item \ph{Pruebas sobre integraciones con servicios externos
-        (proveedores de identidad, almacenamiento, APIs de terceros\dots).}
-\end{itemize}
-}
+Esta sección reúne pruebas del contrato de parámetros y pruebas que combinan
+rutas Flask, sesión, configuración y componente generador. Las realizadas con
+el cliente de pruebas de Flask recorren el contrato HTTP sin abrir un
+navegador; las pruebas con navegador real se describen en la
+Sección~\ref{sec:pruebas_e2e}.
 
-\ph{Documenta también las pruebas de casos negativos
-(valores fuera de rango, restricciones violadas, datos incompletos\dots).}
+\subsection{\texttt{test\_params\_contract.py} del paquete \texttt{fm\_generator}}
 
-Las pruebas de integración se han centrado en verificar la comunicación entre
-los diferentes módulos que intervienen en el proceso de generación, desde la
-configuración realizada mediante el \textit{wizard} de UVLHub hasta la obtención del
-modelo UVL generado.
+Este fichero verifica el contrato entre las claves del asistente y las
+admitidas por \texttt{FmgeneratorModel}. El caso
+\path{test_wizard_referenced_params_keys_are_mapped_to_generator_model}
+detecta claves sin correspondencia;
+\path{test_generator_model_defaults_are_valid_for_generation_contract}
+comprueba los valores por defecto. Los casos restantes verifican la forma de los parámetros y rechazan las
+distribuciones cuya suma se aleja de uno más allá de la tolerancia aplicada
+por el validador del modelo, de $10^{-6}$. Sus cinco casos
+se superaron, al igual que los 39 del otro fichero de \texttt{fm\_generator}.
 
-Los principales casos cubiertos son:
+\subsection{\texttt{test\_wizard\_flow.py}}
 
-\begin{itemize}
+El cliente de Flask recorre las rutas \texttt{/generator/random/step1} a
+\texttt{/generator/random/step6} y comprueba las respuestas, las redirecciones
+y el estado de sesión. \path{test_full_happy_path_produces_valid_params}
+verifica que el recorrido proporciona una configuración completa;
+\path{test_params_json_returns_400_without_params} comprueba la
+respuesta cuando falta configuración; y los casos
+\path{test_back_nav_from_step2_preserves_level_flags} y
+\path{test_step4_configuration_survives_forward_and_back_navigation}
+comprueban la conservación de valores al navegar. También se prueban los
+errores de validación y la respuesta de rutas ante estados incompletos.
 
-    \item \textbf{Integración del \textit{wizard} con la capa de servicios:}
-    se prueba el recorrido completo del asistente mediante las rutas
-    \texttt{/generator/random/step1} a
-    \texttt{/generator/random/step6}, verificando la interacción entre los
-    controladores Flask y los métodos de \texttt{GeneratorWizardService}
-    encargados de procesar cada etapa.
+\subsection{\texttt{test\_wizard\_outputs.py}}
 
-    \item \textbf{Integración de la configuración persistida con el generador:}
-    se comprueba que la configuración almacenada durante el flujo del \textit{wizard} se
-    recupera correctamente mediante el endpoint
-    \texttt{/generator/random/params-json} y puede ser transformada en una
-    instancia válida de \texttt{FmgeneratorModel}.
-
-    \item \textbf{Integración del modelo de parámetros con la generación UVL:}
-    se valida que una configuración completa procedente del \textit{wizard} es utilizada
-    correctamente por \texttt{GenerateFeatureModel}, generando artefactos UVL
-    que reflejan las opciones seleccionadas, como niveles UVL, cardinalidades,
-    tipos de atributos, restricciones y opciones de nomenclatura.
-
-    \item \textbf{Integración del flujo de navegación y estado del asistente:}
-    se verifican los escenarios de navegación hacia atrás entre pasos,
-    comprobando que los valores almacenados en la sesión Flask permanecen
-    consistentes y que una configuración parcialmente modificada no provoca
-    estados inválidos durante la generación.
-
-\end{itemize}
+Estas pruebas recorren los seis pasos mediante el cliente Flask, recuperan
+\texttt{/generator/random/params-json} y utilizan esa configuración para
+generar modelos UVL. \path{test_boolean_only_wizard_produces_only_boolean},
+\path{test_arithmetic_level_wizard_produces_arithmetic_constraints}
+y \path{test_group_cardinality_on_produces_groups} comprueban que
+las opciones del asistente afectan al resultado. Otros casos verifican el
+número de atributos y restricciones, las funciones de \texttt{fmgen\_wrapper.py},
+la serialización y los nombres de fichero. En particular,
+\path{test_o1_level_combinations_roundtrip_to_uvl_and_boolean_sat}
+ejercita 26 combinaciones de niveles, serializa los modelos a UVL y vuelve a
+cargarlos con \texttt{UVLReader}. En las configuraciones booleanas también
+comprueba la satisfacibilidad. Este caso verifica los modelos generados y su
+compatibilidad con las herramientas de lectura y análisis; la descripción de
+la suite no identifica una prueba de extremo a extremo que invoque el endpoint
+\texttt{/generator/random/generate-sat}. Este fichero contiene también pruebas
+unitarias del \textit{wrapper} que sustituyen algunas dependencias mediante
+objetos simulados; se agrupan aquí porque comparten el fichero con las pruebas
+de integración.
 
 \section{Pruebas de extremo a extremo}
 \label{sec:pruebas_e2e}
 
-\ph{Describe la validación del sistema desde la perspectiva del usuario
-final. No tiene por qué ejecutarse en un navegador o entorno gráfico real:
-muchas veces basta con automatizar el flujo a través de la interfaz pública
-del sistema (HTTP, CLI, etc.). Estas pruebas son las menos numerosas pero
-las que dan más confianza en que el sistema funciona como un todo.}
 
-\ph{Plantilla de pasos del flujo principal validado:}
+El fichero \path{test_selenium.py} contiene doce pruebas con Selenium
+WebDriver~\cite{selenium}. Comprueba la aplicación desde un navegador real,
+incluidas la respuesta de los formularios, la navegación y la preparación del
+entorno de Pyodide. Por ejemplo,
+\path{test_step2_type_level_enables_arithmetic_level_in_ui}
+verifica una dependencia visible entre opciones;
+\path{test_wizard_preserves_step1_values_after_next_and_previous}
+verifica la navegación; y
+\path{test_wizard_reaches_step5_with_pyodide_ready} comprueba la
+preparación del entorno de generación.
 
-\ph{\begin{enumerate}
-  \item \ph{Paso 1.}
-  \item \ph{Paso 2.}
-  \item \ph{Paso 3.}
-  \item \ph{Paso 4.}
-  \item \ph{Paso 5.}
-\end{enumerate}
-}
+El caso más completo es
+\path{test_step6_generates_one_uvl_model_with_pyodide}. Recorre
+los seis pasos, espera a que el \textit{runtime} esté disponible, solicita un
+modelo y comprueba que aparece un único resultado, que se ofrece la descarga y
+que la vista del archivo contiene la sección \texttt{features}. Otros casos
+comprueban los límites de campos numéricos, la disponibilidad de las pantallas
+y la aparición de opciones de cardinalidad o niveles UVL. Así, las doce
+pruebas no realizan todas una generación completa; cada una examina un tramo
+concreto del flujo de usuario.
 
-\ph{Casos complementarios habituales:}
+La Tabla~\ref{tab:casos_por_fichero} relaciona cada fichero con sus casos
+ejecutados y una función de prueba representativa. Los casos se cuentan tras
+expandir las parametrizaciones: una función puede producir varias ejecuciones.
+Los ficheros de UVLHub se encuentran en
+\path{app/features/generator/tests/} y los del componente independiente en
+\path{fm_generator/tests/}.
 
-\ph{\begin{itemize}
-  \item \ph{Estado inicial vacío.}
-  \item \ph{Repetición del flujo con varias instancias y comprobación del orden.}
-  \item \ph{Acceso no autorizado o sesión inválida.}
-  \item \ph{Recuperación tras un error controlado.}
-\end{itemize}
-}
-
-Las pruebas de extremo a extremo se han implementado mediante Selenium
-WebDriver, validando el comportamiento del sistema desde la interfaz web hasta
-la ejecución del proceso de generación en el navegador.
-
-El flujo principal validado es el siguiente:
-
-\begin{enumerate}
-
-    \item \textbf{Carga del generador:}
-    se verifica la correcta inicialización de la interfaz mediante el acceso a
-    la ruta \texttt{/generator/random/step1} y la disponibilidad de los
-    elementos necesarios para comenzar la configuración.
-
-    \item \textbf{Ejecución del proceso de generación:}
-    se automatiza la interacción con el \textit{wizard} completo, comprobando la
-    transición entre las diferentes vistas y la correcta respuesta de la
-    interfaz ante las acciones del usuario.
-
-    \item \textbf{Inicialización del entorno Pyodide:}
-    se valida la carga del runtime JavaScript necesario para ejecutar el
-    generador en el navegador antes de iniciar la generación.
-
-    \item \textbf{Generación y visualización del modelo UVL:}
-    se comprueba la ejecución de la generación desde la interfaz, verificando
-    el estado final del proceso, la aparición del resultado generado y la
-    visualización del contenido UVL obtenido.
-
-\end{enumerate}
-
-Además, se han probado escenarios adicionales relacionados con la interacción
-del usuario:
-
-\begin{itemize}
-
-    \item Navegación entre pasos mediante los controles de la interfaz,
-    verificando que el comportamiento visual coincide con el estado esperado.
-
-    \item Activación y desactivación de opciones dependientes dentro del
-    formulario, como niveles aritméticos, cardinalidades y opciones avanzadas.
-
-    \item Ejecución del generador con configuraciones completas desde la
-    interfaz, comprobando la disponibilidad de las acciones finales sobre el
-    modelo generado.
-
-\end{itemize}
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}p{3.1cm}
+>{\centering\arraybackslash}p{1.2cm}
+>{\raggedright\arraybackslash}X
+@{}}
+\toprule
+\textbf{Fichero de test} & \textbf{Pasan} &
+\textbf{Caso representativo} \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Paquete independiente \texttt{fm\_generator}}} \\
+\path{test_engine.py} &
+39/39 & \path{test_determinism_same_seed_same_output} \\
+\path{test_params_contract.py} &
+5/5 & \path{test_wizard_referenced_params_keys_are_mapped_to_generator_model} \\
+\textbf{Subtotal \texttt{fm\_generator}} & \textbf{44/44} & \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Módulo \texttt{generator} de UVLHub}} \\
+\path{test_selenium.py} &
+12/12 & \path{test_step6_generates_one_uvl_model_with_pyodide} \\
+\path{test_validators.py} &
+51/51 & \path{test_step3_rejects_invalid_relation_distribution} \\
+\path{test_wizard_builders.py} &
+16/16 & \path{test_build_step1_values_uses_saved_parameters} \\
+\path{test_wizard_flow.py} &
+35/35 & \path{test_full_happy_path_produces_valid_params} \\
+\path{test_wizard_outputs.py} &
+90/90 & \path{test_o1_level_combinations_roundtrip_to_uvl_and_boolean_sat} \\
+\path{test_wizard_persisters.py} &
+12/12 & \path{test_apply_step1_persists_batch_fields} \\
+\path{test_wizard_state.py} &
+4/4 & \path{test_save_step_state_does_not_overwrite_other_steps} \\
+\textbf{Subtotal UVLHub} & \textbf{220/220} & \\
+\bottomrule
+\end{tabularx}
+\caption{Casos superados y ejemplos por fichero de las dos suites de pruebas.}
+\label{tab:casos_por_fichero}
+\end{table}
 
 \section{Cobertura y métricas de calidad}
 \label{sec:cobertura}
 
 La calidad de la solución se ha evaluado mediante pruebas automatizadas y
-cobertura de líneas, utilizando \texttt{pytest} y \texttt{coverage.py}. Se ha
+cobertura de sentencias ejecutables, utilizando \texttt{pytest} y \texttt{coverage.py}. Se ha
 establecido un umbral mínimo del \textbf{80\,\%} sobre el código de producción.
 
-Este umbral busca mantener una cobertura honesta. Las líneas no cubiertas
+Este umbral busca mantener una cobertura honesta. Las sentencias no cubiertas
 corresponden principalmente a comprobaciones defensivas, configuraciones
-inválidas bloqueadas por el \textit{wizard} y rutas de error cuya ejecución
+inválidas bloqueadas por el asistente y rutas de error cuya ejecución
 forzada no aportaría evidencia funcional relevante.
 
-La medición excluye las dependencias externas, las cachés, los artefactos
-generados, los ficheros auxiliares de carga y los propios tests. Aunque los
-informes incluyen estos ficheros para facilitar el análisis, no se utilizan
-para calcular la cobertura del código de producción.
+El cálculo de la Tabla~\ref{tab:cobertura_ficheros} considera únicamente el
+código de producción del generador en UVLHub y en \texttt{fm\_generator}.
+Los informes completos incluyen también ficheros de prueba; estos no se
+incluyen en los subtotales de producción. Tampoco se suman dependencias
+externas, cachés ni artefactos generados.
 
 \begin{table}[H]
 \centering
 \small
 \setlength{\tabcolsep}{5pt}
 \renewcommand{\arraystretch}{1.2}
-\begin{tabularx}{\textwidth}{@{}
->{\raggedright\arraybackslash}X
->{\centering\arraybackslash}p{1.25cm}
->{\centering\arraybackslash}p{1.55cm}
->{\centering\arraybackslash}p{1.45cm}
-@{}}
+\begin{tabularx}{\textwidth}{@{}Xrrr@{}}
 \toprule
-\textbf{Fichero} &
-\textbf{Líneas} &
-\textbf{Sin cubrir} &
-\textbf{Cobertura} \\
+\textbf{Fichero} & \textbf{Sent.} & \textbf{Sin cubrir} & \textbf{Cobertura} \\
 \midrule
-
-\path{app/features/generator/__init__.py}
-& 2 & 0 & 100\,\% \\
-
-\path{app/features/generator/assets/js/}
-\path{fmgen_wrapper.py}
-& 49 & 0 & 100\,\% \\
-
-\path{app/features/generator/routes.py}
-& 214 & 6 & 97\,\% \\
-
-\path{app/features/generator/wizard.py}
-& 810 & 158 & 80\,\% \\
-
-\path{fm_generator/src/.../models/models.py}
-& 325 & 42 & 87\,\% \\
-
-\path{fm_generator/src/.../operations/}
-\path{generate_feature_model.py}
-& 666 & 73 & 89\,\% \\
-
+\multicolumn{4}{@{}l}{\textit{Módulo \texttt{generator} de UVLHub}} \\
+\path{__init__.py} & 2 & 0 & 100\,\% \\
+\path{assets/js/fmgen_wrapper.py} & 49 & 0 & 100\,\% \\
+\path{routes.py} & 214 & 6 & 97\,\% \\
+\path{wizard.py} & 810 & 159 & 80\,\% \\
 \midrule
-\textbf{Código de producción de UVLHub}
-& \textbf{1075} & \textbf{164} & \textbf{85\,\%} \\
-
-\textbf{Código de producción de \texttt{fm\_generator}}
-& \textbf{997} & \textbf{115} & \textbf{88\,\%} \\
-
+\multicolumn{4}{@{}l}{\textit{Paquete \texttt{fm\_generator}}} \\
+\path{__init__.py} & 2 & 0 & 100\,\% \\
+\path{models/__init__.py} & 2 & 0 & 100\,\% \\
+\path{models/models.py} & 325 & 42 & 87\,\% \\
+\path{operations/__init__.py} & 2 & 0 & 100\,\% \\
+\path{operations/generate_feature_model.py} & 666 & 73 & 89\,\% \\
 \midrule
-\textbf{Total de código de producción}
-& \textbf{2072} & \textbf{279} & \textbf{87\,\%} \\
-
+\textbf{Subtotal UVLHub} & \textbf{1075} & \textbf{165} & \textbf{85\,\%} \\
+\textbf{Subtotal \texttt{fm\_generator}} & \textbf{997} & \textbf{115} & \textbf{88\,\%} \\
+\midrule
+\textbf{Total de producción} & \textbf{2072} & \textbf{280} & \textbf{86,5\,\%} \\
 \bottomrule
 \end{tabularx}
-\caption{Cobertura de líneas del código de producción del generador.}
+\caption{Cobertura de sentencias del código de producción del generador.}
 \label{tab:cobertura_ficheros}
 \end{table}
 
@@ -354,6 +327,8 @@ incluye también los ficheros de prueba. Al excluirlos, el código de producció
 del generador alcanza un 85\,\%. Del mismo modo, el informe del paquete
 \texttt{fm\_generator} muestra un 91\,\% incluyendo sus tests, mientras que la
 cobertura específica del código de producción es del 88\,\%.
+La cobertura conjunta del 86,5\,\% se obtiene agregando las sentencias
+cubiertas de ambos informes independientes: 1792 de 2072.
 
 Los ficheros con menor cobertura son \texttt{wizard.py}, con un 80\,\%, y
 \texttt{models.py}, con un 87\,\%. A pesar de ello, los caminos principales de
@@ -391,37 +366,33 @@ Pruebas de \texttt{fm\_generator} &
 \label{tab:resumen_suite}
 \end{table}
 
+
 La suite combina pruebas unitarias sobre validadores, constructores,
 persistencia de parámetros y reglas del motor, con pruebas de integración del
-flujo del \textit{wizard} y de la generación de modelos. Además, incluye
+flujo del asistente y de la generación de modelos. Además, incluye
 12 pruebas con Selenium para verificar los flujos principales desde la
 interfaz web.
 
-Destaca la prueba asociada al objetivo O1, que recorre 26 combinaciones válidas
+Destaca una prueba automatizada que recorre 26 combinaciones válidas
 de niveles principales y secundarios. Para cada combinación se generan tres
 modelos, lo que supone 78 modelos en total. Cada modelo se serializa a UVL y
 se vuelve a cargar mediante \texttt{UVLReader}. En las configuraciones
 booleanas, además, el modelo se transforma a PySAT y se ejecuta la operación
 de satisfacibilidad. Esta prueba comprueba la compatibilidad del resultado con
-las herramientas que consumirán posteriormente los modelos generados.
+las herramientas que consumirán posteriormente los modelos generados. Sus 78
+modelos corresponden a la matriz de combinaciones de las pruebas de regresión,
+y se diferencian de los 30 modelos del experimento cuantitativo descrito en la
+Sección~\ref{subsec:resultados_o1}.
 
-La suite aporta evidencia para los objetivos de generación de modelos con
-diferentes niveles de expresividad (O1), configuración del proceso de
-generación (O2), integración con UVLHub y Flamapy (O3) y disponibilidad de una
-batería automatizada de validación (O5). La relación detallada entre
-requisitos y pruebas se recoge en la
-Tabla~\ref{tab:trazabilidad_rf_tests}.
+La Tabla~\ref{tab:resumen_suite} resume el resultado de ambas suites. 
+La relación detallada entre requisitos y pruebas se recoge en la
+Tabla~\ref{tab:trazabilidad_rf_tests}. El capítulo siguiente utiliza estas
+evidencias, junto con las evaluaciones específicas, para valorar los objetivos
+del trabajo.
 
-% --- Transición al siguiente capítulo ---
-\ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
-establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
-«Verificado que el sistema está bien construido y que cumple los requisitos
-especificados, queda la pregunta de fondo: ¿resuelve el problema planteado y
-en qué medida? El Capítulo~\ref{chap:resultados} evalúa los resultados
-obtenidos frente a los criterios de éxito y los discute críticamente».}
 
-La estrategia de pruebas desarrollada permite verificar el correcto
-funcionamiento del sistema y comprobar el cumplimiento de los principales
-requisitos definidos. Una vez validada la implementación, el siguiente capítulo
-analiza los resultados obtenidos y evalúa en qué medida la solución desarrollada
-alcanza los objetivos planteados inicialmente.
+Este capítulo ha documentado los casos ejecutados, los resultados de las
+suites y la cobertura del código de producción. El
+Capítulo~\ref{chap:resultados} contrasta esta evidencia con los criterios de
+éxito de los objetivos y presenta las evaluaciones que requieren medidas
+adicionales.

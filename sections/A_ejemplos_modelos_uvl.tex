@@ -1,0 +1,417 @@
+\chapter{Modelos UVL generados y configuraciones}
+\label{app:apendice_a}
+
+Este apéndice recoge tres modelos UVL ilustrativos, uno por cada nivel de
+expresividad utilizado: booleano, aritmético y de tipos. Para cada ejemplo se
+reproduce el contenido del modelo y el objeto completo de parámetros
+registrado en su ejecución. Los parámetros desactivados también se conservan
+para documentar íntegramente cada configuración. Estos ejemplos proceden de
+ejecuciones independientes de la evaluación cuantitativa de O1 descrita en el
+Capítulo~\ref{chap:resultados}.
+
+En las tres ejecuciones ilustrativas, \texttt{SEED} tiene el valor
+\texttt{4233} y \texttt{NUM\_MODELS} tiene el valor \texttt{10}. Cada modelo
+mostrado procede de una tanda de diez modelos. Estos valores no corresponden
+a la semilla ni a los resultados cuantitativos de O1.
+
+\section{Modelos ilustrativos por nivel de expresividad}
+\label{app:modelos-o1}
+
+\subsection{Nivel booleano y cardinalidad de grupo}
+\label{app:modelo-uvl}
+
+En esta configuración se activa el nivel booleano y, como nivel menor, la
+cardinalidad de grupo (\texttt{GROUP\_CARDINALITY}). Los niveles aritmético y
+de tipos permanecen desactivados. El Listado~\ref{lst:modelo-booleano}
+presenta uno de los modelos generados y el
+Listado~\ref{lst:parametros-booleano} recoge todos los parámetros de la tanda.
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Modelo UVL generado con el nivel booleano y cardinalidad de grupo.},
+    label={lst:modelo-booleano}
+]
+include
+    Boolean.group-cardinality
+features
+    F0
+        mandatory
+            F2
+                mandatory
+                    F3
+                        mandatory
+                            F6
+        mandatory
+            F1 {Attr0 true}
+                optional
+                    F4
+                        mandatory
+                            F5
+                                [2]
+                                    F8
+                                        mandatory
+                                            F10
+                                    F7
+                                        mandatory
+                                            F11
+                                        mandatory
+                                            F9
+constraints
+    ((((F8 | F3) => (! F1.Attr0 | ! F9)) | F6) | ! F5) & (F2 & ! F10)
+    (((F11 | ! F10) | ((! F1.Attr0 & ! F4) & F5)) | F7) & ! F9
+    (F6 | F9) & ! F10
+    ((F4 => F6) => ((! F10 & F11) & ! F8)) & F1.Attr0
+    ! F7 | F3
+\end{lstlisting}
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Parámetros de la tanda con nivel booleano y cardinalidad de grupo.},
+    label={lst:parametros-booleano}
+]
+{
+  "AGGREGATE_FUNCTIONS": false,
+  "ARITHMETIC_LEVEL": false,
+  "ATTRIBUTES_LIST": [],
+  "ATTRIBUTE_ATTACH_PROBS": [],
+  "ATTRIBUTE_IN_CONSTRAINTS": [],
+  "ATTR_DIST_BOOLEAN": 1,
+  "ATTR_DIST_INTEGER": 0,
+  "ATTR_DIST_REAL": 0,
+  "ATTR_DIST_STRING": 0,
+  "BOOLEAN_LEVEL": true,
+  "CTC_DIST_BOOLEAN": 1,
+  "CTC_DIST_INTEGER": 0,
+  "CTC_DIST_REAL": 0,
+  "CTC_DIST_STRING": 0,
+  "DIST_ALTERNATIVE": 0.1,
+  "DIST_GROUP_CARDINALITY": 0.24,
+  "DIST_MANDATORY": 0.24,
+  "DIST_OPTIONAL": 0.24,
+  "DIST_OR": 0.18,
+  "ENSURE_SATISFIABLE": false,
+  "EXTRA_CONSTRAINT_REPRESENTATIVENESS": 1,
+  "FEATURE_CARDINALITY": false,
+  "FEATURE_DIST_BOOLEAN": 0.7,
+  "FEATURE_DIST_INTEGER": 0.1,
+  "FEATURE_DIST_REAL": 0.1,
+  "FEATURE_DIST_STRING": 0.1,
+  "GROUP_CARDINALITY": true,
+  "GROUP_CARDINALITY_MAX": 6,
+  "GROUP_CARDINALITY_MIN": 1,
+  "INCLUDE_CONSTRAINT_COUNT_SUFFIX": false,
+  "INCLUDE_FEATURE_COUNT_SUFFIX": false,
+  "MAX_ATTRIBUTES": 5,
+  "MAX_CONSTRAINTS": 8,
+  "MAX_FEATURES": 15,
+  "MAX_TREE_DEPTH": 5,
+  "MAX_VARS_PER_CONSTRAINT": 8,
+  "MIN_ATTRIBUTES": 1,
+  "MIN_CONSTRAINTS": 5,
+  "MIN_FEATURES": 10,
+  "MIN_VARS_PER_CONSTRAINT": 1,
+  "NAME_PREFIX": "",
+  "NUM_MODELS": 10,
+  "PROB_AND": 0.29,
+  "PROB_AVG_FUNCTION": 0,
+  "PROB_DIVIDE": 0,
+  "PROB_EQUALS": 0,
+  "PROB_EQUIVALENCE": 0.21,
+  "PROB_FEATURE_CARDINALITY": 0,
+  "PROB_GREATER": 0,
+  "PROB_GREATER_EQUALS": 0,
+  "PROB_IMPLICATION": 0.24,
+  "PROB_LEN_FUNCTION": 0,
+  "PROB_LESS": 0,
+  "PROB_LESS_EQUALS": 0,
+  "PROB_MULTIPLY": 0,
+  "PROB_NOT": 0.3,
+  "PROB_OR_CT": 0.26,
+  "PROB_SUBSTRACT": 0,
+  "PROB_SUM": 0,
+  "PROB_SUM_FUNCTION": 0,
+  "RANDOM_ATTRIBUTES": true,
+  "SEED": 4233,
+  "STRING_CONSTRAINTS": false,
+  "TYPE_LEVEL": false
+}
+\end{lstlisting}
+
+\subsection{Nivel aritmético, cardinalidad de grupo, cardinalidad de
+característica y funciones de agregación}
+\label{app:modelo-aritmetico}
+
+Esta configuración activa los niveles booleano y aritmético, así como la
+cardinalidad de grupo, la cardinalidad de característica
+(\texttt{FEATURE\_CARDINALITY}) y las funciones de agregación
+(\texttt{AGGREGATE\_FUNCTIONS}). El Listado~\ref{lst:modelo-aritmetico}
+contiene un modelo generado y el Listado~\ref{lst:parametros-aritmetico} muestra
+la configuración completa de su tanda.
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Modelo UVL generado con nivel aritmético y sus niveles menores.},
+    label={lst:modelo-aritmetico}
+]
+include
+    Boolean.group-cardinality
+    Arithmetic.*
+features
+    F0
+        mandatory
+            F2 cardinality [3..4]
+                mandatory
+                    F3 cardinality [4..4] {Attr2 26.38, Attr3 false}
+                        mandatory
+                            F6
+                                optional
+                                    F7
+                                        or
+                                            F11
+                                            F10 cardinality [5..5] {Attr1 53}
+                                            F9 cardinality [3..3]
+        mandatory
+            F1 cardinality [4..4]
+                mandatory
+                    F4 cardinality [3..4]
+                        mandatory
+                            F5 {Attr0 45.82}
+                                optional
+                                    F8
+constraints
+    ((F5.Attr0 > sum(F10.Attr1, F3.Attr2)) & F9) <=> ! F1
+    ! F5 & F6
+    ((F3.Attr2 < F10.Attr1) => ((F9 <=> F2) & F5)) <=> F1
+    F11 => F6
+    ! F5
+\end{lstlisting}
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Parámetros de la tanda con nivel aritmético y sus niveles menores.},
+    label={lst:parametros-aritmetico}
+]
+{
+  "AGGREGATE_FUNCTIONS": true,
+  "ARITHMETIC_LEVEL": true,
+  "ATTRIBUTES_LIST": [],
+  "ATTRIBUTE_ATTACH_PROBS": [],
+  "ATTRIBUTE_IN_CONSTRAINTS": [],
+  "ATTR_DIST_BOOLEAN": 0.27,
+  "ATTR_DIST_INTEGER": 0.26,
+  "ATTR_DIST_REAL": 0.47,
+  "ATTR_DIST_STRING": 0,
+  "BOOLEAN_LEVEL": true,
+  "CTC_DIST_BOOLEAN": 0.1,
+  "CTC_DIST_INTEGER": 0.45,
+  "CTC_DIST_REAL": 0.45,
+  "CTC_DIST_STRING": 0,
+  "DIST_ALTERNATIVE": 0.1,
+  "DIST_GROUP_CARDINALITY": 0.24,
+  "DIST_MANDATORY": 0.24,
+  "DIST_OPTIONAL": 0.24,
+  "DIST_OR": 0.18,
+  "ENSURE_SATISFIABLE": false,
+  "EXTRA_CONSTRAINT_REPRESENTATIVENESS": 1,
+  "FEATURE_CARDINALITY": true,
+  "FEATURE_DIST_BOOLEAN": 0.7,
+  "FEATURE_DIST_INTEGER": 0.1,
+  "FEATURE_DIST_REAL": 0.1,
+  "FEATURE_DIST_STRING": 0.1,
+  "GROUP_CARDINALITY": true,
+  "GROUP_CARDINALITY_MAX": 6,
+  "GROUP_CARDINALITY_MIN": 1,
+  "INCLUDE_CONSTRAINT_COUNT_SUFFIX": false,
+  "INCLUDE_FEATURE_COUNT_SUFFIX": false,
+  "MAX_ATTRIBUTES": 5,
+  "MAX_CONSTRAINTS": 8,
+  "MAX_FEATURES": 15,
+  "MAX_FEATURE_CARDINALITY": [
+    5
+  ],
+  "MAX_TREE_DEPTH": 5,
+  "MAX_VARS_PER_CONSTRAINT": 8,
+  "MIN_ATTRIBUTES": 1,
+  "MIN_CONSTRAINTS": 5,
+  "MIN_FEATURES": 10,
+  "MIN_FEATURE_CARDINALITY": [
+    2
+  ],
+  "MIN_VARS_PER_CONSTRAINT": 1,
+  "NAME_PREFIX": "",
+  "NUM_MODELS": 10,
+  "PROB_AND": 0.29,
+  "PROB_AVG_FUNCTION": 0.17,
+  "PROB_DIVIDE": 0.17,
+  "PROB_EQUALS": 0.2,
+  "PROB_EQUIVALENCE": 0.21,
+  "PROB_FEATURE_CARDINALITY": 0.7,
+  "PROB_GREATER": 0.2,
+  "PROB_GREATER_EQUALS": 0.2,
+  "PROB_IMPLICATION": 0.24,
+  "PROB_LEN_FUNCTION": 0,
+  "PROB_LESS": 0.2,
+  "PROB_LESS_EQUALS": 0.2,
+  "PROB_MULTIPLY": 0.17,
+  "PROB_NOT": 0.3,
+  "PROB_OR_CT": 0.26,
+  "PROB_SUBSTRACT": 0.16,
+  "PROB_SUM": 0.17,
+  "PROB_SUM_FUNCTION": 0.16,
+  "RANDOM_ATTRIBUTES": true,
+  "SEED": 4233,
+  "STRING_CONSTRAINTS": false,
+  "TYPE_LEVEL": false
+}
+\end{lstlisting}
+
+\subsection{Nivel de tipos y restricciones sobre cadenas}
+\label{app:modelo-tipos}
+
+La última configuración activa los niveles booleano, aritmético y de tipos,
+así como los cuatro niveles menores representados por
+\texttt{GROUP\_CARDINALITY}, \texttt{FEATURE\_CARDINALITY},
+\texttt{AGGREGATE\_FUNCTIONS} y \texttt{STRING\_CONSTRAINTS}. El
+Listado~\ref{lst:modelo-tipos} muestra uno de los modelos generados y el
+Listado~\ref{lst:parametros-tipos} recoge sus parámetros.
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Modelo UVL generado con nivel de tipos y todos los niveles menores.},
+    label={lst:modelo-tipos}
+]
+include
+    Boolean.group-cardinality
+    Arithmetic.*
+    Type.string-constraints
+features
+    F0
+        or
+            F2 cardinality [3..5] {Attr2 64.26}
+                optional
+                    Integer F3
+                        mandatory
+                            Real F6 cardinality [4..4] {Attr4 '1ad3pMlJJwXVPEknlZaDUfZZRpE92NiKFh6fzfFYfmik'}
+                                mandatory
+                                    F7 cardinality [5..5] {Attr0 51, Attr1 false}
+                                        optional
+                                            F10 cardinality [2..5]
+                                        optional
+                                            F9 cardinality [3..5]
+            F1
+                mandatory
+                    Integer F4 cardinality [3..4]
+                        optional
+                            Real F5 cardinality [3..3] {Attr3 'z8K1qWctslCuO1oz8hlVjtj1tpagk'}
+                                optional
+                                    Real F8 cardinality [2..2]
+constraints
+    F5.Attr3 == F6.Attr4
+    F8 == (len(F6.Attr4) + F5)
+    F3 == F7.Attr0
+    ((F5 == F8) & (((F3 + F6) / F7.Attr0) <= F4)) | ! F9
+    F10
+\end{lstlisting}
+
+\begin{lstlisting}[
+    basicstyle=\ttfamily\footnotesize,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    frame=single,
+    caption={Parámetros de la tanda con nivel de tipos y todos los niveles menores.},
+    label={lst:parametros-tipos}
+]
+{
+  "AGGREGATE_FUNCTIONS": true,
+  "ARITHMETIC_LEVEL": true,
+  "ATTRIBUTES_LIST": [],
+  "ATTRIBUTE_ATTACH_PROBS": [],
+  "ATTRIBUTE_IN_CONSTRAINTS": [],
+  "ATTR_DIST_BOOLEAN": 0.27,
+  "ATTR_DIST_INTEGER": 0.18,
+  "ATTR_DIST_REAL": 0.26,
+  "ATTR_DIST_STRING": 0.29,
+  "BOOLEAN_LEVEL": true,
+  "CTC_DIST_BOOLEAN": 0.1,
+  "CTC_DIST_INTEGER": 0.29,
+  "CTC_DIST_REAL": 0.36,
+  "CTC_DIST_STRING": 0.25,
+  "DIST_ALTERNATIVE": 0.1,
+  "DIST_GROUP_CARDINALITY": 0.24,
+  "DIST_MANDATORY": 0.24,
+  "DIST_OPTIONAL": 0.24,
+  "DIST_OR": 0.18,
+  "ENSURE_SATISFIABLE": false,
+  "EXTRA_CONSTRAINT_REPRESENTATIVENESS": 1,
+  "FEATURE_CARDINALITY": true,
+  "FEATURE_DIST_BOOLEAN": 0.18,
+  "FEATURE_DIST_INTEGER": 0.27,
+  "FEATURE_DIST_REAL": 0.35,
+  "FEATURE_DIST_STRING": 0.2,
+  "GROUP_CARDINALITY": true,
+  "GROUP_CARDINALITY_MAX": 6,
+  "GROUP_CARDINALITY_MIN": 1,
+  "INCLUDE_CONSTRAINT_COUNT_SUFFIX": false,
+  "INCLUDE_FEATURE_COUNT_SUFFIX": false,
+  "MAX_ATTRIBUTES": 5,
+  "MAX_CONSTRAINTS": 8,
+  "MAX_FEATURES": 15,
+  "MAX_FEATURE_CARDINALITY": [
+    5
+  ],
+  "MAX_TREE_DEPTH": 5,
+  "MAX_VARS_PER_CONSTRAINT": 8,
+  "MIN_ATTRIBUTES": 1,
+  "MIN_CONSTRAINTS": 5,
+  "MIN_FEATURES": 10,
+  "MIN_FEATURE_CARDINALITY": [
+    2
+  ],
+  "MIN_VARS_PER_CONSTRAINT": 1,
+  "NAME_PREFIX": "",
+  "NUM_MODELS": 10,
+  "PROB_AND": 0.29,
+  "PROB_AVG_FUNCTION": 0.17,
+  "PROB_DIVIDE": 0.17,
+  "PROB_EQUALS": 0.2,
+  "PROB_EQUIVALENCE": 0.21,
+  "PROB_FEATURE_CARDINALITY": 0.7,
+  "PROB_GREATER": 0.2,
+  "PROB_GREATER_EQUALS": 0.2,
+  "PROB_IMPLICATION": 0.24,
+  "PROB_LEN_FUNCTION": 0.7,
+  "PROB_LESS": 0.2,
+  "PROB_LESS_EQUALS": 0.2,
+  "PROB_MULTIPLY": 0.17,
+  "PROB_NOT": 0.3,
+  "PROB_OR_CT": 0.26,
+  "PROB_SUBSTRACT": 0.16,
+  "PROB_SUM": 0.17,
+  "PROB_SUM_FUNCTION": 0.16,
+  "RANDOM_ATTRIBUTES": true,
+  "SEED": 4233,
+  "STRING_CONSTRAINTS": true,
+  "TYPE_LEVEL": true
+}
+\end{lstlisting}

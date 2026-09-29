@@ -1,43 +1,16 @@
 \chapter{Análisis de requisitos}
 \label{chap:requisitos}
 
-\ph{Este capítulo describe \textbf{qué} debe hacer el sistema, sin entrar todavía en cómo
-lo hace. Es la base contractual del TFG: si un requisito no aparece aquí,
-no debería darse por hecho que el sistema lo cumple.}
 
 \section{Descripción del sistema}
 \label{sec:descripcion_sistema}
 
-\ph{Visión general del sistema en una página: qué es, qué resuelve y para quién.}
-
-\ph{Cubre:}
-\ph{
-\begin{itemize}
-  \item \ph{Tipo de sistema (aplicación web, CLI, librería, servicio\dots).}
-  \item \ph{Qué entradas acepta y qué salidas produce.}
-  \item \ph{Subsistemas o módulos principales en los que se divide.}
-  \item \ph{Actores que interactúan con él (anónimo, autenticado, administrador\dots).}
-\end{itemize}
-}
-
-\ph{Ejemplo de subsistemas:}
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Subsistema 1}}: \ph{responsabilidad principal.}
-  \item \textbf{\ph{Subsistema 2}}: \ph{responsabilidad principal.}
-  \item \textbf{\ph{Subsistema 3}}: \ph{responsabilidad principal.}
-\end{itemize}
-}
-
-\ph{Ejemplo de actores:}
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Actor 1}}: \ph{rol y nivel de acceso.}
-  \item \textbf{\ph{Actor 2}}: \ph{rol y nivel de acceso.}
-\end{itemize}
-}
-
-El sistema desarrollado consiste en un generador automático de modelos de características integrado dentro del ecosistema de herramientas asociado a la variabilidad software. La solución consiste en una herramienta que sigue una arquitectura compatible con Flamapy y su integración dentro de UVLHub, permitiendo que los usuarios puedan configurar y ejecutar el proceso de generación mediante una interfaz web.
+El sistema desarrollado es un generador automático de modelos de
+características expresados en UVL, integrado en el módulo
+\textit{generator} de UVLHub. El generador se organiza mediante un
+modelo de configuración y una operación compatibles con Flamapy, y
+permite configurar y ejecutar la generación desde la interfaz web de
+la plataforma.
 
 El objetivo principal del sistema es facilitar la creación automática de modelos de características expresados en UVL con distintos niveles de complejidad y expresividad. Estos modelos permiten disponer de conjuntos de prueba más completos para la evaluación, validación y mejora de herramientas relacionadas con la Ingeniería de Líneas de Productos Software (SPL), especialmente aquellas orientadas al análisis de variabilidad. De esta forma, el sistema aborda la necesidad de disponer de modelos con características avanzadas que permitan evaluar el comportamiento de dichas herramientas en diferentes escenarios.
 
@@ -51,62 +24,72 @@ El sistema puede dividirse principalmente en los siguientes subsistemas:
 
     \item \textbf{Subsistema de configuración del generador:} responsable de gestionar los parámetros definidos por el usuario mediante la interfaz web proporcionada en UVLHub. Este subsistema permite establecer las características del modelo que se desea generar y preparar la configuración necesaria para ejecutar el proceso desde el navegador.
 
-    \item \textbf{Subsistema de generación automática:} constituye el núcleo funcional del sistema y es el encargado de producir los modelos de características a partir de la configuración proporcionada, haciendo uso de los componentes y mecanismos disponibles dentro del framework Flamapy.
+    \item \textbf{Subsistema de generación automática:} constituye el núcleo funcional del sistema y es el encargado de producir los modelos de características a partir de la configuración proporcionada, haciendo uso de los componentes y mecanismos disponibles dentro del \textit{framework} Flamapy.
 
     \item \textbf{Subsistema de integración con UVLHub:} encargado de conectar la operación generadora desarrollada con el módulo \textit{generator} de UVLHub, permitiendo que la funcionalidad de la herramienta pueda ser utilizada dentro de la plataforma mediante los mecanismos definidos por esta.
 
 \end{itemize}
 
-Los actores principales que interactúan con el sistema son los siguientes:
+El actor principal es el usuario investigador o desarrollador, que
+configura el generador y obtiene modelos UVL para experimentación,
+evaluación o validación. El acceso a esta funcionalidad no requiere
+autenticación previa.
 
-\begin{itemize}
-
-    \item \textbf{Usuario investigador o desarrollador:} configura los parámetros del generador y obtiene modelos UVL para su utilización en procesos de evaluación, experimentación o validación de herramientas de variabilidad software. El acceso al generador no requiere autenticación previa.
-
-    \item \textbf{Herramientas de análisis de variabilidad:} utilizan los modelos generados como entrada para realizar diferentes tareas relacionadas con el análisis y procesamiento de modelos de características.
-
-\end{itemize}
+Las herramientas externas de análisis pueden utilizar los ficheros
+descargados, pero su uso posterior no constituye una interacción
+directa con el generador descrito en estos casos de uso.
 
 \section{Requisitos de información}
 \label{sec:ri}
 
-\ph{Describe las entidades de información que el sistema gestiona, con sus
-atributos y restricciones (claves, unicidad, tipos, opcionalidad). Suele haber
-una tabla por entidad.}
+
 
 El sistema gestiona la información necesaria para configurar el proceso de generación automática de modelos de características. Esta información se representa mediante un conjunto de entidades de configuración que permiten definir los parámetros utilizados durante la generación.
 
-La entidad principal del modelo conceptual es \textbf{FmgeneratorModel}, que agrupa las diferentes configuraciones específicas del generador. Cada una de estas configuraciones representa un aspecto concreto del modelo que se desea generar, como la nomenclatura, los niveles de expresividad UVL soportados, las características, la estructura jerárquica, las restricciones o los atributos.
+La entidad principal del modelo conceptual es \texttt{FmgeneratorModel}, que agrupa las diferentes configuraciones específicas del generador. Cada una de estas configuraciones representa un aspecto concreto del modelo que se desea generar, como la nomenclatura, los niveles de expresividad UVL soportados, las características, la estructura jerárquica, las restricciones o los atributos.
 
 Estas entidades son utilizadas posteriormente por la operación de generación automática para producir modelos de características expresados en UVL. La operación de generación no se considera una entidad de información, sino una funcionalidad del sistema que será descrita en los requisitos funcionales.
 
-\subsubsection*{RI-01: FmgeneratorModel}
+\subsubsection*{RI-01: \texttt{FmgeneratorModel}}
 
-La entidad \textbf{FmgeneratorModel} representa la configuración global del generador automático de modelos de características. Contiene los parámetros generales del proceso y las configuraciones específicas asociadas a cada aspecto del modelo generado.
+La entidad \texttt{FmgeneratorModel} representa la configuración global del generador automático de modelos de características. Contiene los parámetros generales del proceso y las configuraciones específicas asociadas a cada aspecto del modelo generado.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-fmgenerator-model} recoge sus parámetros generales y las configuraciones que agrupa.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-num\_models & int & Número de modelos que se desean generar. \\
 
-seed & int & Semilla utilizada para controlar la generación aleatoria. \\
+\path{num_models}\newline{\footnotesize\texttt{int}} & Número de modelos que se desean generar. \\
 
-ensure\_satisfiable & bool & Indica si los modelos generados deben ser satisfacibles. \\
+\midrule
+\path{seed}\newline{\footnotesize\texttt{int}} & Semilla utilizada para controlar la generación aleatoria. \\
 
-naming & NamingConfig & Configuración relacionada con la nomenclatura de los elementos generados. \\
+\midrule
+\path{ensure_satisfiable}\newline{\footnotesize\texttt{bool}} &
+Indica si debe aplicarse la generación booleana con comprobación de
+satisfacibilidad mediante SAT. \\
 
-levels & LevelConfig & Configuración de los niveles de expresividad soportados por UVL. \\
+\midrule
+\path{naming}\newline{\footnotesize\texttt{NamingConfig}} & Configuración relacionada con la nomenclatura de los elementos generados. \\
 
-features & FeaturesConfig & Configuración relacionada con la generación de características. \\
+\midrule
+\path{levels}\newline{\footnotesize\texttt{LevelConfig}} & Configuración de los niveles de expresividad soportados por UVL. \\
 
-hierarchy & HierarchyConfig & Configuración de la estructura jerárquica del modelo. \\
+\midrule
+\path{features}\newline{\footnotesize\texttt{FeaturesConfig}} & Configuración relacionada con la generación de características. \\
 
-constraints & ConstraintsConfig & Configuración de las restricciones generadas. \\
+\midrule
+\path{hierarchy}\newline{\footnotesize\texttt{HierarchyConfig}} & Configuración de la estructura jerárquica del modelo. \\
 
-attributes & AttributesConfig & Configuración de los atributos asociados a las características. \\
+\midrule
+\path{constraints}\newline{\footnotesize\texttt{ConstraintsConfig}} & Configuración de las restricciones generadas. \\
+
+\midrule
+\path{attributes}\newline{\footnotesize\texttt{AttributesConfig}} & Configuración de los atributos asociados a las características. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-01.}
@@ -114,21 +97,25 @@ attributes & AttributesConfig & Configuración de los atributos asociados a las 
 \end{longtable}
 
 
-\subsubsection*{RI-02: NamingConfig}
+\subsubsection*{RI-02: \texttt{NamingConfig}}
 
-La entidad \textbf{NamingConfig} representa la configuración utilizada para definir la nomenclatura de los elementos generados por el sistema.
+La entidad \texttt{NamingConfig} representa la configuración utilizada para definir la nomenclatura de los elementos generados por el sistema.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-naming-config} presenta sus parámetros de nomenclatura.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-name\_prefix & str & Prefijo utilizado para los nombres generados. \\
+\path{name_prefix}\newline{\footnotesize\texttt{str}} & Prefijo utilizado para los nombres generados. \\
 
-include\_feature\_count\_suffix & bool & Indica si se incluye el número de características en el nombre del modelo generado. \\
+\midrule
+\path{include_feature_count_suffix}\newline{\footnotesize\texttt{bool}} & Indica si se incluye el número de características en el nombre del modelo generado. \\
 
-include\_constraint\_count\_suffix & bool & Indica si se incluye el número de restricciones en el nombre del modelo generado. \\
+\midrule
+\path{include_constraint_count_suffix}\newline{\footnotesize\texttt{bool}} & Indica si se incluye el número de restricciones en el nombre del modelo generado. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-02.}
@@ -136,29 +123,41 @@ include\_constraint\_count\_suffix & bool & Indica si se incluye el número de r
 \end{longtable}
 
 
-\subsubsection*{RI-03: LevelConfig}
+\subsubsection*{RI-03: \texttt{LevelConfig}}
 
-La entidad \textbf{LevelConfig} representa los niveles de expresividad UVL que estarán disponibles durante el proceso de generación.
+La entidad \texttt{LevelConfig} representa los niveles de expresividad UVL que estarán disponibles durante el proceso de generación.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-level-config} recoge los niveles configurables.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-boolean\_level & bool & Indica si se habilita la generación de modelos booleanos. \\
+\path{boolean_level}\newline{\footnotesize\texttt{bool}} &
+Representa el nivel booleano, que constituye la base obligatoria
+de los modelos generados. \\
 
-arithmetic\_level & bool & Indica si se habilitan elementos aritméticos en los modelos generados. \\
+\midrule
+\path{arithmetic_level}\newline{\footnotesize\texttt{bool}} & Indica si se habilitan elementos aritméticos en los modelos generados. \\
 
-type\_level & bool & Indica si se permite el uso de tipos en características y atributos. \\
+\midrule
+\path{type_level}\newline{\footnotesize\texttt{bool}} &
+Indica si se permite generar características tipadas y las
+construcciones de UVL asociadas al nivel de tipos. \\
 
-group\_cardinality & bool & Indica si se habilitan cardinalidades de grupo. \\
+\midrule
+\path{group_cardinality}\newline{\footnotesize\texttt{bool}} & Indica si se habilitan cardinalidades de grupo. \\
 
-feature\_cardinality & bool & Indica si se habilitan cardinalidades individuales de características. \\
+\midrule
+\path{feature_cardinality}\newline{\footnotesize\texttt{bool}} & Indica si se habilitan cardinalidades individuales de características. \\
 
-aggregate\_functions & bool & Indica si se permite la generación de funciones agregadas. \\
+\midrule
+\path{aggregate_functions}\newline{\footnotesize\texttt{bool}} & Indica si se permite la generación de funciones agregadas. \\
 
-string\_constraints & bool & Indica si se habilitan restricciones sobre valores de tipo cadena. \\
+\midrule
+\path{string_constraints}\newline{\footnotesize\texttt{bool}} & Indica si se habilitan restricciones sobre valores de tipo cadena. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-03.}
@@ -166,33 +165,47 @@ string\_constraints & bool & Indica si se habilitan restricciones sobre valores 
 \end{longtable}
 
 
-\subsubsection*{RI-04: FeaturesConfig}
+\subsubsection*{RI-04: \textbf{FeaturesConfig}}
 
 La entidad \textbf{FeaturesConfig} contiene los parámetros relacionados con la generación de características del modelo.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-features-config} presenta los límites y distribuciones aplicables a las características.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-min\_features & int & Número mínimo de características que puede contener el modelo generado. \\
+\path{min_features}\newline{\footnotesize\texttt{int}} &
+Número mínimo de características adicionales a la raíz que se
+solicita generar. \\
 
-max\_features & int & Número máximo de características que puede contener el modelo generado. \\
+\midrule
+\path{max_features}\newline{\footnotesize\texttt{int}} &
+Número máximo de características adicionales a la raíz que se
+solicita generar. \\
 
-dist\_boolean & float & Probabilidad de generación de características booleanas. \\
+\midrule
+\path{dist_boolean}\newline{\footnotesize\texttt{float}} & Probabilidad de generación de características booleanas. \\
 
-dist\_integer & float & Probabilidad de generación de características enteras. \\
+\midrule
+\path{dist_integer}\newline{\footnotesize\texttt{float}} & Probabilidad de generación de características enteras. \\
 
-dist\_real & float & Probabilidad de generación de características reales. \\
+\midrule
+\path{dist_real}\newline{\footnotesize\texttt{float}} & Probabilidad de generación de características reales. \\
 
-dist\_string & float & Probabilidad de generación de características de tipo cadena. \\
+\midrule
+\path{dist_string}\newline{\footnotesize\texttt{float}} & Probabilidad de generación de características de tipo cadena. \\
 
-min\_feature\_cardinality & int / list[int] & Valor mínimo permitido para las cardinalidades de características. \\
+\midrule
+\path{min_feature_cardinality}\newline{\footnotesize\texttt{int / list[int]}} & Valor mínimo permitido para las cardinalidades de características. \\
 
-max\_feature\_cardinality & int / list[int] & Valor máximo permitido para las cardinalidades de características. \\
+\midrule
+\path{max_feature_cardinality}\newline{\footnotesize\texttt{int / list[int]}} & Valor máximo permitido para las cardinalidades de características. \\
 
-prob\_feature\_cardinality & float & Probabilidad de aplicar cardinalidades a las características. \\
+\midrule
+\path{prob_feature_cardinality}\newline{\footnotesize\texttt{float}} & Probabilidad de aplicar cardinalidades a las características. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-04.}
@@ -200,31 +213,40 @@ prob\_feature\_cardinality & float & Probabilidad de aplicar cardinalidades a la
 \end{longtable}
 
 
-\subsubsection*{RI-05: HierarchyConfig}
+\subsubsection*{RI-05: \texttt{HierarchyConfig}}
 
-La entidad \textbf{HierarchyConfig} representa la configuración relacionada con la estructura jerárquica del modelo generado.
+La entidad \texttt{HierarchyConfig} representa la configuración relacionada con la estructura jerárquica del modelo generado.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-hierarchy-config} recoge los parámetros de profundidad y de relaciones jerárquicas.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-max\_tree\_depth & int & Profundidad máxima permitida para la jerarquía del modelo. \\
+\path{max_tree_depth}\newline{\footnotesize\texttt{int}} & Profundidad máxima permitida para la jerarquía del modelo. \\
 
-dist\_optional & float & Probabilidad de generar relaciones opcionales. \\
+\midrule
+\path{dist_optional}\newline{\footnotesize\texttt{float}} & Probabilidad de generar relaciones opcionales. \\
 
-dist\_mandatory & float & Probabilidad de generar relaciones obligatorias. \\
+\midrule
+\path{dist_mandatory}\newline{\footnotesize\texttt{float}} & Probabilidad de generar relaciones obligatorias. \\
 
-dist\_alternative & float & Probabilidad de generar relaciones alternativas. \\
+\midrule
+\path{dist_alternative}\newline{\footnotesize\texttt{float}} & Probabilidad de generar relaciones alternativas. \\
 
-dist\_or & float & Probabilidad de generar relaciones OR. \\
+\midrule
+\path{dist_or}\newline{\footnotesize\texttt{float}} & Probabilidad de generar relaciones OR. \\
 
-group\_cardinality\_min & int & Cardinalidad mínima para grupos de características. \\
+\midrule
+\path{group_cardinality_min}\newline{\footnotesize\texttt{int}} & Cardinalidad mínima para grupos de características. \\
 
-group\_cardinality\_max & int & Cardinalidad máxima para grupos de características. \\
+\midrule
+\path{group_cardinality_max}\newline{\footnotesize\texttt{int}} & Cardinalidad máxima para grupos de características. \\
 
-dist\_group\_cardinality & float & Probabilidad de generar relaciones con cardinalidad de grupo. \\
+\midrule
+\path{dist_group_cardinality}\newline{\footnotesize\texttt{float}} & Probabilidad de generar relaciones con cardinalidad de grupo. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-05.}
@@ -232,67 +254,94 @@ dist\_group\_cardinality & float & Probabilidad de generar relaciones con cardin
 \end{longtable}
 
 
-\subsubsection*{RI-06: ConstraintsConfig}
+\subsubsection*{RI-06: \texttt{ConstraintsConfig}}
 
-La entidad \textbf{ConstraintsConfig} contiene los parámetros utilizados para definir la generación de restricciones entre elementos del modelo.
+La entidad \texttt{ConstraintsConfig} contiene los parámetros utilizados para definir la generación de restricciones entre elementos del modelo.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-constraints-config} presenta los límites y distribuciones empleados para generar restricciones.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-min\_constraints & int & Número mínimo de restricciones generadas. \\
+\path{min_constraints}\newline{\footnotesize\texttt{int}} & Número mínimo de restricciones generadas. \\
 
-max\_constraints & int & Número máximo de restricciones generadas. \\
+\midrule
+\path{max_constraints}\newline{\footnotesize\texttt{int}} & Número máximo de restricciones generadas. \\
 
-extra\_constraint\_representativeness & int & Factor utilizado para aumentar la representatividad de las restricciones. \\
+\midrule
+\path{extra_constraint_representativeness}\newline{\footnotesize\texttt{int}} & Factor utilizado para aumentar la representatividad de las restricciones. \\
 
-min\_vars\_per\_constraint & int & Número mínimo de variables utilizadas en una restricción. \\
+\midrule
+\path{min_vars_per_constraint}\newline{\footnotesize\texttt{int}} & Número mínimo de variables utilizadas en una restricción. \\
 
-max\_vars\_per\_constraint & int & Número máximo de variables utilizadas en una restricción. \\
+\midrule
+\path{max_vars_per_constraint}\newline{\footnotesize\texttt{int}} & Número máximo de variables utilizadas en una restricción. \\
 
-ctc\_dist\_boolean & float & Probabilidad de generar restricciones booleanas. \\
+\midrule
+\path{ctc_dist_boolean}\newline{\footnotesize\texttt{float}} & Probabilidad de generar restricciones booleanas. \\
 
-ctc\_dist\_integer & float & Probabilidad de generar restricciones enteras. \\
+\midrule
+\path{ctc_dist_integer}\newline{\footnotesize\texttt{float}} & Probabilidad de generar restricciones enteras. \\
 
-ctc\_dist\_real & float & Probabilidad de generar restricciones reales. \\
+\midrule
+\path{ctc_dist_real}\newline{\footnotesize\texttt{float}} & Probabilidad de generar restricciones reales. \\
 
-ctc\_dist\_string & float & Probabilidad de generar restricciones sobre cadenas. \\
+\midrule
+\path{ctc_dist_string}\newline{\footnotesize\texttt{float}} & Probabilidad de generar restricciones sobre cadenas. \\
 
-prob\_not & float & Probabilidad de aplicar negación en restricciones booleanas. \\
+\midrule
+\path{prob_not}\newline{\footnotesize\texttt{float}} & Probabilidad de aplicar negación en restricciones booleanas. \\
 
-prob\_and & float & Probabilidad de utilizar operadores AND. \\
+\midrule
+\path{prob_and}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operadores AND. \\
 
-prob\_or\_ct & float & Probabilidad de utilizar operadores OR. \\
+\midrule
+\path{prob_or_ct}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operadores OR. \\
 
-prob\_implication & float & Probabilidad de utilizar implicaciones. \\
+\midrule
+\path{prob_implication}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar implicaciones. \\
 
-prob\_equivalence & float & Probabilidad de utilizar equivalencias. \\
+\midrule
+\path{prob_equivalence}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar equivalencias. \\
 
-prob\_sum & float & Probabilidad de utilizar operaciones de suma. \\
+\midrule
+\path{prob_sum}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operaciones de suma. \\
 
-prob\_substract & float & Probabilidad de utilizar operaciones de resta. \\
+\midrule
+\path{prob_substract}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operaciones de resta. \\
 
-prob\_multiply & float & Probabilidad de utilizar operaciones de multiplicación. \\
+\midrule
+\path{prob_multiply}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operaciones de multiplicación. \\
 
-prob\_divide & float & Probabilidad de utilizar operaciones de división. \\
+\midrule
+\path{prob_divide}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar operaciones de división. \\
 
-prob\_equals & float & Probabilidad de utilizar comparaciones de igualdad. \\
+\midrule
+\path{prob_equals}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar comparaciones de igualdad. \\
 
-prob\_less & float & Probabilidad de utilizar comparaciones menor que. \\
+\midrule
+\path{prob_less}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar comparaciones menor que. \\
 
-prob\_greater & float & Probabilidad de utilizar comparaciones mayor que. \\
+\midrule
+\path{prob_greater}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar comparaciones mayor que. \\
 
-prob\_less\_equals & float & Probabilidad de utilizar comparaciones menor o igual que. \\
+\midrule
+\path{prob_less_equals}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar comparaciones menor o igual que. \\
 
-prob\_greater\_equals & float & Probabilidad de utilizar comparaciones mayor o igual que. \\
+\midrule
+\path{prob_greater_equals}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar comparaciones mayor o igual que. \\
 
-prob\_sum\_function & float & Probabilidad de utilizar funciones agregadas de suma. \\
+\midrule
+\path{prob_sum_function}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar funciones agregadas de suma. \\
 
-prob\_avg\_function & float & Probabilidad de utilizar funciones agregadas de promedio. \\
+\midrule
+\path{prob_avg_function}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar funciones agregadas de promedio. \\
 
-prob\_len\_function & float & Probabilidad de utilizar funciones de longitud sobre cadenas. \\
+\midrule
+\path{prob_len_function}\newline{\footnotesize\texttt{float}} & Probabilidad de utilizar funciones de longitud sobre cadenas. \\
 
 \bottomrule
 \caption{Atributos del requisito de información RI-06.}
@@ -300,47 +349,52 @@ prob\_len\_function & float & Probabilidad de utilizar funciones de longitud sob
 \end{longtable}
 
 
-\subsubsection*{RI-07: AttributesConfig}
+\subsubsection*{RI-07: \texttt{AttributesConfig}}
 
-La entidad \textbf{AttributesConfig} representa la configuración relacionada con los atributos asociados a las características generadas.
+La entidad \texttt{AttributesConfig} representa la configuración relacionada con los atributos asociados a las características generadas.
 
-\begin{longtable}{P{4cm} P{3cm} P{6cm}}
+La Tabla~\ref{tab:ri-attributes-config} recoge los parámetros de generación automática y manual de atributos.
+
+\begin{longtable}{@{}P{5.3cm} P{\dimexpr\textwidth-5.3cm-2\tabcolsep\relax}@{}}
 \toprule
-\textbf{Atributo} & \textbf{Tipo} & \textbf{Descripción} \\
+\textbf{Atributo y tipo} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-random\_attributes & bool & Indica si los atributos deben generarse automáticamente o definirse manualmente. \\
+\path{random_attributes}\newline{\footnotesize\texttt{bool}} & Indica si los atributos deben generarse automáticamente o definirse manualmente. \\
 
-min\_attributes & int / None & Número mínimo de atributos generados en modo aleatorio. \\
+\midrule
+\path{min_attributes}\newline{\footnotesize\texttt{int / None}} & Número mínimo de atributos generados en modo aleatorio. \\
 
-max\_attributes & int / None & Número máximo de atributos generados en modo aleatorio. \\
+\midrule
+\path{max_attributes}\newline{\footnotesize\texttt{int / None}} & Número máximo de atributos generados en modo aleatorio. \\
 
-\texttt{dist\_boolean\_atr} & float &
-Probabilidad de seleccionar el tipo booleano en la generación
+\midrule
+\path{dist_boolean_atr}\newline{\footnotesize\texttt{float}} & Probabilidad de seleccionar el tipo booleano en la generación
 aleatoria de atributos. \\
 
-\texttt{dist\_integer\_atr} & float &
-Probabilidad de seleccionar el tipo entero en la generación
+\midrule
+\path{dist_integer_atr}\newline{\footnotesize\texttt{float}} & Probabilidad de seleccionar el tipo entero en la generación
 aleatoria de atributos. \\
 
-\texttt{dist\_real\_atr} & float &
-Probabilidad de seleccionar el tipo real en la generación
+\midrule
+\path{dist_real_atr}\newline{\footnotesize\texttt{float}} & Probabilidad de seleccionar el tipo real en la generación
 aleatoria de atributos. \\
 
-\texttt{dist\_string\_atr} & float &
-Probabilidad de seleccionar el tipo cadena en la generación
+\midrule
+\path{dist_string_atr}\newline{\footnotesize\texttt{float}} & Probabilidad de seleccionar el tipo cadena en la generación
 aleatoria de atributos. \\
 
-attributes\_list & list[dict] &
-Lista de atributos definidos manualmente para la generación. Cada
+\midrule
+\path{attributes_list}\newline{\footnotesize\texttt{list[dict]}} & Lista de atributos definidos manualmente para la generación. Cada
 definición puede incluir su tipo, dominio, probabilidad de asociación y
 participación en restricciones. \\
 
-attribute\_attach\_probs & list[float] & Probabilidades de asociación de atributos a características. \\
+\midrule
+\path{attribute_attach_probs}\newline{\footnotesize\texttt{list[float]}} & Probabilidades de asociación de atributos a características. \\
 
-attribute\_in\_constraints & list[bool] &
-Indica si cada atributo definido manualmente puede participar en
+\midrule
+\path{attribute_in_constraints}\newline{\footnotesize\texttt{list[bool]}} & Indica si cada atributo definido manualmente puede participar en
 restricciones. \\
 
 \bottomrule
@@ -351,241 +405,344 @@ restricciones. \\
 \section{Requisitos funcionales}
 \label{sec:rf}
 
-\ph{Lista las capacidades concretas que el sistema debe ofrecer, agrupadas por
-bloques temáticos (gestión de usuarios, lógica de negocio principal, exploración\dots).
-Cada requisito tiene un identificador único, un nombre, una descripción
-y una prioridad (Alta/Media/Baja).}
 
 El sistema debe proporcionar las funcionalidades necesarias para permitir la configuración, ejecución y obtención de modelos de características generados automáticamente. Los requisitos funcionales identificados se muestran en la Tabla~\ref{tab:requisitos-funcionales}.
 
-\begin{longtable}{P{1.5cm} P{4cm} P{6.5cm} P{2cm}}
+\begin{longtable}{@{}P{1.25cm} P{3.2cm}
+P{\dimexpr\textwidth-5.7cm-6\tabcolsep\relax} P{1.25cm}@{}}
 
 \toprule
 \textbf{ID} & \textbf{Nombre} & \textbf{Descripción} & \textbf{Prior.} \\
 \midrule
 \endhead
 
-RF-01 & Configuración del generador &
-El sistema debe permitir al usuario definir los parámetros necesarios para el proceso de generación, incluyendo aspectos relacionados con las características, niveles de expresividad, estructura jerárquica, restricciones y atributos del modelo generado.
-& Alta \\[0.5em]
+RF-01 &
+Configuración del generador &
+El sistema debe proporcionar un asistente de seis pasos para configurar
+la generación. El usuario debe poder indicar: el número de modelos, entre 1 y
+1000; una semilla entera positiva; un prefijo opcional; los \textit{major
+levels} y \textit{minor levels} de UVL; los límites y distribuciones del
+\textit{feature tree}; el número, composición y operadores de las
+\textit{cross-tree constraints}; la generación automática o manual de
+\textit{attributes}; y las opciones de satisfacibilidad y nomenclatura de los
+ficheros. Los parámetros y sus dependencias se detallan en las
+reglas RN-01 a RN-06.
+&
+Alta \\[0.8em]
 
-RF-02 & Validación de configuración &
-El sistema debe comprobar que los parámetros introducidos por el usuario constituyen una configuración válida antes de iniciar el proceso de generación. Las restricciones y condiciones específicas aplicables a dicha validación se describen en la subsección \ref{sec:reglas_negocio}.
-& Alta \\[0.5em]
+RF-02 &
+Validación de la configuración &
+El sistema debe validar cada paso antes de permitir el avance. Debe comprobar
+que los valores enteros sean válidos, que los límites mínimos no superen los
+máximos, que las probabilidades pertenezcan al intervalo $[0,1]$, que las
+distribuciones activas sumen 1 y que los \textit{minor levels} sean compatibles
+con sus \textit{major levels}. Cuando una validación falle, el sistema debe
+mantener los valores introducidos, permanecer en el mismo paso y mostrar el
+mensaje asociado al campo incorrecto. Por ejemplo:
+\texttt{Number of models cannot exceed 1000.},
+\texttt{Requires Arithmetic level.} o
+\texttt{Current sum: 0.8000. Must be 1.0.}
+&
+Alta \\[0.8em]
 
-RF-03 & Generación automática de modelos UVL &
-El sistema debe permitir generar automáticamente modelos de características expresados en UVL a partir de la configuración proporcionada por el usuario.
-& Alta \\[0.5em]
+RF-03 &
+Generación automática de modelos UVL &
+En el flujo ordinario, el sistema debe transformar la configuración
+validada en una instancia de \texttt{FmgeneratorModel} en el navegador
+y ejecutar \texttt{GenerateFeatureModel.execute()} para cada modelo
+solicitado. La operación debe producir un \texttt{FeatureModel} y aplicar la semilla
+configurada. Posteriormente, el resultado debe serializarse mediante
+\texttt{UVLWriter}. Cuando se active la comprobación de
+satisfacibilidad, la generación y la verificación mediante SAT deben
+realizarse en el servidor. La semilla efectiva debe depender de la
+semilla base, el índice del modelo y, cuando proceda, el índice del
+intento. Los errores deben comunicarse al usuario sin presentar un
+modelo incompleto como resultado válido.
+&
+Alta \\[0.8em]
 
-RF-04 & Soporte de niveles de expresividad UVL &
-El sistema debe permitir generar modelos incorporando diferentes niveles de expresividad del lenguaje UVL, incluyendo construcciones booleanas, aritméticas y de tipos cuando hayan sido seleccionadas en la configuración.
-& Alta \\[0.5em]
+RF-04 &
+Soporte de niveles de expresividad UVL &
+El sistema debe generar modelos del \textit{Boolean level} y permitir la
+activación del \textit{Arithmetic level}, el \textit{Type level} y los
+\textit{minor levels} de \textit{group cardinality}, \textit{feature
+cardinality}, \textit{aggregate functions} y \textit{string constraints}. Cuando la comprobación de satisfacibilidad esté desactivada, las
+opciones seleccionadas deben habilitar las construcciones correspondientes
+y reflejarse en las declaraciones \texttt{include} pertinentes. Su
+activación no garantiza que cada construcción aparezca en todos los
+modelos generados:
+\texttt{Boolean.group-cardinality},
+\texttt{Arithmetic.feature-cardinality},
+\texttt{Arithmetic.aggregate-function}, \texttt{Arithmetic.*} o
+\texttt{Type.string-constraints}. Cuando esté activada, se aplicará
+la limitación al nivel booleano descrita en RN-06.
+&
+Alta \\[0.8em]
 
-RF-05 & Visualización del modelo generado &
-El sistema debe mostrar el modelo de características generado dentro de la plataforma UVLHub tras finalizar correctamente el proceso de generación.
-& Media \\[0.5em]
+RF-05 &
+Visualización del modelo generado &
+Tras completar correctamente la generación, el sistema debe mostrar
+en UVLHub los resultados obtenidos, incluido el nombre del fichero
+y los recuentos de características y restricciones. El usuario debe
+poder abrir la vista del contenido UVL de cada modelo. Estas acciones
+solo deben estar disponibles para modelos generados correctamente;
+si la generación falla, el sistema debe informar del error.
+&
+Media \\[0.8em]
 
-RF-06 & Descarga del modelo generado &
-El sistema debe permitir descargar el modelo generado como un fichero independiente con extensión \texttt{.uvl} para su posterior utilización en otras herramientas del ecosistema de variabilidad software.
-& Alta \\
+RF-06 &
+Descarga de los modelos generados &
+El sistema debe permitir descargar los resultados como ficheros con extensión
+\texttt{.uvl}. Cuando se generen varios modelos, estos deben incluirse en un
+archivo comprimido. El nombre de cada fichero debe utilizar el prefijo indicado
+o \texttt{fm} como valor predeterminado y aplicar, cuando hayan sido
+seleccionados, los sufijos con el número de características y restricciones. Si
+no se emplean sufijos y se genera más de un modelo, el sistema debe añadir su
+índice para evitar nombres idénticos.
+&
+Alta \\
 
 \bottomrule
-
 \caption{Requisitos funcionales del sistema.}
 \label{tab:requisitos-funcionales}
-
 \end{longtable}
 
 \section{Requisitos no funcionales}
 \label{sec:rnf}
 
-\ph{Atributos transversales del sistema: seguridad, rendimiento, mantenibilidad,
-calidad de código, despliegue, estándares\dots Son tan vinculantes como los
-funcionales y deben poder verificarse. Formula cada RNF con una MÉTRICA y un
-UMBRAL comprobables, no con adjetivos vagos: en lugar de «el sistema debe ser
-rápido», escribe «el 95\% de las peticiones se atiende en menos de 200~ms».
-El Capítulo~\ref{chap:resultados} usará estos umbrales como criterios de
-éxito medibles, así que un RNF que no se pueda medir aquí no se podrá
-evaluar allí. El umbral de cada RNF cuantitativo debe coincidir con el del
-criterio de éxito asociado de la Tabla~\ref{tab:criterios-exito}: un único
-umbral, dos vistas.}
+La Tabla~\ref{tab:requisitos-no-funcionales} reúne las condiciones de integración, compatibilidad, ejecución y calidad del sistema.
 
-
-\begin{longtable}{P{1.5cm} P{4cm} P{7cm} P{2cm}}
+\begin{longtable}{@{}P{1.25cm} P{3.2cm}
+P{\dimexpr\textwidth-5.7cm-6\tabcolsep\relax} P{1.25cm}@{}}
 
 \toprule
 \textbf{ID} & \textbf{Nombre} & \textbf{Descripción} & \textbf{Prior.} \\
 \midrule
 \endhead
 
-RNF-01 & Arquitectura modular y mantenibilidad &
-El sistema debe mantener una estructura modular basada en la arquitectura de extensiones de Flamapy, siguiendo las convenciones establecidas por el ecosistema. Esta organización debe facilitar el mantenimiento del código, la incorporación de nuevas funcionalidades y la integración con otros componentes del framework.
-& Alta \\[0.8em]
+RNF-01 &
+Modularidad e integración &
+El generador debe mantenerse como un componente independiente compatible con
+la arquitectura de Flamapy. La operación
+\texttt{GenerateFeatureModel} debe implementar la interfaz de operación de
+Flamapy, poder localizarse mediante \texttt{DiscoverMetamodels} y utilizarse
+desde UVLHub sin duplicar su implementación.
+&
+Alta \\[0.8em]
 
-RNF-02 & Compatibilidad con modelos UVL &
-Los modelos generados deben cumplir la especificación UVL soportada por las herramientas del ecosistema de variabilidad software, permitiendo su posterior utilización en procesos de análisis y evaluación de modelos de características.
-& Alta \\[0.8em]
+RNF-02 &
+Compatibilidad sintáctica con UVL &
+Los modelos serializados deben poder procesarse mediante
+\texttt{UVLReader} sin errores sintácticos. Las declaraciones
+\texttt{include} necesarias para las construcciones generadas deben conservarse
+durante la serialización.
+&
+Alta \\[0.8em]
 
-RNF-03 & Ejecución eficiente del proceso de generación &
-El sistema debe minimizar la carga computacional sobre el servidor mediante la ejecución del proceso de generación en el entorno del cliente cuando sea posible. Para ello, se emplean tecnologías como Pyodide y WebAssembly (WASM), permitiendo ejecutar el código del generador directamente en el navegador y reduciendo los tiempos de respuesta asociados a la comunicación y procesamiento remoto.
-& Alta \\[0.8em]
+RNF-03 &
+Ejecución en el navegador &
+El flujo ordinario de generación debe ejecutarse en el navegador
+mediante Pyodide y WebAssembly. Para ese flujo, el servidor almacena
+la configuración como un diccionario en la sesión y la expone como
+JSON (\textit{JavaScript Object Notation}); la instancia de
+\texttt{FmgeneratorModel} se construye en el navegador. Cuando el
+usuario activa la comprobación de satisfacibilidad, la generación
+y la verificación mediante SAT se realizan en el servidor.
+&
+Alta \\[0.8em]
 
-RNF-04 & Usabilidad de la interfaz de configuración &
-La interfaz proporcionada para configurar el generador debe permitir al usuario seleccionar y comprender los parámetros disponibles de forma clara, facilitando la creación de configuraciones válidas y reduciendo posibles errores durante el proceso de configuración.
-& Media \\[0.8em]
+RNF-04 &
+Usabilidad del asistente &
+La configuración debe dividirse en seis pasos agrupados por funcionalidad. El
+sistema debe conservar los valores al navegar hacia atrás o después de una
+validación fallida, ocultar o desactivar las opciones que no sean aplicables y
+mostrar los errores junto al parámetro que debe corregirse.
+&
+Media \\[0.8em]
 
-RNF-05 & Calidad del software &
-El código desarrollado debe cumplir los mecanismos de control de calidad establecidos en el proyecto, incluyendo las comprobaciones automáticas mediante integración continua y las herramientas de análisis estático utilizadas para mejorar la legibilidad y mantenibilidad del código.
-& Alta \\
+RNF-05 &
+Calidad del software &
+La cobertura de sentencias ejecutables del conjunto de ficheros de
+código de producción evaluados en la
+Tabla~\ref{tab:cobertura_ficheros} debe ser igual o superior al
+80\,\%. La solución debe superar la suite automatizada descrita en
+el Capítulo~\ref{chap:pruebas}. Los workflows de integración
+continua del repositorio upstream de UVLHub no forman parte de los
+criterios de aceptación específicos de este TFG.
+&
+Alta \\
 
 \bottomrule
-
 \caption{Requisitos no funcionales del sistema.}
 \label{tab:requisitos-no-funcionales}
-
 \end{longtable}
 
 \section{Reglas de negocio}
 \label{sec:reglas_negocio}
 
-\ph{Las reglas de negocio (RN) son afirmaciones sobre cómo se comporta el
-dominio que el sistema debe respetar, independientemente de la tecnología o
-de la interfaz. No son requisitos funcionales (qué hace el sistema) ni
-requisitos no funcionales (atributos transversales): son restricciones
-lógicas del problema. Son las que se rompen últimas si cambian: no porque
-hayamos refactorizado, sino porque el negocio ha cambiado.}
+La Tabla~\ref{tab:reglas-negocio} concreta las validaciones y dependencias aplicables a la configuración.
 
-\begin{longtable}{P{1.5cm} P{4cm} P{9cm}}
+\begin{longtable}{@{}P{1.2cm} P{3.2cm}
+P{\dimexpr\textwidth-4.4cm-4\tabcolsep\relax}@{}}
 
 \toprule
 \textbf{ID} & \textbf{Nombre} & \textbf{Descripción} \\
 \midrule
 \endhead
 
-RN-01 & Validación de parámetros generales &
-Los parámetros generales del generador deben cumplir las restricciones mínimas necesarias para permitir la ejecución del proceso de generación. El número de modelos a generar (\texttt{num\_models}) debe encontrarse comprendido entre 1 y 1000. Además, la semilla utilizada para controlar la aleatoriedad del proceso (\texttt{seed}) debe ser un valor positivo.
+RN-01 &
+Parámetros generales &
+El número de modelos, \texttt{num\_models}, debe ser un entero comprendido
+entre 1 y 1000. Los valores inferiores producen el mensaje
+\texttt{Number of models must be at least 1.}; los superiores,
+\texttt{Number of models cannot exceed 1000.}; y los valores no enteros,
+\texttt{Number of models must be an integer.}
+
+La semilla, \texttt{seed}, debe ser un entero positivo. En caso contrario se
+muestra \texttt{Seed must be a positive integer.} El prefijo es opcional; si
+está vacío, se normaliza al valor \texttt{fm}.
 \\[1em]
 
-RN-02 & Validación de niveles de expresividad &
-Los niveles de expresividad del generador deben respetar la jerarquía establecida entre niveles principales (\textit{major levels}) y niveles secundarios (\textit{minor levels}).
+RN-02 &
+Dependencias entre niveles UVL &
+El \textit{Boolean level} debe permanecer siempre activado. La selección del
+\textit{Type level} activa automáticamente el \textit{Arithmetic level}. Los
+\textit{minor levels} de \textit{feature cardinality} y
+\textit{aggregate functions} requieren el \textit{Arithmetic level}; si este
+no está activo, se muestra \texttt{Requires Arithmetic level.}
 
-El nivel booleano (\texttt{boolean\_level}) constituye el nivel base del generador y debe permanecer siempre habilitado.
-
-La activación de un nivel principal implica la disponibilidad de los niveles secundarios asociados. Por otro lado, un nivel secundario únicamente puede activarse cuando el nivel principal necesario para soportar su funcionalidad se encuentra habilitado.
-
-En concreto, los niveles deben cumplir las siguientes dependencias:
-\begin{itemize}
-    \item El nivel aritmético (\texttt{arithmetic\_level}) permite la generación de expresiones numéricas y es necesario para habilitar los niveles secundarios relacionados con cardinalidades, funciones agregadas y operaciones aritméticas.
-    \item El nivel de tipos (\texttt{type\_level}) requiere la activación previa del nivel aritmético.
-    \item Los niveles secundarios no pueden permanecer activos si el nivel del que dependen está deshabilitado.
-\end{itemize}
+El nivel de \textit{string constraints} requiere el \textit{Type level}. Si se
+selecciona sin él, se muestra \texttt{Requires Type level.} La
+\textit{group cardinality} pertenece al \textit{Boolean level} y no requiere
+activar niveles superiores.
 \\[1em]
 
-RN-03 & Validación de configuración del árbol de características &
-La configuración del árbol de características generado debe cumplir las restricciones necesarias para garantizar una estructura válida del modelo. Estas validaciones afectan al número de características, la estructura jerárquica y las distribuciones probabilísticas asociadas.
-\\[0.5em]
+RN-03 &
+Configuración del \textit{feature tree} &
+Los parámetros \texttt{min\_features} y \texttt{max\_features} deben ser
+enteros mayores o iguales que 1 y el mínimo no puede superar al máximo. Los
+mensajes utilizados son \texttt{Min. features must be at least 1.},
+\texttt{Max. features must be at least 1.} y
+\texttt{Max. features must be >= Min. features.}
 
-& & Las restricciones establecidas son las siguientes:
+La profundidad \texttt{max\_tree\_depth} debe ser un entero comprendido entre
+1 y \texttt{max\_features}; en caso contrario se muestra
+\texttt{Maximum tree depth must be between 1 and Max. features.}
 
-\begin{itemize}[noitemsep, topsep=0pt]
+Las probabilidades de las relaciones \textit{optional}, \textit{mandatory},
+\textit{alternative}, \textit{or} y, cuando esté habilitada,
+\textit{group cardinality}, deben pertenecer a $[0,1]$ y sumar 1. Se admite
+una tolerancia de 0,001 en la interfaz. Los errores muestran
+\texttt{Value must be between 0 and 1.},
+\texttt{The relation-distribution probabilities must sum to 1.0.} y el valor
+actual mediante \texttt{Current sum: X. Must be 1.0.}
 
-    \item Los parámetros \texttt{min\_features} y \texttt{max\_features} deben ser mayores o iguales que uno, y el número mínimo de características no puede superar al número máximo configurado.
+Cuando se active la \textit{group cardinality}, sus límites deben ser enteros
+mayores o iguales que 0, el mínimo no puede superar al máximo y el máximo no
+puede superar \texttt{max\_features}. Cuando se active la
+\textit{feature cardinality}, sus límites también deben ser mayores o iguales
+que 1, el mínimo no puede superar al máximo y
+\texttt{prob\_feature\_cardinality} debe pertenecer a $[0,1]$.
 
-    \item La profundidad máxima del árbol (\texttt{max\_tree\_depth}) debe encontrarse comprendida entre uno y el número máximo de características configurado (\texttt{max\_features}).
-
-    \item Las probabilidades asociadas a las relaciones jerárquicas deben encontrarse entre 0 y 1 y formar una distribución cuya suma sea exactamente uno.
-
-    \item Cuando se habilite la cardinalidad de características (\texttt{feature\_cardinality}), los parámetros asociados deben cumplir las siguientes restricciones:
-    \begin{itemize}[noitemsep, topsep=0pt]
-        \item Los valores \texttt{min\_feature\_cardinality} y \texttt{max\_feature\_cardinality} deben ser mayores o iguales que uno, y el valor mínimo no puede superar al máximo.
-        \item La probabilidad de asignación de cardinalidad (\texttt{prob\_feature\_cardinality}) debe encontrarse dentro del rango comprendido entre 0 y 1.
-    \end{itemize}
-
-\end{itemize}
+La distribución de características booleanas, enteras, reales y de cadena debe
+estar formada por probabilidades de $[0,1]$ cuya suma sea 1.
 \\[1em]
 
-& &
+RN-04 &
+Configuración de restricciones &
+Los parámetros \texttt{min\_constraints} y \texttt{max\_constraints} deben ser
+enteros mayores o iguales que 1 y el mínimo no puede superar al máximo. Los
+parámetros \texttt{min\_vars\_per\_constraint} y
+\texttt{max\_vars\_per\_constraint} siguen la misma regla, y el máximo de
+variables no puede superar \texttt{max\_features}.
 
-\begin{itemize}[noitemsep, topsep=0pt]
-    \item Cuando se habilite la cardinalidad de grupos (\texttt{group\_cardinality}), los parámetros asociados deben cumplir las siguientes restricciones:
-    \begin{itemize}[noitemsep, topsep=0pt]
-        \item Los valores \texttt{group\_cardinality\_min} y \texttt{group\_cardinality\_max} deben ser mayores o iguales que uno, y el valor mínimo no puede superar al máximo.
-        \item Ambos valores no pueden superar el número máximo de características configurado (\texttt{max\_features}).
-    \end{itemize}
+\texttt{extra\_constraint\_representativeness} debe ser un entero mayor o igual
+que 1 y menor o igual que \texttt{max\_vars\_per\_constraint}. Los mensajes
+asociados son \texttt{Must be an integer.}, \texttt{Must be >= 1.} y
+\texttt{Must be <= Max. vars per constraint.}
 
-    \item La distribución de tipos de características únicamente debe estar disponible cuando el nivel de tipos (\texttt{type\_level}) esté habilitado y sus probabilidades deben sumar exactamente uno.
+Las probabilidades de \texttt{and}, \texttt{or}, implicación y equivalencia
+deben sumar 1. La probabilidad de negación se valida de forma independiente
+dentro de $[0,1]$. Si el \textit{Arithmetic level} está activo, las
+probabilidades de suma, resta, multiplicación y división deben sumar 1. Cuando
+también estén activadas las \textit{aggregate functions}, se incorporan a esa
+misma distribución las probabilidades de \texttt{sum()} y \texttt{avg()}.
 
-\end{itemize}
+Las probabilidades de los operadores de comparación deben sumar 1. La
+distribución de tipos de restricciones debe sumar 1 considerando únicamente
+los tipos disponibles según los niveles activos. Por último,
+\texttt{prob\_len\_function} debe pertenecer a $[0,1]$ cuando estén activos el
+\textit{Type level} y las \textit{string constraints}.
+
+Ante una suma incorrecta, el sistema muestra el valor calculado y mensajes como
+\texttt{The boolean-connective probabilities must sum to 1.0.},
+\texttt{Arithmetic-level probabilities must sum to 1.0.},
+\texttt{Comparison-operator probabilities must sum to 1.0.} o
+\texttt{Active type probabilities must total 1.0.}
 \\[1em]
 
-RN-04 & Validación de configuración de restricciones &
-La configuración de restricciones entre características y atributos debe cumplir las siguientes reglas:
+RN-05 &
+Configuración de \textit{attributes} &
+En modo automático, \texttt{min\_attributes} y \texttt{max\_attributes} deben
+ser enteros comprendidos entre 0 y 1000 y el mínimo no puede superar al máximo.
+Los mensajes asociados son
+\texttt{Min. attributes must be between 0 and 1000.},
+\texttt{Max. attributes must be between 0 and 1000.} y
+\texttt{Max. attributes must be >= Min.}
 
-\begin{itemize}
-    \item Los límites del número de restricciones (\texttt{min\_constraints} y \texttt{max\_constraints}) deben ser mayores o iguales que uno y el mínimo no puede superar al máximo.
+La distribución de \textit{attributes} booleanos, enteros, reales y de cadena
+debe utilizar valores de $[0,1]$ y sumar 1 considerando únicamente los tipos
+habilitados por los niveles seleccionados.
 
-    \item El número mínimo de variables utilizadas en una restricción (\texttt{min\_vars\_per\_constraint}) debe ser menor o igual que el número máximo permitido (\texttt{max\_vars\_per\_constraint}), siendo ambos valores mayores o iguales que uno.
+En modo manual, cada \textit{attribute} debe tener un nombre y una probabilidad
+de asociación perteneciente a $[0,1]$. Si falta alguno de estos valores se
+muestran \texttt{Attribute name is required.} o
+\texttt{Attach probability is required.}
 
-    \item El parámetro \texttt{extra\_constraint\_representativeness} debe ser mayor o igual que uno.
+Un \textit{attribute} booleano debe permitir al menos uno de los valores
+verdadero o falso. Los atributos enteros, reales y de cadena deben definir
+límites mínimo y máximo numéricos, con el mínimo menor o igual que el máximo.
+En los atributos de cadena, ambos límites deben ser no negativos.
 
-    \item Las probabilidades utilizadas en la generación de restricciones deben encontrarse dentro del rango comprendido entre 0 y 1.
-
-    \item La distribución asociada a los tipos de restricciones (\texttt{ctc\_dist\_boolean}, \texttt{ctc\_dist\_integer}, \texttt{ctc\_dist\_real} y \texttt{ctc\_dist\_string}) debe sumar exactamente uno cuando los niveles de expresividad correspondientes estén habilitados.
-
-    \item La distribución de operadores booleanos (\texttt{prob\_and}, \texttt{prob\_or\_ct}, \texttt{prob\_implication} y \texttt{prob\_equivalence}) debe sumar exactamente uno. La probabilidad asociada al operador NOT (\texttt{prob\_not}) se considera de forma independiente y debe encontrarse dentro del rango comprendido entre 0 y 1.
-\end{itemize}
-\\[0.5em]
-
-& &
-\begin{itemize}
-    \item Cuando el nivel aritmético esté habilitado y las funciones
-    agregadas estén desactivadas, la distribución de operaciones
-    aritméticas básicas (\texttt{prob\_sum}, \texttt{prob\_substract},
-    \texttt{prob\_multiply} y \texttt{prob\_divide}) debe sumar uno.
-
-    \item Cuando las funciones agregadas estén activadas, las probabilidades
-    \texttt{prob\_sum\_function} y \texttt{prob\_avg\_function} se incorporan
-    a la distribución de operaciones aritméticas. En este caso, la suma
-    conjunta de las cuatro operaciones básicas y las dos funciones agregadas
-    debe ser igual a uno, admitiendo una tolerancia absoluta de $10^{-6}$
-    debida a la representación numérica.
-
-    \item Cuando el nivel aritmético esté habilitado, la distribución de operadores de comparación (\texttt{prob\_equals}, \texttt{prob\_less}, \texttt{prob\_greater}, \texttt{prob\_less\_equals} y \texttt{prob\_greater\_equals}) debe sumar exactamente uno.
-\end{itemize}
+Los atributos enteros o reales solo pueden participar en restricciones cuando
+está activo el \textit{Arithmetic level}. Los atributos de cadena requieren el
+\textit{Type level} y las \textit{string constraints}. En caso contrario se
+muestran, respectivamente,
+\texttt{Integer/Real attrs can be used in constraints only when Arithmetic
+level is on.} y
+\texttt{String attrs can be used in constraints only when Type level + String
+constraints are on.}
 \\[1em]
 
-RN-05 & Validación de configuración de atributos &
-La configuración de atributos debe cumplir las restricciones asociadas al modo de generación seleccionado:
+RN-06 &
+Satisfacibilidad y nomenclatura de salida &
+Cuando se active \texttt{ensure\_satisfiable}, la configuración
+efectiva utilizada para generar los modelos se limitará al nivel
+booleano. Se desestimarán los niveles aritmético y de tipos, sus
+niveles menores y la cardinalidad de grupo, aunque se hubieran
+seleccionado en el asistente. Tampoco se generarán atributos,
+características tipadas ni restricciones ajenas al dominio booleano.
 
-\begin{itemize}[noitemsep, topsep=0pt]
+Cada modelo dispondrá de un máximo de 20 intentos. Cada candidato se
+comprobará mediante SAT y solo se devolverá si se confirma que es
+satisfacible. Si se agotan los intentos, se producirá
+\texttt{SatisfiableModelGenerationError}, cuyo mensaje identifica el
+número de modelo y los 20 intentos realizados. El error se comunicará
+al usuario sin presentar el último candidato como resultado válido.
 
-    \item En modo de generación automática (\texttt{random\_attributes}), los límites \texttt{min\_attributes} y \texttt{max\_attributes} deben estar definidos, deben ser mayores o iguales que cero y el mínimo no puede superar al máximo.
+Cuando \texttt{ensure\_satisfiable} esté desactivado, se tendrán en
+cuenta los niveles de expresividad, las cardinalidades y los atributos
+habilitados en la configuración.
 
-    \item Cuando se utiliza la generación automática de atributos,
-    las probabilidades \texttt{dist\_boolean\_atr},
-    \texttt{dist\_integer\_atr}, \texttt{dist\_real\_atr} y
-    \texttt{dist\_string\_atr} deben encontrarse en el intervalo
-    $[0,1]$ y formar una distribución cuya suma sea uno.
-
-    \item En modo de definición manual, cada atributo debe cumplir las restricciones asociadas a su tipo:
-    \begin{itemize}
-        \item Los atributos booleanos deben definir al menos un valor posible.
-        \item Los atributos de tipo entero, real o cadena deben establecer un valor mínimo y máximo válidos, siendo el mínimo menor o igual que el máximo.
-    \end{itemize}
-
-    \item En modo manual, los límites \texttt{min\_attributes} y
-    \texttt{max\_attributes} deben tomar el valor \texttt{None}.
-
-    \item En modo manual, la probabilidad de asociación de cada atributo,
-    almacenada mediante el parámetro \texttt{attach\_probability}, debe
-    pertenecer al intervalo $[0,1]$. Esta comprobación se realiza durante la
-    validación de \texttt{AttributesConfig}.
-
-\end{itemize}
-\\[1em]
+Los resultados se serializarán con extensión \texttt{.uvl}. El nombre
+base será el prefijo configurado o \texttt{fm}. Los sufijos opcionales
+tendrán la forma \texttt{\_Nf} y \texttt{\_Mc}, donde $N$ es el número
+de características y $M$ el número de restricciones. Cuando no se
+activen sufijos y \texttt{num\_models} sea mayor que 1, se añadirá el
+índice del modelo.
+\\
 
 \bottomrule
-
 \caption{Reglas de negocio del dominio.}
 \label{tab:reglas-negocio}
 \end{longtable}
@@ -593,12 +750,10 @@ La configuración de atributos debe cumplir las restricciones asociadas al modo 
 \section{Restricciones del proyecto}
 \label{sec:restricciones}
 
-\ph{Limitaciones externas que acotan el espacio de soluciones del proyecto.
-A diferencia de los RNF, no son atributos del sistema construido sino
-condicionantes del proceso de construcción.}
+La Tabla~\ref{tab:res} recoge las restricciones tecnológicas, organizativas y temporales del proyecto.
 
-
-\begin{longtable}{P{1.7cm} P{3.5cm} P{9.3cm}}
+\begin{longtable}{@{}P{1.4cm} P{3cm}
+P{\dimexpr\textwidth-4.4cm-4\tabcolsep\relax}@{}}
 
 \toprule
 \textbf{ID} & \textbf{Tipo} & \textbf{Descripción} \\
@@ -606,7 +761,7 @@ condicionantes del proceso de construcción.}
 \endhead
 
 RES-01 & Tecnológica &
-El desarrollo debe integrarse dentro del ecosistema existente de herramientas de variabilidad software, utilizando como base el framework Flamapy y la plataforma UVLHub. Esta condición limita la arquitectura de la solución, ya que el generador debe seguir los mecanismos de extensión definidos por Flamapy, adaptarse a la estructura proporcionada por UVLHub y utilizar las librerías propias del framework y componentes externos necesarios para la generación y representación de modelos de características.
+El desarrollo debe integrarse dentro del ecosistema existente de herramientas de variabilidad software, utilizando como base el \textit{framework} Flamapy y la plataforma UVLHub. Esta condición limita la arquitectura de la solución, ya que el generador debe seguir los mecanismos de extensión definidos por Flamapy, adaptarse a la estructura proporcionada por UVLHub y utilizar las librerías propias del \textit{framework} y componentes externos necesarios para la generación y representación de modelos de características.
 \\[0.8em]
 
 RES-02 & Tecnológica / interoperabilidad &
@@ -618,7 +773,9 @@ El desarrollo debe realizarse dentro del contexto del grupo de investigación y 
 \\[0.8em]
 
 RES-04 & Temporal &
-El proyecto está condicionado por la planificación académica del TFG, estableciendo un periodo limitado para realizar las fases de análisis, diseño, implementación, validación y documentación de la solución.
+El desarrollo y la entrega de la memoria deben ajustarse al calendario
+académico del TFG, cuya fecha límite de entrega es el 7 de octubre
+de 2026.
 \\[0.8em]
 
 \bottomrule
@@ -633,15 +790,6 @@ El proyecto está condicionado por la planificación académica del TFG, estable
 \subsection{Diagrama general de casos de uso}
 \label{subsec:cu_diagrama}
 
-\ph{Resumen narrativo del diagrama: qué actores hay, qué casos de uso conectan
-con cada actor y qué relaciones \texttt{include} o \texttt{extend} existen
-entre casos de uso.}
-
-\ph{(Espacio reservado para el diagrama de casos de uso del sistema, no incluido
-en esta plantilla.)}
-
-\subsection{Diagrama general de casos de uso}
-\label{subsec:cu_diagrama}
 
 El diagrama de casos de uso representa las principales interacciones entre los actores externos y el sistema generador de modelos UVL. El usuario investigador o desarrollador es el encargado de configurar los parámetros del generador y, una vez finalizado el proceso, puede visualizar los modelos generados dentro de la plataforma o descargarlos para su posterior utilización. El sistema se encarga de validar la configuración proporcionada y ejecutar el proceso de generación automática de modelos de características UVL. Los modelos descargados pueden ser utilizados posteriormente por herramientas externas de análisis de variabilidad para realizar procesos de evaluación y análisis sobre los modelos generados.
 
@@ -649,19 +797,17 @@ La Figura~\ref{fig:diagrama-casos-uso} muestra el diagrama general de casos de u
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{diagrama_casos_uso.png}
-    \caption{Diagrama general de casos de uso del sistema. Elaboración propia}
+    \makebox[\textwidth][c]{
+        \includegraphics[width=1\textwidth]{diagrama_casos_uso.pdf}
+    }
+    \caption{Diagrama general de casos de uso del sistema. Elaboración propia.}
     \label{fig:diagrama-casos-uso}
 \end{figure}
 
 \subsection{Especificación de casos de uso principales}
 \label{subsec:cu_especificacion}
 
-\ph{Especifica con detalle los casos de uso más relevantes. Cada uno usa una ficha
-con los campos: actores, descripción, precondiciones, flujo principal,
-flujos alternativos y postcondiciones. Repite la ficha tantas veces como casos
-de uso quieras especificar.}
-
+La Tabla~\ref{tab:uc01} especifica el caso de uso de configuración del generador.
 
 \begin{table}[H]
 \centering
@@ -684,15 +830,16 @@ El usuario debe acceder a la interfaz de configuración del generador disponible
 Flujo principal &
 1. El usuario accede al formulario de configuración del generador.
 
-2. El usuario establece los parámetros asociados a la generación del modelo en cada \textit{step}.
+2. El usuario establece los parámetros asociados a la generación del modelo en cada paso del asistente.
 
 3. El sistema registra la configuración proporcionada. \\
 
 Flujo alternativo &
-Si los valores introducidos no cumplen las restricciones establecidas, el sistema informa al usuario de los errores detectados durante la introducción de dichos valores o antes de pasar al siguiente \textit{step}. \\
+Si los valores introducidos no cumplen las restricciones establecidas, el sistema informa al usuario de los errores detectados durante la introducción de dichos valores o antes de pasar al siguiente paso. \\
 
 Postcondiciones &
-Si la configuración de cada \textit{step} es válida, se procede en el último \textit{step} a la generación de los modelos.\\
+La configuración validada queda disponible para que el usuario
+solicite la generación desde el último paso. \\
 
 \bottomrule
 \end{tabular}
@@ -700,6 +847,7 @@ Si la configuración de cada \textit{step} es válida, se procede en el último 
 \label{tab:uc01}
 \end{table}
 
+La Tabla~\ref{tab:uc02} describe la validación que se realiza al avanzar por el asistente.
 
 \begin{table}[H]
 \centering
@@ -711,7 +859,7 @@ Si la configuración de cada \textit{step} es válida, se procede en el último 
 \midrule
 
 Actores &
-Sistema generador de modelos UVL. \\
+Usuario investigador o desarrollador. \\
 
 Descripción &
 Permite comprobar que la configuración proporcionada por el usuario cumple las reglas de negocio definidas antes de ejecutar el proceso de generación automática. \\
@@ -720,17 +868,21 @@ Precondiciones &
 Debe existir una configuración del generador proporcionada por el usuario. \\
 
 Flujo principal &
-1. El sistema recibe la configuración definida por el usuario y analiza sus parámetros.
+1. El usuario solicita avanzar al siguiente paso del asistente.
 
-3. El sistema comprueba las restricciones asociadas a características, jerarquía, restricciones y atributos en cada \textit{step}, respectivamente.
+2. El sistema comprueba los valores, las distribuciones y las
+dependencias correspondientes al paso actual.
 
-4. El sistema valida las distribuciones probabilísticas y dependencias entre parámetros. \\
+3. Si la configuración es válida, el sistema guarda los parámetros y
+permite continuar. \\
 
 Flujo alternativo &
-Si alguna regla de negocio no se cumple, el sistema devuelve los errores detectados e impide continuar con la generación hasta corregir la configuración. \\
+Si alguna regla de negocio no se cumple, el sistema conserva los
+valores introducidos, muestra los errores detectados e impide avanzar
+hasta que se corrija la configuración. \\
 
 Postcondiciones &
-Si la configuración de cada \textit{step} es válida, se le permite al usuario pasar al siguiente \textit{step}. \\
+Si la configuración de cada paso es válida, se le permite al usuario pasar al siguiente paso. \\
 
 \bottomrule
 \end{tabular}
@@ -738,6 +890,7 @@ Si la configuración de cada \textit{step} es válida, se le permite al usuario 
 \label{tab:uc02}
 \end{table}
 
+La Tabla~\ref{tab:uc03} especifica la solicitud y ejecución de la generación.
 
 \begin{table}[H]
 \centering
@@ -749,26 +902,31 @@ Si la configuración de cada \textit{step} es válida, se le permite al usuario 
 \midrule
 
 Actores &
-Sistema generador de modelos UVL. \\
+Usuario investigador o desarrollador. \\
 
 Descripción &
 Permite generar automáticamente un modelo de características expresado en UVL a partir de una configuración previamente validada. \\
 
 Precondiciones &
-Las dependencias necesarias deben ser cargadas correctamente al acceder al primer \textit{step}. Además, la configuración proporcionada por el usuario debe ser validada en cada \textit{step}. \\
+La configuración proporcionada por el usuario debe haberse validado
+en los pasos anteriores y el entorno necesario para el flujo de
+generación seleccionado debe estar disponible. \\
 
 Flujo principal &
-1. Cuando el usuario llega al último \textit{step}, el sistema inicializa el proceso de generación utilizando la configuración proporcionada.
+1. Desde el último paso, el usuario solicita la generación y el
+sistema inicia el flujo correspondiente a las opciones seleccionadas.
 
 2. El sistema genera, para cada modelo y de forma aleatoria, la estructura jerárquica del modelo de características, incorporando los niveles de expresividad, atributos y restricciones pertinentes, cumpliendo con la configuración seleccionada por el usuario.
 
 3. El sistema genera la representación final de los modelos en formato UVL y los almacena temporalmente para su visualización o descarga. \\
 
 Flujo alternativo &
-Si se produce un error durante el proceso de generación, el sistema informa del fallo y no genera los modelos solicitados. \\
+Si se produce un error, el sistema informa del fallo y no presenta
+como válidos los modelos cuya generación o comprobación no se haya
+completado. \\
 
 Postcondiciones &
-Existe un/unos modelo/s de características UVL generado/s correctamente disponible/s para su posterior visualización o descarga. \\
+Existen uno o más modelos de características UVL generados correctamente disponibles para su posterior visualización o descarga. \\
 
 \bottomrule
 \end{tabular}
@@ -776,6 +934,7 @@ Existe un/unos modelo/s de características UVL generado/s correctamente disponi
 \label{tab:uc03}
 \end{table}
 
+La Tabla~\ref{tab:uc04} describe la visualización de un resultado generado.
 
 \begin{table}[H]
 \centering
@@ -796,11 +955,12 @@ Precondiciones &
 Debe existir al menos un modelo generado correctamente por el sistema. \\
 
 Flujo principal &
-1. El sistema carga la representación del modelo generado.
+1. El usuario selecciona la acción de visualizar uno de los
+modelos generados.
 
-2. El sistema muestra el modelo dentro de la interfaz de UVLHub al hacer clic en el botón correspondiente.
+2. El sistema abre una vista con su contenido UVL.
 
-3. El usuario inspecciona la estructura y elementos generados. \\
+3. El usuario consulta el modelo y cierra la vista cuando termina. \\
 
 Flujo alternativo &
 Si no se ha podido realizar la generación previa a la visualización, el sistema lanza un error informativo. \\
@@ -814,6 +974,7 @@ El usuario puede consultar el modelo generado dentro de la plataforma. \\
 \label{tab:uc04}
 \end{table}
 
+La Tabla~\ref{tab:uc05} recoge las opciones de descarga de los resultados.
 
 \begin{table}[H]
 \centering
@@ -828,22 +989,29 @@ Actores &
 Usuario investigador o desarrollador. \\
 
 Descripción &
-Permite descargar en formato zip los modelos generados como ficheros independientes en formato UVL para su posterior utilización dentro o fuera de la plataforma. \\
+Permite descargar individualmente los modelos como ficheros
+\texttt{.uvl} o descargar el conjunto generado en un archivo
+comprimido. \\
 
 Precondiciones &
-Debe existir un modelo de características generado correctamente. \\
+Debe existir al menos un modelo de características generado correctamente. \\
 
 Flujo principal &
-1. El usuario solicita la descarga del modelo generado haciendo clic en el botón correspondiente.
+1. El usuario selecciona la descarga de un modelo concreto o la
+descarga del conjunto de resultados.
 
-2. El sistema prepara el zip con los ficheros UVL generados. El usuario puede ver el archivo en la bandeja de descargas de su navegador.
+2. El sistema prepara el fichero \texttt{.uvl} correspondiente o el
+archivo comprimido con los modelos generados.
+
+3. El navegador inicia la descarga del fichero preparado.
 \\
 
 Flujo alternativo &
 Si el modelo no se encuentra disponible o se produce un error durante la generación del fichero, el sistema informa al usuario y cancela la descarga. \\
 
 Postcondiciones &
-El modelo UVL queda disponible como fichero independiente para su almacenamiento o análisis mediante herramientas externas. \\
+El usuario dispone del modelo descargado en formato \texttt{.uvl}
+o del archivo comprimido con el conjunto de modelos. \\
 
 \bottomrule
 \end{tabular}
@@ -854,22 +1022,11 @@ El modelo UVL queda disponible como fichero independiente para su almacenamiento
 \section{Matriz de trazabilidad}
 \label{sec:trazabilidad}
 
-\ph{La matriz de trazabilidad cruza los requisitos funcionales con los
-casos de uso que los implementan y, opcionalmente, con las pruebas que los
-verifican. Demuestra que ningún requisito queda huérfano y que cada caso
-de uso responde a uno o más requisitos identificados.}
-
-\ph{Marca con \texttimes\ la celda en la que el caso de uso (o la prueba)
-cubre el requisito de la fila. Una fila vacía es un requisito sin cobertura;
-una columna vacía es un caso de uso sin requisito que lo justifique.
-Ambos son señales de alerta.}
 
 \subsection{Requisitos funcionales \texorpdfstring{$\leftrightarrow$}{<->} casos de uso}
 \label{subsec:trazabilidad_rf_cu}
 
-\ph{Ajusta el número de columnas al número real de casos de uso
-especificados (la tabla de ejemplo muestra seis columnas, pero solo se han
-incluido tres fichas de ejemplo).}
+La Tabla~\ref{tab:trazabilidad_rf_cu} relaciona cada requisito funcional con el caso de uso que lo desarrolla.
 
 \begin{longtable}{P{1.7cm} *{5}{P{1.8cm}}}
 
@@ -884,7 +1041,7 @@ RF-02 & & \texttimes & & & \\
 
 RF-03 & & & \texttimes & & \\
 
-RF-04 & & & \texttimes & & \\
+RF-04 & \texttimes & & \texttimes & & \\
 
 RF-05 & & & & \texttimes & \\
 
@@ -900,119 +1057,209 @@ RF-06 & & & & & \texttimes \\
 \subsection{Requisitos \texorpdfstring{$\leftrightarrow$}{<->} pruebas}
 \label{subsec:trazabilidad_rf_pruebas}
 
-\ph{Cruce de los requisitos con la suite de pruebas (Capítulo~\ref{chap:pruebas}).
-Cada requisito debería tener al menos una prueba que lo cubra. Indica el
-identificador o nombre del test correspondiente.}
+La Tabla~\ref{tab:trazabilidad_rf_tests} recoge las pruebas y evidencias
+utilizadas para verificar los requisitos funcionales y no funcionales.
 
+\begingroup
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
 
-\begin{longtable}{P{1.5cm} P{3.2cm} P{9.3cm}}
+\begin{longtable}{@{}P{1.3cm} P{2.6cm} P{\dimexpr\textwidth-3.9cm-4\tabcolsep\relax}@{}}
 
 \toprule
-\textbf{Requisito} & \textbf{Tipo de verificación} & \textbf{Evidencia} \\
+\textbf{Req.} &
+\textbf{Tipo de verificación} &
+\textbf{Pruebas y evidencia proporcionada} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Req.} &
+\textbf{Tipo de verificación} &
+\textbf{Pruebas y evidencia proporcionada} \\
 \midrule
 \endhead
 
 RF-01 &
-Integración / sistema &
-\texttt{test\_full\_happy\_path\_produces\_valid\_params}
-(\texttt{test\_wizard\_flow.py}), que comprueba que el usuario puede
-completar el flujo de configuración y establecer los parámetros necesarios
-para la generación. \\[0.8em]
+Integración del asistente &
+\path{test_wizard_flow.py::test_full_happy_path_produces_valid_params}
+recorre los seis pasos y comprueba el diccionario de parámetros resultante;
+\path{test_wizard_persisters.py::test_apply_step1_persists_batch_fields}
+verifica la persistencia de los parámetros generales;
+\path{test_selenium.py::test_step2_configuration_is_propagated_to_step3}
+comprueba la propagación de la configuración entre pasos; y
+\path{test_wizard_outputs.py::test_back_navigation_preserves_all_choices}
+verifica que las opciones se conservan al navegar hacia atrás.
+\\[0.9em]
 
 RF-02 &
-Pruebas unitarias &
-\texttt{test\_step1\_rejects\_batch\_size\_that\_could\_break\_generation},
-\texttt{test\_step2\_rejects\_minor\_levels\_without\_required\_major\_levels}
+Pruebas unitarias y de contrato &
+\path{test_validators.py::test_step1_rejects_batch_size_that_could_break_generation}
+comprueba el límite de 1000 modelos;
+\path{test_validators.py::test_step1_rejects_non_numeric_values}
+valida los valores numéricos de los parámetros generales;
+\path{test_validators.py::test_step2_rejects_minor_levels_without_required_major_levels}
+comprueba las dependencias entre niveles;
+\path{test_validators.py::test_step3_rejects_invalid_relation_distribution},
+\path{test_validators.py::test_step4_rejects_invalid_arithmetic_and_constraint_type_distributions}
 y
-\texttt{test\_step3\_rejects\_invalid\_relation\_distribution}
-(\texttt{test\_validators.py}), que comprueban el rechazo de configuraciones
-inválidas. \\[0.8em]
+\path{test_validators.py::test_step5_rejects_invalid_random_attribute_distribution}
+verifican las distribuciones de los pasos correspondientes. Las pruebas de
+\path{test_params_contract.py} comprueban además el contrato entre los
+parámetros del asistente y el modelo de configuración del generador.
+\\[0.9em]
 
 RF-03 &
-Prueba de extremo a extremo &
-\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
-(\texttt{test\_selenium.py}), que verifica que el proceso de generación se
-completa desde la interfaz y produce un modelo. \\[0.8em]
+Pruebas unitarias, integración y sistema &
+\path{test_engine.py::test_num_models_respected} comprueba el tamaño del lote;
+\path{test_engine.py::test_determinism_same_seed_same_output} y
+\path{test_engine.py::test_different_seed_different_output} verifican el
+comportamiento asociado a la semilla;
+\path{test_wizard_outputs.py::test_wrapper_generates_feature_model_with_received_arguments}
+comprueba los argumentos entregados a
+\texttt{GenerateFeatureModel};
+\path{test_wizard_outputs.py::test_wrapper_generate_models_returns_serialized_batch}
+valida la generación y serialización de un lote;
+\path{test_wizard_outputs.py::test_ensure_satisfiable_retries_until_sat}
+comprueba los reintentos de generación satisfacible; y
+\path{test_selenium.py::test_step6_generates_one_uvl_model_with_pyodide}
+ejecuta el flujo ordinario de generación desde la interfaz.
+\\[0.9em]
 
 RF-04 &
-Pruebas de integración &
-\texttt{test\_everything\_on\_every\_family\_represented}
-(\texttt{test\_wizard\_outputs.py}), que comprueba que las configuraciones
-relacionadas con los diferentes niveles de expresividad se reflejan en los
-modelos generados. \\[0.8em]
+Pruebas unitarias e integración &
+\path{test_engine.py::test_relation_kinds_create_expected_cardinalities}
+comprueba las relaciones \textit{mandatory}, \textit{optional},
+\textit{alternative}, \textit{or} y de cardinalidad;
+\path{test_engine.py::test_group_cardinality_on_with_weight_produces_group_groups}
+y
+\path{test_engine.py::test_feature_cardinality_on_produces_some}
+validan las cardinalidades;
+\path{test_engine.py::test_arithmetic_level_produces_arith_constraints},
+\path{test_engine.py::test_aggregate_functions_produce_sum_avg}
+y
+\path{test_engine.py::test_string_level_produces_len_constraints}
+comprueban los niveles aritmético, agregado y de cadenas; y
+\path{test_engine.py::test_generated_model_declares_correct_uvl_includes}
+verifica las declaraciones \texttt{include} correspondientes.
+\\[0.9em]
 
 RF-05 &
-Prueba de extremo a extremo &
-\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
-(\texttt{test\_selenium.py}), considerando en este caso la comprobación de
-que el modelo generado se muestra correctamente en la interfaz. \\[0.8em]
+Pruebas de sistema e integración &
+\path{test_wizard_outputs.py::test_wrapper_generate_one_model_returns_download_payload}
+comprueba que el resultado contiene el nombre, el contenido UVL y los
+contadores de características y restricciones;
+\path{test_selenium.py::test_step6_generates_one_uvl_model_with_pyodide}
+verifica que la interfaz muestra el resultado y sus acciones; y
+\path{test_selenium.py::test_step6_shows_output_options}
+comprueba que las opciones de salida aparecen antes de generar.
+\\[0.9em]
 
 RF-06 &
-Pruebas de integración &
-\texttt{test\_filename\_suffixes\_applied\_to\_generated\_files}
-(\texttt{test\_wizard\_outputs.py}), que comprueba la aplicación de los
-sufijos configurados a los ficheros generados. \\
+Pruebas unitarias, integración y sistema &
+\path{test_validators.py::test_step6_accepts_all_output_options}
+comprueba la configuración de los sufijos;
+\path{test_wizard_persisters.py::test_apply_step6_output_persists_checkboxes}
+verifica su persistencia;
+\path{test_wizard_outputs.py::test_wrapper_builds_expected_filename}
+y
+\path{test_wizard_outputs.py::test_serialize_generated_model_covers_all_filename_branches}
+comprueban las combinaciones de nombres y sufijos;
+\path{test_wizard_outputs.py::test_wrapper_generate_one_model_returns_download_payload}
+valida el contenido preparado para la descarga; y
+\path{test_selenium.py::test_step6_generates_one_uvl_model_with_pyodide}
+comprueba que la acción de descarga queda disponible tras generar el modelo.
+La descarga efectiva del archivo comprimido se verificó manualmente.
+\\[0.9em]
 
 \midrule
 
 RNF-01 &
-Inspección estructural e integración &
-Revisión de la separación entre el modelo de configuración, las clases
-especializadas, la operación \texttt{GenerateFeatureModel} y la integración
-con Flamapy y UVLHub. Esta revisión se complementa con la ejecución de las
-pruebas de integración del módulo \texttt{generator}. \\[0.8em]
+Integración arquitectónica &
+\path{test_engine.py::test_generate_feature_model_is_discoverable_by_flamapy}
+comprueba que \texttt{DiscoverMetamodels} localiza la operación
+\texttt{GenerateFeatureModel};
+\path{test_wizard_outputs.py::test_wrapper_build_one_delegates_to_feature_model_generator}
+verifica la delegación desde el \textit{wrapper}; y
+\path{test_params_contract.py::test_wizard_referenced_params_keys_are_mapped_to_generator_model}
+comprueba el contrato entre los parámetros de UVLHub y
+\texttt{FmgeneratorModel}.
+\\[0.9em]
 
 RNF-02 &
-Validación de formato y prueba de sistema &
-La prueba
-\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
-(\texttt{test\_selenium.py}) comprueba que el resultado se genera y se
-entrega en formato UVL. La validez sintáctica del modelo se verifica
-adicionalmente mediante su lectura o validación con el parser UVL utilizado
-por Flamapy. \\[0.8em]
+Compatibilidad sintáctica con UVL &
+\path{test_wizard_outputs.py::test_o1_level_combinations_roundtrip_to_uvl_and_boolean_sat}
+genera combinaciones de niveles, serializa los modelos y los vuelve a leer
+mediante \texttt{UVLReader};
+\path{test_wizard_outputs.py::test_wrapper_serializes_uvl_and_reads_includes}
+comprueba la conservación de los \texttt{include}; y
+\path{test_engine.py::test_generated_model_declares_correct_uvl_includes}
+verifica que cada configuración declara los niveles UVL necesarios.
+\\[0.9em]
 
 RNF-03 &
-Prueba de extremo a extremo &
-\texttt{test\_step6\_generates\_one\_uvl\_model\_with\_pyodide}
-(\texttt{test\_selenium.py}), que verifica que el proceso de generación se
-ejecuta en el navegador mediante Pyodide y que el resultado se devuelve a la
-interfaz. También está el \texttt{test\_generate\_feature\_model\_is\_discoverable\_by\_flamapy},
-que verifica que Flamapy localiza esta operación mediante \texttt{DiscoverMetamodels} \\[0.8em]
+Ejecución en el navegador e integración con el servidor &
+\path{test_selenium.py::test_wizard_reaches_step5_with_pyodide_ready}
+comprueba la carga de Pyodide, la instalación de dependencias y la
+disponibilidad de la API \texttt{generateOne};
+\path{test_selenium.py::test_step6_generates_one_uvl_model_with_pyodide}
+ejecuta la generación ordinaria en el navegador;
+\path{test_wizard_flow.py::test_generate_sat_returns_models}
+comprueba la generación solicitada con satisfacibilidad; y
+\path{test_wizard_flow.py::test_params_json_returns_400_without_params}
+verifica la respuesta del endpoint de configuración cuando no hay parámetros
+en la sesión.
+\\[0.9em]
 
 RNF-04 &
-Comprobación manual de usabilidad &
-Recorrido manual del \textit{wizard} de configuración, comprobando que los
-parámetros se presentan agrupados por funcionalidad, que las opciones
-dependientes se muestran de forma coherente y que los mensajes de validación
-permiten corregir una configuración inválida. La organización de las vistas
-se describe en la Sección~\ref{subsec:mapa_navegacion}. \\[0.8em]
+Usabilidad, navegación y estado &
+\path{test_selenium.py::test_step1_numeric_fields_expose_expected_browser_constraints}
+comprueba las restricciones de los campos numéricos;
+\path{test_selenium.py::test_step2_type_level_enables_arithmetic_level_in_ui}
+y
+\path{test_selenium.py::test_step2_arithmetic_toggles_arithmetic_minor_levels_visibility}
+verifican el comportamiento de las opciones dependientes;
+\path{test_selenium.py::test_wizard_preserves_step1_values_after_next_and_previous}
+y
+\path{test_wizard_state.py::test_step_state_is_preserved_after_returning_to_previous_step}
+comprueban la conservación de los valores; y
+\path{test_wizard_flow.py::test_step1_invalid_post_renders_errors}
+verifica que los errores de validación se muestran en el formulario.
+\\[0.9em]
 
 RNF-05 &
-Integración continua y análisis estático &
-Ejecución de los flujos de GitHub Actions configurados para el proyecto,
-incluyendo las comprobaciones de calidad del código y la suite automatizada de
-pruebas. Los workflows utilizados se muestran en la Figura~\ref{fig:workflows}
-y la suite de pruebas se describe en la Sección~\ref{sec:pruebas_unitarias}. \\
+Suite automatizada y cobertura &
+La suite automatizada ejecuta 220 pruebas de UVLHub y 44 pruebas del paquete
+\texttt{fm\_generator}. Incluye pruebas unitarias en
+\path{test_engine.py}, \path{test_validators.py} y
+\path{test_params_contract.py}; pruebas de integración en
+\path{test_wizard_flow.py}, \path{test_wizard_outputs.py},
+\path{test_wizard_persisters.py}, \path{test_wizard_state.py} y
+\path{test_wizard_builders.py}; y pruebas de sistema en
+\path{test_selenium.py}. La Tabla~\ref{tab:cobertura_ficheros}, presentada en
+el Capítulo~\ref{chap:pruebas}, registra una cobertura conjunta del código de
+producción del 86,5\,\%, superior al umbral fijado del 80\,\%.
+\\
 
 \bottomrule
-
-\caption{Matriz de trazabilidad entre requisitos funcionales y no funcionales y sus verificaciones.}
+\caption{Matriz de trazabilidad entre requisitos funcionales y no funcionales
+y sus verificaciones.}
 \label{tab:trazabilidad_rf_tests}
 
 \end{longtable}
+\endgroup
 
-Un mismo caso de prueba puede aportar evidencia para varios requisitos
-cuando sus comprobaciones cubren aspectos diferentes del sistema. En esos
-casos, la matriz especifica en cada fila qué propiedad concreta se verifica.
-Las inspecciones estructurales y las comprobaciones manuales se identifican
-explícitamente y no se presentan como pruebas automatizadas.
+La descarga efectiva del archivo comprimido se comprobó manualmente, ya que
+las pruebas automatizadas verifican la preparación de los ficheros y la
+disponibilidad de la acción de descarga, pero no inspeccionan el archivo
+descargado por el navegador.
 
-% --- Transición al siguiente capítulo ---
-\ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
-establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
-«Con los requisitos especificados y trazados, queda fijado \emph{qué} debe
-hacer el sistema. El Capítulo~\ref{chap:diseno} aborda \emph{cómo}
-satisfacerlos: la arquitectura, los modelos y las decisiones de diseño que
-dan forma a la solución».}
+Una misma prueba puede aportar evidencia para varios requisitos cuando sus
+aserciones comprueban propiedades diferentes del flujo. En cada fila se indica
+la propiedad concreta verificada para evitar interpretar esta reutilización
+como una duplicación de cobertura. La matriz recoge pruebas representativas y
+no pretende enumerar la totalidad de la suite automatizada.
+
 
 Con los requisitos funcionales, no funcionales, reglas de negocio y restricciones del proyecto definidos y trazados, queda establecido el comportamiento esperado del sistema y las condiciones que debe cumplir la solución desarrollada. El siguiente capítulo aborda cómo satisfacer estos requisitos mediante la definición de la arquitectura del sistema, los componentes principales y las decisiones de diseño adoptadas durante el desarrollo.

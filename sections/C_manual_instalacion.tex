@@ -1,26 +1,8 @@
 \chapter{Manual de instalación y despliegue}
 \label{app:manual_instalacion}
 
-\ph{Este apéndice describe los pasos para instalar y desplegar el sistema en
-un entorno limpio. Debe ser lo bastante detallado para que un tercero
-(p.\,ej.\ otro estudiante o un evaluador) pueda reproducir el despliegue
-sin contacto con el autor/a.}
-
 \section{Requisitos previos}
 \label{sec:requisitos_previos}
-
-\ph{Lista del software, hardware y credenciales necesarios antes de empezar.
-Indica versiones concretas siempre que sea posible.}
-
-\ph{\begin{itemize}
-  \item \textbf{Sistema operativo:} \ph{p.\,ej.\ Linux Ubuntu 24.04 LTS / macOS / Windows 11.}
-  \item \textbf{Lenguaje y runtime:} \ph{p.\,ej.\ Python 3.x / Node 20 / Java 17.}
-  \item \textbf{Gestor de paquetes:} \ph{pip / npm / maven\dots}
-  \item \textbf{Servicios externos:} \ph{base de datos, broker de mensajería,
-        almacenamiento\dots}
-  \item \textbf{Otras herramientas:} \ph{Docker, Git, etc.}
-\end{itemize}
-}
 
 \begin{itemize}
     \item \textbf{Sistema operativo:} el entorno utilizado durante el
@@ -45,33 +27,91 @@ Indica versiones concretas siempre que sea posible.}
     ejecutar el entorno de desarrollo.
 \end{itemize}
 
-\section{Obtención del código fuente}
-\label{sec:obtencion_codigo}
+\section{Disponibilidad del código}
+\label{sec:disponibilidad_codigo}
 
-\ph{Indica el repositorio donde está alojado el código y cómo clonarlo:}
-El código fuente de referencia se encuentra en el repositorio oficial de
-UVLHub:
+El código fuente relacionado con este trabajo está disponible públicamente en
+GitHub. La Tabla~\ref{tab:repositorios_codigo} recoge la dirección de cada
+repositorio, el commit de referencia considerado en esta memoria y la licencia
+declarada en cada caso.
 
-\begin{center}
-\url{https://github.com/diverso-lab/uvlhub}
-\end{center}
+\begin{table}[H]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabularx}{\textwidth}{@{}
+>{\raggedright\arraybackslash}p{2.5cm}
+>{\raggedright\arraybackslash}X
+>{\raggedright\arraybackslash}p{5.2cm}
+>{\centering\arraybackslash}p{2.1cm}
+@{}}
+\toprule
+\textbf{Repositorio} & \textbf{URL} & \textbf{Commit de referencia} &
+\textbf{Licencia} \\
+\midrule
 
-La versión documentada en esta memoria puede encontrarse en
-\texttt{https://github.com/antjimort/uvlhub}, que incorpora el componente \texttt{fm\_generator} y
-su integración en el módulo \textit{generator} de UVLHub. Para reproducir la
-versión evaluada, deben ejecutarse los siguientes comandos:
+\texttt{uvlhub}
+&
+\url{https://github.com/antjimort/uvlhub}
+&
+{\footnotesize\ttfamily\shortstack[l]{b4ca8d81f5b03c688a14\\68289a74d144ce5d081a}}
+&
+MIT
+\\
 
-\begin{verbatim}
-git clone git@github.com:antjimort/uvlhub.git
-cd uvlhub
-\end{verbatim}
+\texttt{uvlhub\_v2}
+&
+\url{https://github.com/antjimort/uvlhub\_v2}
+&
+{\footnotesize\ttfamily\shortstack[l]{45ee7a8c8f0ed0b800ee\\7a4646a561ae0145995f}}
+&
+No declarada
+\\
+
+\texttt{fm\_generator}
+&
+\url{https://github.com/antjimort/fm\_generator}
+&
+{\footnotesize\ttfamily\shortstack[l]{5b0a32f7d728defcfcaf\\736e6c1f88d3d5e3c171}}
+&
+No declarada
+\\
+
+\bottomrule
+\end{tabularx}
+\caption{Repositorios, commits de referencia y licencias declaradas.}
+\label{tab:repositorios_codigo}
+\end{table}
+
+El repositorio \texttt{uvlhub} contiene la aplicación web y su integración con
+el generador. En su directorio raíz se ha añadido un archivo \texttt{LICENSE}
+que declara la licencia MIT. Se mantienen los avisos de licencia específicos
+incluidos en determinados archivos del proyecto. La licencia del repositorio
+\texttt{uvlhub} no se extiende automáticamente a los repositorios
+\texttt{uvlhub\_v2} y \texttt{fm\_generator}, que no tienen una licencia
+declarada.
+
+La aplicación está desplegada en Render y puede consultarse en
+\url{https://uvlhub-antjimort-8e4j.onrender.com}. La versión disponible es la
+\texttt{v1.0.0}, cuyo código ejecutable corresponde al commit
+\texttt{b4ca8d81f5b03c688a1468289a74d144ce5d081a} de \texttt{uvlhub}. El
+commit posterior que añade el archivo de licencia no modifica la aplicación.
+El generador se ejecuta como parte de UVLHub y no dispone de un despliegue
+público independiente. Los repositorios \texttt{uvlhub\_v2} y
+\texttt{fm\_generator} tampoco cuentan con despliegues separados.
+
+Además del código disponible en los repositorios indicados, se ha depositado
+en Zenodo una copia archivada de \textit{UVLHub with fm\_generator integration}.
+El archivo corresponde a UVLHub 1.0.0 e incluye la versión 0.0.1 de
+\texttt{fm\_generator}. Esta versión puede citarse mediante el DOI
+\href{https://doi.org/10.5281/zenodo.22963634}{10.5281/zenodo.22963634};
+su registro está disponible en
+\url{https://zenodo.org/records/22963634}.
 
 \section{Instalación de dependencias y ejecución}
 \label{sec:instalacion_dependencias}
 
-\ph{Comandos para instalar las dependencias del proyecto en un entorno
-aislado (virtualenv, contenedor, etc.). Si hay variables de entorno o
-ficheros de configuración que el usuario debe rellenar, lístalos aquí.}
 
 Las dependencias del proyecto se gestionan mediante Docker, por lo que no es
 necesaria una instalación manual de paquetes. La construcción de los
@@ -96,12 +136,8 @@ docker compose -f docker/docker-compose.dev.yml down
 \section{Despliegue en producción}
 \label{sec:despliegue_produccion}
 
-\ph{Si el sistema se despliega en un entorno productivo (servidor propio,
-nube, PaaS\dots), describe el proceso paso a paso: construcción de la
-imagen, publicación en el registro, despliegue en el host, configuración
-del proxy/HTTPS, etc.}
 
-La herramienta utilizada para el despliegue de la app principal ha sido Render, pero ha sido usada únicamente para las revisiones del tutor. Tambien se ha usado Redis, utilizado como almacenamiento externo para la gestión de las
+La herramienta utilizada para el despliegue de la app principal ha sido Render, pero ha sido usada únicamente para las revisiones de los tutores. También se ha usado Redis, utilizado como almacenamiento externo para la gestión de las
 sesiones de Flask para conservar el estado
 del proceso de configuración del generador.
 
@@ -113,11 +149,8 @@ El despliegue oficial de UVLHub es gestionado por DiversoLab.
 
 
 \section{Verificación de la instalación}
-\label{sec:verificacion}
+\label{sec:verificacion-instalacion}
 
-\ph{Cómo comprobar que la instalación ha sido correcta: ejecución de la
-suite de pruebas, acceso a una pantalla concreta, llamada a un endpoint
-de \textit{health check}, etc.}
 
 Una vez levantados los contenedores mediante el comando indicado en la
 Sección~\ref{sec:instalacion_dependencias}, se puede comprobar que la
@@ -134,12 +167,12 @@ docker compose -f docker/docker-compose.dev.yml ps
 El servicio debe abrirse en el navegador utilizando el puerto expuesto en el
 equipo anfitrión, normalmente mediante una dirección de la forma
 \texttt{http://localhost:<PUERTO>}. La salida del arranque permite comprobar
-que el contenedor web se ha iniciado correctamente.
+que el contenedor web se ha iniciado correctamente; véase la Figura~\ref{fig:inicio-contenedor}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\textwidth]{salida_contenedor.png}
-    \caption{Salida de consola tras el arranque correcto del contenedor web. Elaboración propia}
+    \caption{Salida de consola tras el arranque correcto del contenedor web. Elaboración propia.}
     \label{fig:inicio-contenedor}
 \end{figure}
 
@@ -149,8 +182,7 @@ Una vez iniciado el entorno Docker, la suite de pruebas integrada del módulo
 \textit{generator} puede ejecutarse mediante el siguiente comando:
 
 \begin{verbatim}
-docker compose -f docker/docker-compose.dev.yml exec web \
-  rosemary test generator --all
+docker compose -f docker/docker-compose.dev.yml exec web rosemary test generator --all
 \end{verbatim}
 
 La ejecución correcta debe finalizar sin errores. Esta suite valida el flujo del
@@ -170,8 +202,7 @@ La cobertura del código del módulo \textit{generator} integrado en UVLHub pued
 obtenerse ejecutando la suite mediante Rosemary dentro del contenedor web:
 
 \begin{verbatim}
-docker compose -f docker/docker-compose.dev.yml exec web \
-  rosemary test generator --all --coverage
+docker compose -f docker/docker-compose.dev.yml exec web rosemary coverage generator --all 
 \end{verbatim}
 
 El informe generado incluye tanto el código de producción como los ficheros de
@@ -183,11 +214,11 @@ La cobertura del paquete independiente \texttt{fm\_generator} puede obtenerse
 mediante el siguiente comando:
 
 \begin{verbatim}
-pytest fm_generator/tests -v --cov=fm_generator \
-  --cov-report=term-missing --cov-report=html
+pytest fm_generator/tests -v --cov=fm_generator --cov-report=term-missing --cov-report=html
 \end{verbatim}
 
 El informe textual muestra las líneas no cubiertas, mientras que el informe HTML
 se genera en el directorio \texttt{htmlcov}. Los resultados de cobertura
 utilizados en esta memoria se describen en la
 Sección~\ref{sec:cobertura}.
+

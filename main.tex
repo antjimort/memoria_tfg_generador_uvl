@@ -63,6 +63,7 @@
 % --- Gráficos (logo de la universidad en portada) ---
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{placeins}
 \graphicspath{{figures/img/}}
 
 % --- Colores ---
@@ -105,12 +106,12 @@
 \newcommand{\memTutorUno}{Benavides Cuevas, David}
 % Deja \memTutorDos vacío con \newcommand{\memTutorDos}{} si solo hay un tutor.
 \newcommand{\memTutorDos}{Romero Organvídez, David}
-\newcommand{\memDepartamento}{Departamento de Lenguajes y Sistemas Informáticos}
+\newcommand{\memDepartamento}{Lenguajes y Sistemas Informáticos}
 % Convocatoria de defensa, p. ej. «Convocatoria de junio, curso 2025/26».
 \newcommand{\memConvocatoria}{Convocatoria de octubre, curso 2025/26}
 % Ciudad y fecha de firma (solo para la declaración de autoría).
 \newcommand{\memCiudad}{Sevilla}
-\newcommand{\memFecha}{agosto 2026}
+\newcommand{\memFecha}{octubre 2026}
 
 % --- Código fuente ---
 \usepackage{listings}
@@ -205,6 +206,7 @@
 \usepackage{csquotes}
 \usepackage{enumitem}
 \usepackage{pdfpages}
+\usepackage{uvlhighlight}
 
 % --- Profundidad del índice  ---
 \setcounter{tocdepth}{2}
@@ -284,8 +286,9 @@
 % Duplica el archivo A_apendice.tex y añade aquí el correspondiente
 % \include si necesitas más apéndices.
 \appendix
-\include{sections/A_apendice}
-\include{sections/B_manual_instalacion}
-\include{sections/C_manual_usuario}
+\include{sections/A_ejemplos_modelos_uvl}
+\include{sections/B_interfaz}
+\include{sections/C_manual_instalacion}
+\include{sections/D_manual_usuario}
 
 \end{document}

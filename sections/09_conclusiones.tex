@@ -1,214 +1,42 @@
 \chapter{Conclusiones y trabajo futuro}
 \label{chap:conclusiones}
 
-\ph{El último capítulo cierra la memoria en tres pasos: las
-\emph{conclusiones} (qué se ha conseguido, apoyado en la evidencia del
-Capítulo~\ref{chap:resultados}, que el lector acaba de leer), las
-\emph{limitaciones} (qué no se ha conseguido o no se ha podido validar) y
-el \emph{trabajo futuro} (qué líneas abre todo lo anterior).}
 
 \section{Conclusiones}
 \label{sec:conclusiones}
 
-\ph{Estructura recomendada:}
+La aportación principal de este trabajo es un generador de modelos de
+características expresados en UVL, integrado con Flamapy y accesible desde
+UVLHub. La solución permite configurar la estructura y el contenido de los
+modelos generados e incorporar construcciones de los niveles booleano,
+aritmético y de tipos.
 
-\ph{1. \textbf{Recapitulación del problema}: una o dos frases recordando
-qué problema se planteaba al inicio (sin entrar en detalles, ya que el
-lector viene del Capítulo~\ref{chap:resultados}).}
+La Sección~\ref{sec:resultados_objetivos} recoge la valoración individual de
+los objetivos a partir de sus respectivas evidencias. En conjunto, las pruebas
+de compatibilidad, la evaluación temporal y la ejecución de las suites
+automatizadas respaldan el funcionamiento de la solución en los escenarios
+estudiados. El alcance de esta conclusión depende de las configuraciones y
+condiciones de evaluación descritas en el capítulo anterior.
 
-\ph{2. \textbf{Cumplimiento de los objetivos}: revisa los objetivos
-específicos planteados en el Capítulo~\ref{chap:intro} y argumenta cómo
-se han cubierto, \textbf{apoyando cada afirmación en evidencia concreta}:
-la tabla, figura o sección del Capítulo~\ref{chap:resultados} que lo
-demuestra (o, si procede, de los Capítulos~\ref{chap:requisitos}
-a~\ref{chap:pruebas}). Evita el «se ha cumplido» sin soporte: todo
-cumplimiento debe poder verificarse en un capítulo anterior. Dedica un
-párrafo a cada objetivo, en el mismo orden en que se enunciaron.}
-
-\ph{
-\begin{itemize}
-  \item \ph{El \textbf{primer objetivo} \dots se ha cumplido mediante
-        \dots, como muestra la Tabla/Figura~\dots\ del
-        Capítulo~\ref{chap:resultados}.}
-  \item \ph{El \textbf{segundo objetivo} \dots se ha cumplido mediante
-        \dots, como muestra \dots}
-  \item \ph{El \textbf{tercer objetivo} \dots se ha cumplido mediante
-        \dots, como muestra \dots}
-  \item \ph{El \textbf{cuarto objetivo} \dots se ha cumplido mediante
-        \dots, como muestra \dots}
-  \item \ph{El \textbf{quinto objetivo} \dots se ha cumplido
-        \emph{parcialmente} mediante \dots, como se discute en la
-        Sección~\ref{sec:limitaciones}.}
-\end{itemize}
-}
-
-\ph{3. \textbf{Aportaciones más amplias}: comenta brevemente la contribución
-del trabajo más allá del producto en sí. Por ejemplo, aplicación de un
-paradigma a un dominio nuevo, integración con un ecosistema, validación
-empírica de una técnica, etc.}
-
-\ph{4. \textbf{Reflexión crítica y lecciones aprendidas}: resume en un
-párrafo la desviación global de horas y en qué fases se concentró,
-remitiendo al cierre del Capítulo~\ref{chap:planificacion}
-(Sección~\ref{sec:cierre}) para el detalle, sin duplicarlo. Añade aquí
-una o dos lecciones \emph{nuevas}, técnicas o personales: qué decisión
-repetirías, qué harías de otra forma si empezaras hoy, qué sabes ahora
-que no sabías al comenzar. Dos o tres frases honestas valen más que un
-párrafo genérico.}
-
-\ph{5. \textbf{Cierre}: una frase que cierre el capítulo conectando las
-limitaciones identificadas en la introducción con la solución desarrollada
-(``el sistema desarrollado resuelve los X problemas estructurales\dots'').}
-
-El objetivo principal de este trabajo era desarrollar un generador automático de
-modelos de características capaz de producir modelos UVL con diferentes niveles
-de complejidad y expresividad, integrándose dentro del ecosistema Flamapy y
-UVLHub. Para ello, se ha desarrollado una solución configurable que permite
-generar modelos con construcciones avanzadas del lenguaje UVL y validar su
-correcto funcionamiento mediante pruebas automatizadas.
-
-Los resultados obtenidos en el Capítulo~\ref{chap:resultados} permiten concluir
-que los objetivos funcionales y formativos planteados inicialmente han sido
-alcanzados.
-
-El objetivo O1, relacionado con la generación automática de modelos UVL con
-distintos niveles de expresividad, se ha cumplido mediante la generación y
-validación de modelos con diferentes configuraciones. La prueba asociada
-recorre las combinaciones válidas de niveles de expresividad y verifica la
-serialización y recarga de los modelos generados
-(Sección~\ref{subsec:resultados_o1}).
-
-El objetivo O2 se ha cumplido mediante la incorporación de un sistema de
-configuración que permite modificar los parámetros principales del proceso de
-generación. Las pruebas técnicas verifican que las configuraciones seleccionadas
-producen efectos observables sobre la jerarquía, las cardinalidades, los
-atributos y las restricciones generadas
-(Sección~\ref{subsec:resultados_o2}).
-
-El objetivo O3 se ha alcanzado mediante la integración del generador con
-Flamapy y UVLHub. La evidencia técnica verifica tanto la generación desde el
-\textit{wrapper} ejecutado en UVLHub como el descubrimiento de la operación
-\texttt{GenerateFeatureModel} mediante \texttt{DiscoverMetamodels}
-(Sección~\ref{subsec:resultados_o3}).
-
-El objetivo O4 se ha verificado mediante diez repeticiones de una evaluación
-temporal con 1000 modelos UVL. La evaluación distingue el coste de
-inicialización del entorno del tiempo propio de generación
-(Sección~\ref{subsec:resultados_o4}).
-
-El objetivo O5 se ha cumplido mediante la ejecución satisfactoria de las suites
-automatizadas de UVLHub y del paquete \texttt{fm\_generator}, que reúnen 264
-pruebas superadas (Sección~\ref{subsec:resultados_o5}).
-
-Respecto a los objetivos formativos, O6 se ha alcanzado mediante la aplicación
-del enfoque científico revisado en el diseño del generador. O7 y O8 se han
-cumplido a través de la participación en la evolución de un proyecto software
-real, utilizando Python, Flask, Docker y pruebas automatizadas. Por su parte,
-O9 se ha abordado mediante la consulta y análisis de bibliografía y
-documentación técnica, mientras que O10 se ha materializado en la planificación,
-documentación y seguimiento del proyecto. Las evidencias correspondientes se
-recogen en la Sección~\ref{subsec:resultados_objetivos_formativos}.
-
-La Tabla~\ref{tab:grado-cumplimiento-objetivos} resume el grado de cumplimiento
-de los objetivos definidos.
-
-\begin{longtable}{@{}P{0.9cm} P{4.9cm} P{1.8cm} P{5.5cm}@{}}
-\toprule
-\textbf{Obj.} & \textbf{Objetivo} & \textbf{Grado} &
-\textbf{Evidencia} \\
-\midrule
-\endhead
-
-O1 & Generación automática de modelos UVL con expresividad avanzada. &
-Completo & Sección~\ref{subsec:resultados_o1}. \\[0.5em]
-
-O2 & Configuración flexible del proceso de generación. &
-Completo & Sección~\ref{subsec:resultados_o2}. \\[0.5em]
-
-O3 & Integración con Flamapy y UVLHub. &
-Completo & Sección~\ref{subsec:resultados_o3}. \\[0.5em]
-
-O4 & Evaluación temporal del generador. &
-Completo & Sección~\ref{subsec:resultados_o4}. \\[0.5em]
-
-O5 & Validación mediante pruebas automatizadas. &
-Completo & Sección~\ref{subsec:resultados_o5}. \\[0.5em]
-
-O6 & Reutilización de conocimiento científico en el desarrollo software. &
-Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
-
-O7 & Experiencia en un proyecto software real y de código abierto. &
-Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
-
-O8 & Aplicación práctica de Python, Flask, Docker y pruebas automatizadas. &
-Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
-
-O9 & Búsqueda, análisis y selección de información técnica relevante. &
-Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\[0.5em]
-
-O10 & Planificación, gestión y documentación del proyecto. &
-Completo & Sección~\ref{subsec:resultados_objetivos_formativos}. \\
-
-\bottomrule
-\caption{Grado de cumplimiento de los objetivos y evidencia asociada.
-Elaboración propia.}
-\label{tab:grado-cumplimiento-objetivos}
-\end{longtable}
-
-Como aportación principal, este trabajo proporciona una solución integrada para
-la generación automática de modelos UVL con mayor expresividad que los
-generadores tradicionales centrados en construcciones booleanas. Además, la
-integración dentro del ecosistema Flamapy y UVLHub permite utilizar esta
-funcionalidad en escenarios de experimentación y análisis de variabilidad.
-
-A nivel personal y técnico, el desarrollo ha permitido identificar la
-importancia de realizar una planificación temporal con margen para imprevistos,
-así como la necesidad de utilizar desde el inicio herramientas que faciliten un
-entorno reproducible, como Docker. También se ha comprobado la relevancia de
-realizar refactorizaciones progresivas y acompañar los cambios funcionales con
-pruebas automatizadas para evitar la acumulación de errores durante la
-evolución del software.
-
-En conjunto, los resultados obtenidos permiten concluir que la solución
-desarrollada cumple los objetivos establecidos y proporciona una base extensible
-para futuras mejoras relacionadas con la generación y análisis de modelos de
-características.
+El desarrollo también ha puesto de manifiesto la importancia de trabajar con
+un entorno reproducible, incorporar pruebas durante la integración y planificar
+margen para las dificultades derivadas de adaptar componentes existentes. La
+solución constituye una base para ampliar la generación de modelos y estudiar
+su utilidad en la evaluación de motores de razonamiento.
 
 \section{Limitaciones}
 \label{sec:limitaciones}
 
-\ph{Reflexión honesta sobre lo que el trabajo \emph{no} hace o no ha
-podido demostrar. Reconocer limitaciones no resta nota: demuestra que
-comprendes el alcance real de lo construido. Para cada limitación sigue
-el patrón \emph{causa} (decisión, restricción de tiempo o de recursos)
-+ \emph{efecto} práctico + \emph{por qué es asumible o cómo se
-mitigaría}. Organízalas en tres categorías:}
-
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Limitación técnica:}} \ph{qué no hace el sistema o
-        dónde rinde peor: p.\,ej., rendimiento no evaluado bajo carga
-        real, dependencia de un servicio externo, escalabilidad no
-        contrastada\dots\ Causa, efecto y mitigación.}
-  \item \textbf{\ph{Limitación de validación:}} \ph{qué no se ha podido
-        medir o con qué amenazas a la validez: p.\,ej., datos sintéticos,
-        sin usuarios finales, una sola configuración de prueba\dots\
-        Conecta con la discusión de la Sección~\ref{sec:discusion} del
-        Capítulo~\ref{chap:resultados}.}
-  \item \textbf{\ph{Limitación de alcance:}} \ph{qué quedó fuera del
-        trabajo y por qué, de forma coherente con lo declarado en la
-        Sección~\ref{sec:alcance}.}
-\end{itemize}
-} 
-
-\ph{Cada limitación es candidata natural a una línea de la
-Sección~\ref{sec:trabajo_futuro}: si una limitación no genera línea
-futura ni se justifica como asumible, queda coja.}
 
 A pesar de los resultados obtenidos, existen ciertas limitaciones que deben
 tenerse en cuenta al interpretar el alcance del trabajo realizado. Estas limitaciones 
 delimitan el alcance de las conclusiones obtenidas y los
 escenarios en los que se ha validado la solución.
+
+Además, los objetivos formativos O6--O10 se han valorado mediante evidencias
+documentales de las actividades y decisiones realizadas durante el proyecto.
+Al no haberse definido métricas para medir la adquisición individual de esas
+competencias, su grado de adquisición queda sin cuantificar.
 
 Desde un punto de vista técnico, la evaluación del generador se ha realizado
 sobre configuraciones representativas, pero no se ha estudiado su comportamiento
@@ -239,32 +67,6 @@ los objetivos definidos inicialmente.
 \section{Trabajo futuro}
 \label{sec:trabajo_futuro}
 
-\ph{Líneas de extensión del trabajo, ordenadas de mayor a menor
-inmediatez. Cada línea debe responder a tres preguntas: \emph{qué} se
-haría, \emph{por qué} merece la pena (anclándola a una limitación de la
-Sección~\ref{sec:limitaciones} o a una tendencia del
-Capítulo~\ref{chap:estado_arte}, idealmente con cita) y qué
-\emph{viabilidad o dificultad} estimada tiene. Al menos una línea debe
-ser genuinamente innovadora (no «añadir más tests»), explicando qué la
-hace novedosa.}
-
-\textbf{\ph{Línea 1 (corto plazo): título corto.}} \ph{Qué: \dots\
-Por qué: resuelve la limitación técnica identificada en la
-Sección~\ref{sec:limitaciones}. Viabilidad: encaja con la arquitectura
-actual porque \dots; dificultad estimada baja.}
-
-\textbf{\ph{Línea 2 (corto plazo): título corto.}} \ph{Qué / por qué
-(limitación de validación) / viabilidad-dificultad.}
-
-\textbf{\ph{Línea 3 (medio plazo): título corto.}} \ph{Qué / por qué
-(funcionalidad excluida del alcance) / viabilidad-dificultad.}
-
-\textbf{\ph{Línea 4 (innovadora): título corto.}} \ph{Qué: extensión
-ambiciosa (nueva técnica, dominio o integración). Por qué: conecta con
-la tendencia identificada en el estado del
-arte~\cite{apellido2024articulo}. Qué la hace novedosa: \dots\
-Viabilidad: qué haría falta para abordarla y por qué este trabajo es un
-buen punto de partida.}
 
 A partir de las limitaciones identificadas y de las posibilidades de extensión
 del sistema desarrollado, se plantean diferentes líneas de trabajo futuro

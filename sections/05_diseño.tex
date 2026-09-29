@@ -1,79 +1,69 @@
 \chapter{Diseño de la solución}
 \label{chap:diseno}
 
-\ph{Este capítulo describe \textbf{cómo} se ha diseñado el sistema para cumplir
-los requisitos del capítulo anterior. Se centra en la arquitectura, los modelos
-y los flujos de datos, sin entrar todavía en el código concreto (eso es la
-implementación).}
 
 \section{Modelo conceptual del dominio}
 \label{sec:modelo_dominio}
 
-\ph{Si el TFG se apoya en un modelo formal del dominio (modelo de features,
-ontología, modelo de datos, gramática, modelo matemático\dots), descríbelo aquí.
-Si no aplica, sustituye esta sección por la que mejor encaje con el trabajo.}
-
-\ph{Cubre:}
-\ph{
-\begin{itemize}
-  \item \ph{Para qué sirve el modelo y qué representa.}
-  \item \ph{Dónde se almacena (archivo, formato, lenguaje).}
-  \item \ph{Cómo se relaciona con el resto del sistema (validación, generación, persistencia).}
-\end{itemize}
-}
-
 El modelo conceptual utilizado para el desarrollo de la solución representa la estructura estándar mediante la cual se implementa un componente compatible con el ecosistema Flamapy. En este caso, dicho modelo ha sido utilizado para representar un generador automático de modelos de características expresados en UVL, definiendo las entidades necesarias para configurar y ejecutar el proceso de generación. La solución se ha desarrollado siguiendo el paradigma de programación orientada a objetos de Python, donde cada entidad del modelo se implementa mediante clases organizadas en archivos con extensión \texttt{.py}. Esta estructura permite separar las responsabilidades de los diferentes componentes de la herramienta, diferenciando la configuración del generador de la operación encargada de producir los modelos de características.
 
-La relación del modelo conceptual con el resto del sistema se establece mediante su integración con UVLHub. La clase \texttt{GenerateFeatureModel} constituye el punto principal de entrada para la operación de generación y es invocada desde el módulo \textit{generator} de UVLHub cuando el usuario solicita la creación de nuevos modelos de características. Antes de realizar dicha llamada, la plataforma UVLHub se encarga de validar la configuración proporcionada por el usuario, actuando como una barrera que evita que la herramienta generadora reciba parámetros inválidos o incoherentes. En cuanto a la persistencia, el sistema no requiere un mecanismo de almacenamiento permanente, ya que está diseñado para permitir al usuario visualizar o descargar los modelos generados inmediatamente después de cada ejecución y comenzar posteriormente una nueva generación con una configuración diferente.
+La integración con UVLHub comienza con la recogida y comprobación de los
+parámetros en los distintos pasos del asistente. Durante este recorrido,
+UVLHub conserva la configuración como un diccionario en la sesión de Flask.
+Al solicitar la generación, el navegador obtiene dicho diccionario en formato
+JSON. Si no se solicita la comprobación de satisfacibilidad,
+\texttt{fmgen\_wrapper.py} construye \texttt{FmgeneratorModel} y ejecuta
+\texttt{GenerateFeatureModel} dentro de Pyodide. Si se activa dicha opción,
+el navegador envía los parámetros al servidor, donde se generan y comprueban
+los modelos booleanos mediante SAT. Los resultados se ofrecen para su
+visualización o descarga, sin almacenarlos de forma permanente.
 
 \subsection{Estructura del modelo}
 \label{subsec:estructura_modelo}
 
-\ph{Describe la jerarquía o estructura principal del modelo. Si hay un árbol,
-descríbelo de raíz a hojas. Si hay entidades, descríbelas con sus relaciones.}
+El modelo conceptual representa la estructura interna del componente desarrollado siguiendo una arquitectura compatible con Flamapy. En este caso, dicho modelo ha sido adaptado para representar un generador automático de modelos de características expresados en UVL, separando la configuración del generador, la operación encargada de ejecutar la generación y el resultado producido. Véase la Figura~\ref{fig:modelado-conceptual}.
 
 \begin{figure}[H]
     \centering
     \makebox[\textwidth][c]{%
-        \includegraphics[width=1.4\textwidth]{figura_5_1_modelo_conceptual.pdf}
+        \includegraphics[width=1\textwidth]{figura_5_1_modelo_conceptual.pdf}
     }
-    \caption{Modelado conceptual del sistema. Elaboración propia}
+    \caption{Modelado conceptual del sistema. Elaboración propia.}
     \label{fig:modelado-conceptual}
 \end{figure}
 
-El modelo conceptual representa la estructura interna del componente desarrollado siguiendo una arquitectura compatible con Flamapy. En este caso, dicho modelo ha sido adaptado para representar un generador automático de modelos de características expresados en UVL, separando la configuración del generador, la operación encargada de ejecutar la generación y el resultado producido.
 
 Las entidades principales que componen el modelo son las siguientes:
 
-\subsubsection*{FmgeneratorModel}
+\subsubsection*{\texttt{FmgeneratorModel}}
 
 La entidad \textbf{FmgeneratorModel} representa la configuración global del generador de modelos de características. Actúa como entidad raíz del modelo conceptual y agrupa las diferentes configuraciones necesarias para definir las características del modelo que se desea generar, incluyendo aspectos relacionados con la nomenclatura, los niveles de expresividad UVL, la estructura jerárquica, las restricciones y los atributos. Esta entidad constituye la representación completa del estado del generador antes de iniciar el proceso de generación.
 
-\subsubsection*{NamingConfig}
+\subsubsection*{\texttt{NamingConfig}}
 
 La entidad \textbf{NamingConfig} representa la configuración relacionada con la generación de nombres de los elementos creados durante el proceso de generación. Su finalidad es establecer las reglas utilizadas para definir la nomenclatura de los modelos y sus elementos asociados.
 
-\subsubsection*{LevelConfig}
+\subsubsection*{\texttt{LevelConfig}}
 
 La entidad \textbf{LevelConfig} representa la configuración de los niveles de expresividad disponibles en el lenguaje UVL durante la generación. Esta entidad permite definir las capacidades del lenguaje que estarán habilitadas en los modelos generados, estableciendo las construcciones que podrán aparecer en el resultado final.
 
-\subsubsection*{FeaturesConfig}
+\subsubsection*{\texttt{FeaturesConfig}}
 
 La entidad \textbf{FeaturesConfig} representa la configuración asociada a la generación de características del modelo. Su responsabilidad es definir las condiciones que controlan la creación de los elementos principales que forman parte de la estructura del modelo de características.
 
-\subsubsection*{HierarchyConfig}
+\subsubsection*{\texttt{HierarchyConfig}}
 
 La entidad \textbf{HierarchyConfig} representa la configuración relacionada con la estructura jerárquica del modelo de características generado. Esta entidad define los parámetros necesarios para construir el árbol de características y establecer las relaciones jerárquicas entre sus elementos.
 
-\subsubsection*{ConstraintsConfig}
+\subsubsection*{\texttt{ConstraintsConfig}}
 
 La entidad \textbf{ConstraintsConfig} representa la configuración utilizada para la generación de restricciones entre los elementos del modelo. Su objetivo es definir cómo se crean las relaciones adicionales entre características y atributos, permitiendo generar modelos con diferentes niveles de complejidad y expresividad.
 
-\subsubsection*{AttributesConfig}
+\subsubsection*{\texttt{AttributesConfig}}
 
 La entidad \textbf{AttributesConfig} representa la configuración asociada a la generación de atributos vinculados a las características del modelo. Esta entidad permite establecer cómo se incorporan atributos al modelo generado, tanto mediante generación automática como mediante configuraciones definidas manualmente.
 
-\subsubsection*{GenerateFeatureModel}
+\subsubsection*{\texttt{GenerateFeatureModel}}
 
 La clase \texttt{GenerateFeatureModel} representa la operación encargada
 de generar un objeto \texttt{FeatureModel} a partir de la configuración
@@ -90,7 +80,7 @@ mediante \texttt{get\_result}. Cada ejecución genera un único modelo de
 características. La conversión a texto UVL y la asignación del nombre
 del fichero se realizan fuera de esta clase.
 
-\subsubsection*{FeatureModel generado}
+\subsubsection*{\texttt{FeatureModel} generado}
 
 El objeto \texttt{FeatureModel} representa el resultado de una ejecución
 del generador. Contiene la raíz del modelo, la jerarquía de
@@ -103,32 +93,35 @@ posteriormente mediante \texttt{UVLWriter}, fuera de la operación
 \subsection{Restricciones del dominio}
 \label{subsec:constraints_dominio}
 
-\ph{Restricciones que el modelo no captura por estructura y que se expresan
-como reglas adicionales (rangos, dependencias, exclusiones, fórmulas\dots).
-Justifica brevemente cada una desde el punto de vista del dominio.}
 
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Restricción 1}:} \ph{descripción y justificación.}
-  \item \textbf{\ph{Restricción 2}:} \ph{descripción y justificación.}
-  \item \textbf{\ph{Restricción 3}:} \ph{descripción y justificación.}
-\end{itemize}
-}
 
 \begin{itemize}
-  \item \textbf{Dependencia entre niveles de expresividad UVL:} El nivel booleano no puede no existir porque no tiene sentido debido a ser el nivel más básico de los modelos, al igual que no puede no existir el Type Level sin el Arithmetic Level, ya que para crear \textit{constraints} con los tipos proporcionados por este nivel hace falta el Arithmetic Level para procesarlos. A este respecto, hablamos tanto de existencia (a nivel conceptual) como también se comentó anteriormente de activación (a nivel técnico y funcional)
-  \item \textbf{Validez estructural de los modelos de características generados:} A nivel conceptual, no se puede determinar como tal la coherencia o validez de los modelos generados. Para poder determinarla, ya existen los motores de razonamiento actuales, como SAT, para modelos únicamente con Boolean Level. Es objetivo de este proyecto proporcionar modelos con mayor expresividad (es decir, que incluyan Arithmetic y Type level) para poder diseñar motores de razonamiento que permitan evaluar la validez de modelos con estos niveles de expresividad.
-  \item \textbf{Reproducibilidad mediante el uso de semillas:} El usuario puede establecer la semilla utilizada para controlar la aleatoriedad del proceso de generación. Esta decisión permite repetir una ejecución utilizando la misma semilla y los mismos parámetros de configuración, siempre que se mantengan la versión del generador y las condiciones de ejecución. De esta forma, se facilita la reproducción de experimentos, la comparación de resultados y el análisis de posibles errores. Para ello, la clase FmgeneratorModel incorpora el atributo seed como parte de la configuración del generador.
+    \item \textbf{Dependencia entre niveles de expresividad UVL:} El nivel
+    booleano constituye la base de los modelos generados. En la configuración
+    implementada, la activación del nivel de tipos requiere que también esté
+    activo el nivel aritmético. Las opciones de los niveles secundarios se
+    habilitan de acuerdo con los niveles principales seleccionados.
+
+    \item \textbf{Validez sintáctica y satisfacibilidad:} La construcción de
+    un objeto \texttt{FeatureModel} no demuestra por sí sola que su
+    representación textual pueda ser interpretada por un lector UVL. Tampoco
+    equivale a demostrar que el modelo sea satisfacible. La opción basada en SAT
+    permite comprobar la satisfacibilidad de los modelos booleanos; la
+    generación de modelos con niveles aritmético y de tipos proporciona
+    artefactos con los que evaluar y desarrollar razonadores para esas
+    construcciones. Cuando se activa la opción de satisfacibilidad, el sistema
+    utiliza una configuración efectiva limitada a construcciones booleanas
+    básicas; la comprobación SAT y los posibles reintentos se realizan en el
+    servidor.
+
+    \item \textbf{Reproducibilidad mediante el uso de semillas:} El usuario puede establecer la semilla utilizada para controlar la aleatoriedad del proceso de generación. Esta decisión permite repetir una ejecución utilizando la misma semilla y los mismos parámetros de configuración, siempre que se mantengan la versión del generador y las condiciones de ejecución. De esta forma, se facilita la reproducción de experimentos, la comparación de resultados y el análisis de posibles errores. Para ello, la clase \texttt{FmgeneratorModel} incorpora el atributo \texttt{seed} como parte de la configuración del generador.
 \end{itemize}
 
-\subsection{Espacio de soluciones / configuraciones}
+\subsection{Espacio de soluciones y configuraciones}
 \label{subsec:espacio_soluciones}
 
-\ph{Si tiene sentido, calcula o estima el tamaño del espacio de soluciones
-válidas (combinatoria de opciones, rango continuo de parámetros, etc.).
-Es útil para ilustrar la magnitud del problema.}
 
-El espacio de configuraciones del generador está determinado por los valores que pueden tomar los diferentes parámetros configurables de la clase \textit{FmgeneratorModel}. Para calcular el número de configuraciones posibles sería necesario revisar los límites entre los cuales puede variar cada parámetro. Debido a que algunos de ellos no presentan un límite superior establecido, como ocurre con el número de características, además de que existen parámetros numéricos reales, el espacio de configuraciones posibles es ilimitado.
+El espacio de configuraciones del generador está determinado por los valores que pueden tomar los diferentes parámetros configurables de la clase \texttt{FmgeneratorModel}. Para calcular el número de configuraciones posibles sería necesario revisar los límites entre los cuales puede variar cada parámetro. Debido a que algunos de ellos no presentan un límite superior establecido, como ocurre con el número de características, además de que existen parámetros numéricos reales, el espacio de configuraciones posibles es ilimitado.
 
 Asimismo, el uso de mecanismos pseudoaleatorios permite explorar distintas soluciones para una misma configuración mediante la variación de la semilla. Esto favorece la diversidad de los modelos generados, aunque el uso de semillas diferentes no garantiza que todos los resultados sean distintos.
 
@@ -138,420 +131,267 @@ Asimismo, el uso de mecanismos pseudoaleatorios permite explorar distintas soluc
 \subsection{Visión general}
 \label{subsec:arquitectura_general}
 
-\ph{Describe la arquitectura de alto nivel: tipo de aplicación
-(monolito, microservicios, librería, CLI\dots), patrón principal
-(capas, hexagonal, MVC\dots) y las tecnologías centrales.}
 
-\ph{Lista de capas habituales:}
-
-\ph{
-\begin{itemize}
-  \item \ph{\textbf{Capa de presentación}: interfaz visible al usuario.}
-  \item \ph{\textbf{Capa de API / controladores}: coordinación de peticiones y respuestas.}
-  \item \ph{\textbf{Capa de dominio / lógica}: reglas de negocio, validación, generación.}
-  \item \ph{\textbf{Capa de persistencia}: acceso a base de datos o almacenamiento.}
-  \item \ph{\textbf{Capa de infraestructura}: contenedores, despliegue, CI/CD.}
-\end{itemize}
-}
-
-\ph{Si usas un modelo de documentación arquitectónica concreto (C4, 4+1, ATAM\dots),
-nómbralo aquí y comenta qué niveles incluyes.}
-
-\ph{(Espacio reservado para los diagramas de contexto y de contenedores,
-no incluidos en esta plantilla.)}
 
 La arquitectura diseñada organiza los diferentes componentes del sistema en capas lógicas, separando las responsabilidades asociadas a la interacción con el usuario, la gestión de la configuración, la generación de modelos y la infraestructura necesaria para su ejecución.
 
-La \textbf{capa de presentación} está formada por la interfaz web proporcionada por UVLHub, mediante la cual el usuario configura los diferentes parámetros del generador. Esta interfaz sigue un diseño basado en un flujo tipo \textit{wizard}, permitiendo organizar la configuración del modelo en diferentes pasos y facilitar la comprensión del proceso por parte del usuario.
+La \textbf{capa de presentación} está formada por la interfaz web proporcionada por UVLHub, mediante la cual el usuario configura los diferentes parámetros del generador. Esta interfaz sigue un diseño basado en un flujo tipo asistente, permitiendo organizar la configuración del modelo en diferentes pasos y facilitar la comprensión del proceso por parte del usuario.
 
 La \textbf{capa de API/controladores} está formada principalmente por las \textit{routes} del módulo \textit{generator} de UVLHub. Estas funciones se encargan de gestionar la comunicación entre los diferentes pasos del flujo de configuración, enviando y recibiendo los parámetros introducidos por el usuario hasta completar la configuración necesaria para ejecutar el proceso de generación.
 
-La \textbf{capa de dominio/lógica} está formada por la lógica interna del generador desarrollado siguiendo la arquitectura de extensiones de Flamapy, junto con los servicios encargados de gestionar la configuración dentro de UVLHub. Por un lado, la herramienta contiene el modelo de configuración y la lógica necesaria para producir modelos de características expresados en UVL. Por otro lado, los servicios se encargan de reconstruir y validar los parámetros recibidos entre los diferentes pasos del generador mediante las \textit{routes}, garantizando que la información utilizada durante la generación sea coherente.
+La \textbf{capa de dominio/lógica} está formada por la lógica interna del generador desarrollado siguiendo la arquitectura de extensiones de Flamapy, junto con los servicios encargados de gestionar la configuración dentro de UVLHub. El componente compatible con Flamapy contiene el modelo de configuración y la operación que produce los modelos de características. Las rutas y la lógica del asistente de UVLHub comprueban los parámetros y mantienen el diccionario de configuración en la sesión. En la generación ordinaria, \texttt{FmgeneratorModel} se construye y la operación se ejecuta en el navegador mediante Pyodide. En la generación satisfacible, el servicio del asistente construye el mismo modelo de configuración y ejecuta la operación en el servidor, donde se aplica la comprobación mediante PySAT.
 
-La \textbf{capa de infraestructura} está formada por los elementos necesarios para la ejecución y despliegue de la aplicación. Para el desarrollo local se ha utilizado Docker junto con sus correspondientes contenedores y configuraciones, permitiendo construir y levantar el entorno completo de la aplicación de forma reproducible. Además, se ha utilizado Render como plataforma de despliegue principalmente para facilitar al tutor la revisión del funcionamiento de la aplicación durante el desarrollo del proyecto. Asimismo, esta capa incluye el entorno de ejecución basado en WebAssembly mediante Pyodide, utilizado para ejecutar el generador directamente en el navegador del usuario y cargar las dependencias necesarias para su funcionamiento.
+La \textbf{capa de infraestructura} está formada por los elementos necesarios para la ejecución y despliegue de la aplicación. Para el desarrollo local se ha utilizado Docker junto con sus correspondientes contenedores y configuraciones, permitiendo construir y levantar el entorno completo de la aplicación de forma reproducible. Además, se ha utilizado Render como plataforma de despliegue principalmente para facilitar a los tutores la revisión del funcionamiento de la aplicación durante el desarrollo del proyecto. Asimismo, esta capa incluye el entorno de ejecución basado en WebAssembly mediante Pyodide, utilizado para ejecutar el generador en el navegador en el flujo ordinario, y las dependencias de PySAT utilizadas por el servidor cuando se solicita la comprobación de satisfacibilidad.
 
-No existe una \textbf{capa de persistencia} en la arquitectura diseñada, debido a que los modelos generados no se almacenan de forma permanente. El sistema está orientado a que el usuario pueda visualizar o descargar los modelos generados tras cada ejecución y comenzar posteriormente una nueva generación con una configuración diferente.
+La funcionalidad de generación no añade persistencia para las configuraciones
+ni para los modelos producidos. El diccionario de la sesión se utiliza de
+forma temporal y los resultados se ofrecen al usuario para su visualización
+o descarga. Esta descripción se refiere al generador integrado, sin excluir
+los mecanismos de persistencia que UVLHub utiliza para otras funcionalidades.
 
 \subsection{Diagrama de componentes}
 \label{subsec:diagrama_componentes}
 
-\ph{Describe cómo se distribuyen los módulos del sistema entre las capas
-y cómo se comunican entre sí. Indica responsabilidades por módulo.}
-
-\ph{(Espacio reservado para el diagrama de capas / componentes.)}
 
 El diagrama de componentes mostrado en la Figura~\ref{fig:diagrama-componentes} representa la distribución de los principales módulos del sistema y la comunicación existente entre ellos.
+
+El diagrama ofrece una vista estructural general; los recorridos de
+generación ordinaria y satisfacible se detallan en las Figuras
+\ref{fig:secuencia-generacion}, \ref{fig:secuencia-generacion-sat}
+y \ref{fig:flujo_datos_principal}.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=\textwidth]{diagrama_componentes.png}
-    \caption{Diagrama de componentes del sistema. Elaboración propia}
+    \caption{Diagrama de componentes del sistema. Elaboración propia.}
     \label{fig:diagrama-componentes}
 \end{figure}
 
-\subsection{Diagrama de secuencia del flujo principal}
-\label{subsec:diagrama_secuencia}
+\subsection{Descripción secuencial del flujo de generación}
+\label{subsec:descripcion_secuencial}
 
-\ph{Enumera, paso a paso, el flujo principal del sistema (el caso de uso central).
-Esto orienta al lector antes de los detalles de implementación.}
-
-\ph{
-\begin{enumerate}
-  \item \ph{Paso 1.}
-  \item \ph{Paso 2.}
-  \item \ph{Paso 3.}
-  \item \ph{Paso 4.}
-  \item \ph{Paso 5.}
-  \item \ph{Paso 6.}
-\end{enumerate}
-}
-
-\ph{Comenta también qué ocurre en caso de error (el flujo se interrumpe,
-se devuelve un código de error, se notifica al usuario\dots).}
 
 \begin{enumerate}
 
     \item \textbf{Inicio de la configuración:} El usuario accede al generador
-    mediante la interfaz basada en \textit{wizard} proporcionada por UVLHub y
+    mediante la interfaz basada en asistente proporcionada por UVLHub y
     comienza a introducir los parámetros necesarios para definir las
     características del modelo que desea generar.
 
-    \item \textbf{Comunicación entre los diferentes pasos del \textit{wizard}:}
+    \item \textbf{Comunicación entre los diferentes pasos del asistente:}
     Las \textit{routes} del módulo \textit{generator} reciben los parámetros
     introducidos por el usuario en cada paso del flujo de configuración y se
     encargan de enviarlos al siguiente paso junto con la información necesaria
     para continuar con la configuración del generador.
 
-    En este punto ya existen validaciones implementadas en el propio frontend que se encargan de realizar comprobaciones básicas, por ejemplo que la suma de las distribuciones sea exactamente 1, entre otras.
+    En esta fase, la interfaz también realiza comprobaciones básicas, como la
+    validación de las distribuciones de probabilidad, antes de enviar los
+    valores al servidor.
 
     \item \textbf{Actualización y validación de los parámetros:}
-    Tras cada paso, las rutas y los servicios internos de UVLHub comprueban los parámetros recibidos y actualizan el diccionario de configuración almacenado en la sesión de Flask. Estas comprobaciones permiten detectar valores inválidos antes de continuar con el asistente. En caso de error, se informa al usuario para que corrija los parámetros correspondientes. En esta fase todavía no se construye la instancia de \texttt{FmgeneratorModel}.
+    Tras cada paso, las rutas y los servicios internos de UVLHub comprueban los
+    parámetros recibidos y actualizan el estado del asistente almacenado en la
+    sesión de Flask. Estas comprobaciones permiten detectar valores inválidos
+    antes de continuar. En caso de error, se informa al usuario para que
+    corrija los parámetros correspondientes. Una vez completado el asistente,
+    los valores se consolidan en un diccionario de parámetros; en esta fase
+    todavía no se construye la instancia de \texttt{FmgeneratorModel}.
 
-    \item \textbf{Obtención de la configuración y preparación de Pyodide:}
-    En el último paso del asistente, el navegador obtiene la configuración en formato JSON mediante el endpoint \texttt{/generator/random/params-json}. Antes de ejecutar el generador, se prepara el entorno de Pyodide y se cargan las dependencias necesarias para ejecutar el código Python en el navegador mediante WebAssembly.
+    \item \textbf{Obtención de la configuración y selección del flujo:}
+    En el último paso del asistente, el navegador obtiene la configuración en
+    formato JSON mediante el endpoint
+    \texttt{/generator/random/params-json}. Si se solicita la generación
+    ordinaria, prepara Pyodide y carga las dependencias necesarias para
+    ejecutar el código Python mediante WebAssembly. Si se activa la opción de
+    satisfacibilidad, envía los parámetros JSON mediante una petición
+    \texttt{POST} a \texttt{/generator/random/generate-sat}.
 
     \item \textbf{Construcción de la configuración y ejecución del generador:}
-    Dentro de Pyodide, el archivo \texttt{fmgen\_wrapper.py} utiliza el método \texttt{from\_flat\_dict} para construir la instancia de \texttt{FmgeneratorModel} a partir de los parámetros recibidos. Una vez validada la configuración, se ejecuta la operación \texttt{GenerateFeatureModel} y los modelos obtenidos se transforman a formato UVL. Si se produce un error durante este proceso, se informa al usuario de que no ha sido posible completar la generación.
+    En el flujo ordinario, \texttt{fmgen\_wrapper.py} construye
+    \texttt{FmgeneratorModel} mediante \texttt{from\_flat\_dict} dentro de
+    Pyodide. Después ejecuta \texttt{GenerateFeatureModel} para cada modelo
+    solicitado, obtiene el objeto \texttt{FeatureModel} y lo transforma en
+    texto UVL mediante \texttt{UVLWriter}. En el flujo de satisfacibilidad,
+    el servicio del asistente construye la configuración efectiva booleana
+    en el servidor y genera cada candidato con la misma operación. Cada
+    candidato se comprueba mediante PySAT; si no es satisfacible, se realiza
+    otro intento, hasta alcanzar el límite establecido. Solo los modelos
+    satisfacibles se serializan y devuelven al navegador. Los errores de
+    preparación, comprobación o generación se comunican al usuario.
 
-    \item \textbf{Visualización y descarga del resultado:} Una vez generado
-    correctamente el modelo UVL, este se devuelve a la interfaz de UVLHub,
-    permitiendo al usuario visualizarlo 
-    en la plataforma o descargarlo para su posterior utilización.
+    \item \textbf{Visualización y descarga del resultado:} Los resultados
+    generados correctamente se muestran en la interfaz de UVLHub para que el
+    usuario pueda consultar su contenido UVL o descargarlos. La interfaz no
+    presenta como válido ningún candidato cuya generación o comprobación
+    haya fallado.
 
 \end{enumerate}
+
+La Figura~\ref{fig:secuencia-configuración} muestra el flujo de configuración.
+Las Figuras~\ref{fig:secuencia-generacion} y
+\ref{fig:secuencia-generacion-sat} muestran, respectivamente, la generación
+ordinaria en el navegador y la generación satisfacible en el servidor.
+
+\begin{figure}[!htbp]
+    \centering
+    \makebox[\textwidth][c]{%
+        \includegraphics[width=1.3\textwidth]{diagrama_secuencia_generacion_1.png}
+    }
+    \caption{Diagrama de secuencia del flujo de configuración. Elaboración propia.}
+    \label{fig:secuencia-configuración}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1.1\textwidth]{secuencia_generacion_ordinaria.png}
+    \caption{Diagrama de secuencia de la generación ordinaria de modelos UVL
+    en el navegador mediante Pyodide. Elaboración propia.}
+    \label{fig:secuencia-generacion}
+\end{figure}
+
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics[width=1.1\textwidth]{secuencia_generacion_sat.png}
+    \caption{Diagrama de secuencia de la generación de modelos booleanos
+    satisfacibles en el servidor mediante PySAT. Elaboración propia.}
+    \label{fig:secuencia-generacion-sat}
+\end{figure}
+
+\FloatBarrier
 
 \section{Patrones de diseño aplicados}
 \label{sec:patrones}
 
-\ph{Enumera los patrones de diseño (creacionales, estructurales, de
-comportamiento o arquitectónicos) que se han aplicado en la solución.
-Para cada uno indica \emph{qué problema resuelve}, \emph{dónde se aplica}
-en el sistema y \emph{por qué} se eligió frente a alternativas.}
+\subsection*{Arquitectura por capas (\textit{Layered Architecture})}
 
-\ph{Ejemplos habituales en TFGs de Ingeniería del Software:}
+La solución sigue una organización basada en capas lógicas, separando las
+responsabilidades asociadas a la interfaz de usuario, comunicación con el
+sistema, lógica de generación e infraestructura. Este patrón permite reducir
+el acoplamiento entre componentes y facilitar la evolución del sistema,
+permitiendo modificar una capa sin afectar al resto siempre que se mantengan
+sus interfaces de comunicación.
 
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Patrón 1 (p.\,ej.\ MVC, Repositorio, Singleton, Factory\dots)}:}
-        \ph{problema que resuelve, módulo o capa donde se aplica, alternativas
-        descartadas.}
-  \item \textbf{\ph{Patrón 2}:} \ph{descripción y justificación.}
-  \item \textbf{\ph{Patrón 3}:} \ph{descripción y justificación.}
-\end{itemize}
-}
+\subsection*{Arquitectura basada en componentes independientes (Component-based Architecture)}
 
-\ph{Si la arquitectura sigue un patrón global (capas, hexagonal, MVC,
-microservicios\dots), descríbelo aquí o referencia la sección de arquitectura
-donde se haya tratado.}
+El generador desarrollado se estructura como un componente independiente compatible con el ecosistema Flamapy, utilizando los mecanismos y modelos proporcionados por el \textit{framework} para interactuar con él. Esta decisión permite separar la lógica de generación del resto de la aplicación, favoreciendo la reutilización, el mantenimiento y la evolución del sistema.
 
-\begin{itemize}
+\subsection{Patrón de interacción estilo asistente (\textit{wizard})}
+La interfaz de configuración del generador utiliza un patrón de interacción
+basado en asistente, mediante el cual la introducción de parámetros se
+divide en diferentes pasos independientes. Este patrón permite organizar una
+gran cantidad de opciones de configuración de forma progresiva, facilitando
+la comprensión del usuario y permitiendo realizar validaciones durante el
+proceso de configuración. Además, se incorporó un panel de progreso que
+permite consultar en todo momento el estado actual de la configuración
+realizada.
 
-    \item \textbf{Arquitectura por capas (\textit{Layered Architecture}):}
-    La solución sigue una organización basada en capas lógicas, separando las
-    responsabilidades asociadas a la interfaz de usuario, comunicación con el
-    sistema, lógica de generación e infraestructura. Este patrón permite reducir
-    el acoplamiento entre componentes y facilitar la evolución del sistema,
-    permitiendo modificar una capa sin afectar al resto siempre que se mantengan
-    sus interfaces de comunicación.
-
-    \item \textbf{Arquitectura basada en componentes independientes (Component-based Architecture):}
-    El generador desarrollado se estructura como un componente independiente compatible con el ecosistema Flamapy, utilizando los mecanismos y modelos proporcionados por el framework para interactuar con él. Esta decisión permite separar la lógica de generación del resto de la aplicación, favoreciendo la reutilización, el mantenimiento y la evolución del sistema.
-
-    \item \textbf{Patrón de interacción \textit{Wizard}:}
-    La interfaz de configuración del generador utiliza un patrón de interacción
-    basado en \textit{wizard}, mediante el cual la introducción de parámetros se
-    divide en diferentes pasos independientes. Este patrón permite organizar una
-    gran cantidad de opciones de configuración de forma progresiva, facilitando
-    la comprensión del usuario y permitiendo realizar validaciones durante el
-    proceso de configuración. Además, se incorporó un panel de progreso que
-    permite consultar en todo momento el estado actual de la configuración
-    realizada.
-
-\end{itemize}
 
 \section{Diseño de la interfaz de usuario}
 \label{sec:ui_ux}
 
-\ph{Si el sistema tiene interfaz gráfica (web, móvil, escritorio), dedica una
-sección al diseño de la experiencia de usuario. No basta con decir ``se ha
-hecho bonito''; conviene documentar las decisiones tomadas.}
+
+La interfaz del asistente de configuración utilizada por el generador procede
+del trabajo previo realizado por David Romero dentro de UVLHub. En particular,
+la ampliación del asistente a seis pasos, el panel lateral de seguimiento de la
+configuración y el selector visual de distribuciones fueron diseñados e
+implementados con anterioridad a este TFG. Estas decisiones se describen en
+esta sección porque forman parte de la interfaz desde la que se utiliza el
+generador integrado, pero no constituyen una aportación propia de este trabajo.
+Las contribuciones realizadas en el TFG se centran en la implementación del
+componente generador compatible con Flamapy y en las adaptaciones necesarias
+para integrarlo con UVLHub.
 
 \subsection{Mapa de navegación}
 \label{subsec:mapa_navegacion}
 
-\ph{Diagrama o lista jerárquica de las pantallas/vistas del sistema y los
-caminos posibles entre ellas. Sirve para que el lector se haga una idea de la
-extensión funcional sin recorrerse el sistema en vivo.}
-
-\ph{Listado de vistas:}
-
-\ph{
-\begin{itemize}
-  \item \ph{Vista 1 — propósito y enlaces salientes.}
-  \item \ph{Vista 2 — propósito y enlaces salientes.}
-  \item \ph{Vista 3 — propósito y enlaces salientes.}
-\end{itemize}
-}
 
 El mapa de navegación del generador sigue una estructura secuencial basada en
-un flujo tipo \textit{wizard}, donde la configuración del modelo de
+un flujo tipo asistente, donde la configuración del modelo de
 características se divide en diferentes etapas independientes. Esta organización
 permite separar los diferentes grupos de parámetros configurables según su
 funcionalidad, facilitando al usuario la definición progresiva de la
 configuración necesaria para realizar la generación del modelo.
 
+El mapa de navegación y las capturas de los seis pasos se recogen en el
+Apéndice~\ref{app:interfaz-generador}.
+
 Las vistas principales del sistema son las siguientes:
 
 
-\subsubsection*{Step 1: Batch}
+\subsubsection*{\textit{Paso 1: Batch}}
 
 Esta vista permite establecer los parámetros generales del proceso de generación,
 incluyendo el número de modelos a generar, la semilla utilizada para controlar
 la aleatoriedad y la nomenclatura de los modelos generados.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-      \includegraphics[width=1.1\textwidth]{step1.png}
-    }
-    \caption{Interfaz del Step 1: Batch. Elaboración propia}
-    \label{fig:step1}
-\end{figure}
 
-
-\subsubsection*{Step 2: Language levels}
+\subsubsection*{\textit{Paso 2: Language levels}}
 
 Esta vista permite seleccionar los niveles de expresividad UVL que estarán
 disponibles durante la generación, incluyendo la activación de los diferentes
 niveles principales y secundarios soportados.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step2.png}
-    }
-        \caption{Interfaz del Step 2: Language levels. Elaboración propia}
-    \label{fig:step2}
-\end{figure}
 
-
-\subsubsection*{Step 3: Feature tree}
+\subsubsection*{\textit{Paso 3: Feature tree}}
 
 Esta vista permite configurar los parámetros relacionados con la generación de la
 estructura del árbol de características, incluyendo el número de características,
 la profundidad máxima y la distribución de relaciones jerárquicas.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step3_1.png}
-    }
-        \caption{Interfaz del Step 3: Feature tree. Elaboración propia}
-    \label{fig:step3}
-\end{figure}
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step3_2.png}
-    }
-        \caption{Interfaz del Step 3: Feature tree. Elaboración propia}
-    \label{fig:step3}
-\end{figure}
-
-
-\subsubsection*{Step 4: Constraints}
+\subsubsection*{\textit{Paso 4: Constraints}}
 
 Esta vista permite definir los parámetros asociados a la generación de
 restricciones entre características y atributos, incluyendo la distribución de
 los diferentes tipos de restricciones y operadores disponibles.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step4_1.png}
-    }
-        \caption{Interfaz del Step 4: Constraints. Elaboración propia}
-    \label{fig:step4}
-\end{figure}
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step4_2.png}
-    }
-        \caption{Interfaz del Step 4: Constraints. Elaboración propia}
-    \label{fig:step4}
-\end{figure}
-
-
-\subsubsection*{Step 5: Attributes}
+\subsubsection*{\textit{Paso 5: Attributes}}
 
 Esta vista permite configurar los parámetros relacionados con la generación de
 atributos asociados a las características, incluyendo la posibilidad de generar
 atributos aleatorios mediante una distribución de tipos configurable.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step5_1.png}
-    }
-        \caption{Interfaz del Step 5: Attributes. Elaboración propia}
-    \label{fig:step5}
-\end{figure}
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step5_2.png}
-    }
-        \caption{Interfaz del Step 5: Attributes. Elaboración propia}
-    \label{fig:step5}
-\end{figure}
-
-
-\subsubsection*{Step 6: Output}
+\subsubsection*{\textit{Paso 6: Output}}
 
 Esta vista permite ejecutar el proceso de generación del modelo UVL utilizando
 la configuración proporcionada en los pasos anteriores. Además, permite
-configurar opciones adicionales como la satisfacibilidad (únicamente para nivel
-booleano) y los sufijos utilizados en los archivos generados.
+activar la comprobación de satisfacibilidad, que aplica una configuración
+efectiva limitada al nivel booleano, y seleccionar los sufijos utilizados en
+los archivos generados.
 
 Una vez finalizada la generación, el usuario puede visualizar el modelo obtenido
 dentro de la plataforma o descargarlo para su posterior utilización.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step6_1.png}
-    }
-        \caption{Interfaz del Step 6: Output. Elaboración propia}
-    \label{fig:step6}
-\end{figure}
+La Figura~\ref{fig:fig:diagrama-navegacion-diseno} muestra una vista general acerca de la navegación a través del sistema.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step6_2.png}
-    }
-        \caption{Interfaz del Step 6: Output. Elaboración propia}
-    \label{fig:step6}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.1\textwidth]{step6_3.png}
-    }
-        \caption{Interfaz del Step 6: Output. Elaboración propia}
-    \label{fig:step6}
-\end{figure}
-
-
-\begin{figure}[H]
+\begin{figure}[!htbp]
     \centering
     \makebox[\textwidth][c]{%
         \includegraphics[width=1.2\textwidth]{diagrama_navegacion.png}
     }
-    \caption{Mapa de navegación del generador UVL. Elaboración propia}
-    \label{fig:diagrama-navegacion}
+    \caption{Mapa de navegación del generador UVL. Elaboración propia.}
+    \label{fig:fig:diagrama-navegacion-diseno}
 \end{figure}
 
+\FloatBarrier
 
-\subsection{Wireframes y mockups}
+\subsection{Prototipo visual inicial}
 \label{subsec:mockups}
 
-\ph{Bocetos de baja fidelidad (wireframes) o prototipos visuales (mockups)
-de las pantallas principales. Conviene incluir al menos las dos o tres más
-representativas: la pantalla principal, la pantalla del flujo principal y
-una pantalla de gestión/listado.}
-
-\ph{(Espacio reservado para los wireframes/mockups, no incluidos en esta plantilla.)}
 
 Durante la fase inicial del desarrollo se realizó un prototipo de la interfaz
 con el objetivo de cubrir los requisitos iniciales identificados para el
-sistema. Los \textit{wireframes} mostrados a continuación corresponden a dicho prototipo
-inicial y no representan completamente la versión final de la interfaz, ya que
+sistema. Este prototipo no representa completamente la versión final de la interfaz, ya que
 durante el desarrollo se fueron incorporando diferentes mejoras y modificaciones
 orientadas a mejorar la usabilidad y adaptar el sistema a las nuevas necesidades surgidas durante el desarrollo.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.15\textwidth]{step1_prototipo.png}
-    }
-        \caption{Wireframe inicial del Step 1 del generador. Elaboración propia}
-    \label{fig:wireframe-step1}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.15\textwidth]{step2_prototipo.png}
-    }
-        \caption{Wireframe inicial del Step 2 del generador. Elaboración propia}
-    \label{fig:wireframe-step2}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.15\textwidth]{step3_prototipo.png}
-    }
-        \caption{Wireframe inicial del Step 3 del generador. Elaboración propia}
-    \label{fig:wireframe-step3}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.15\textwidth]{step4_prototipo.png}
-    }
-        \caption{Wireframe inicial del Step 4 del generador. Elaboración propia}
-    \label{fig:wireframe-step4}
-\end{figure}
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.15\textwidth]{step5_prototipo.png}
-    }
-        \caption{Wireframe inicial del Step 5 del generador. Elaboración propia}
-    \label{fig:wireframe-step5}
-\end{figure}
+Sus cinco bocetos pueden consultarse en el Apéndice~\ref{app:prototipos-iniciales}.
 
 \subsection{Decisiones de diseño visual}
 \label{subsec:decisiones_visuales}
 
-\ph{Comenta brevemente las decisiones globales de la interfaz:}
-
-\ph{
-\begin{itemize}
-  \item \textbf{\ph{Paleta de colores}}: \ph{principales, secundarios,
-        accesibilidad de contraste.}
-  \item \textbf{\ph{Tipografía}}: \ph{familias usadas y por qué.}
-  \item \textbf{\ph{Sistema de diseño / framework CSS}}: \ph{si se ha usado uno
-        (Bootstrap, Tailwind, Material\dots) o se han creado componentes propios.}
-  \item \textbf{\ph{Responsive / accesibilidad}}: \ph{breakpoints, criterios de
-        accesibilidad seguidos (contraste, navegación por teclado, ARIA\dots).}
-\end{itemize}
-}
 
 \begin{itemize}
 
@@ -563,39 +403,30 @@ orientadas a mejorar la usabilidad y adaptar el sistema a las nuevas necesidades
 
     \item \textbf{Tipografía:} Se mantiene la tipografía utilizada por UVLHub,
     basada en las familias \textit{Inter}, \textit{sans-serif} y \textit{Helvetica},
-    utilizadas como estándares dentro de la plataforma, conservando la coherencia visual con el resto de la aplicación y proporciona una
+    utilizadas como estándares dentro de la plataforma, conservando la coherencia visual con el resto de la aplicación y proporcionando una
     lectura clara de los elementos de la interfaz.
 
     \item \textbf{Organización de la interfaz y flujo de configuración:} Debido a la
-    cantidad de parámetros necesarios para configurar el generador, se decidió utilizar
-    un diseño basado en un flujo tipo \textit{wizard}, separando la configuración en
+    cantidad de parámetros necesarios para configurar el generador, la interfaz utiliza
+    un diseño basado en un flujo tipo asistente, separando la configuración en
     diferentes pasos independientes. Esta decisión permite reducir la complejidad
     percibida por el usuario y mejorar la comprensión del proceso de configuración.
 
-    Además, se incorporó un panel lateral de progreso que permite consultar en todo
+    Además, dispone de un panel lateral de progreso que permite consultar en todo
     momento el estado actual del proceso, los pasos completados y un resumen de la
     configuración seleccionada sin necesidad de volver atrás durante el flujo.
 
     \item \textbf{Componentes visuales y sistema de diseño:} La interfaz utiliza los
     componentes proporcionados por el sistema de diseño utilizado en UVLHub, basado
-    principalmente en Bootstrap. Además, se desarrollaron componentes específicos para
-    el generador, como el selector de distribuciones probabilísticas utilizado para
+    principalmente en Bootstrap. Además, la interfaz incorpora componentes específicos para el generador,
+    como el selector de distribuciones probabilísticas utilizado para
     configurar la generación de modelos, permitiendo adaptar la interfaz a las
     necesidades particulares del sistema.
 
-    \begin{figure}[H]
-        \centering
-        \makebox[\textwidth][c]{%
-            \includegraphics[width=\textwidth]{componente_selector_distribuciones.png}
-        }
-            \caption{Componente selector de distribuciones. Elaboración propia}
-        \label{fig:selector_distribuciones}
-    \end{figure}
-
     \item \textbf{Ayudas visuales y gestión de la información:} Para facilitar la
-    configuración de un sistema con una gran cantidad de parámetros, se decidió mostrar
+    configuración de un sistema con una gran cantidad de parámetros, se muestran
     únicamente las opciones relacionadas con los niveles de expresividad seleccionados
-    por el usuario. También se incorporaron textos explicativos y \textit{tooltips}
+    por el usuario. También se incluyen textos explicativos y \textit{tooltips}
     en determinados parámetros con el objetivo de proporcionar contexto adicional
     sobre su funcionamiento.
 
@@ -606,135 +437,91 @@ orientadas a mejorar la usabilidad y adaptar el sistema a las nuevas necesidades
 
 \end{itemize}
 
-\section{Esquema de base de datos}
-\label{sec:esquema_db}
-
-\subsection{Modelo entidad-relación}
-\label{subsec:er}
-
-\ph{Describe las entidades persistidas, sus atributos y las relaciones entre
-ellas. Suele bastar con un par de tablas y una representación simbólica de
-las relaciones.}
-
-% Hueco para la representación simbólica de las relaciones. Descomenta y adapta:
-% \[
-% \texttt{entidad\_A} \;\; 1 \longrightarrow N \;\; \texttt{entidad\_B}
-% \]
-
-\ph{(Espacio reservado para la representación simbólica de las relaciones,
-p.~ej.\ una relación de uno a muchos: \texttt{entidad\_A} $1 \rightarrow N$
-\texttt{entidad\_B}. Descomenta y adapta el bloque comentado del fuente.)}
-
-\ph{\begin{table}[H]
-    \centering
-    \begin{tabular}{lll}
-        \toprule
-        \textbf{Campo} & \textbf{Tipo de dato} & \textbf{Restricciones} \\
-        \midrule
-        \ph{campo\_1} & \ph{Tipo} & \ph{PK / NOT NULL / \dots} \\
-        \ph{campo\_2} & \ph{Tipo} & \ph{\dots} \\
-        \ph{campo\_3} & \ph{Tipo} & \ph{\dots} \\
-        \ph{campo\_4} & \ph{Tipo} & \ph{\dots} \\
-        \bottomrule
-    \end{tabular}
-    \caption{Esquema de la tabla \ph{\texttt{nombre\_tabla\_1}}.}
-    \label{tab:esquema_tabla_1}
-\end{table}}
-
-
-\ph{\begin{table}[H]
-    \centering
-    \begin{tabular}{lll}
-        \toprule
-        \textbf{Campo} & \textbf{Tipo de dato} & \textbf{Restricciones} \\
-        \midrule
-        \ph{campo\_1} & \ph{Tipo} & \ph{PK / FK / \dots} \\
-        \ph{campo\_2} & \ph{Tipo} & \ph{\dots} \\
-        \ph{campo\_3} & \ph{Tipo} & \ph{\dots} \\
-        \bottomrule
-    \end{tabular}
-    \caption{Esquema de la tabla \ph{\texttt{nombre\_tabla\_2}}.}
-    \label{tab:esquema_tabla_2}
-\end{table}}
-
-\ph{Comenta cómo se garantiza el aislamiento entre usuarios (filtros por
-\texttt{user\_id}, comprobaciones de propiedad, etc.) si aplica.}
-
-En el sistema diseñado no existe un esquema de base de datos asociado al
-generador, debido a que no se realiza persistencia de los modelos generados ni
-de las configuraciones utilizadas durante el proceso de generación. Esta
-decisión de diseño se debe a que la herramienta está orientada a permitir al
-usuario configurar el generador, obtener los modelos de características
-resultantes y comenzar inmediatamente después una nueva generación con una configuración
-diferente.
-
-Los parámetros introducidos durante el flujo de configuración se mantienen
-únicamente durante la ejecución actual del generador, siendo utilizados para
-crear la instancia de configuración de la clase \textit{FmgeneratorModel}. Una
-vez finalizada la generación, el resultado puede ser visualizado o descargado
-por el usuario, sin necesidad de almacenarse de forma permanente dentro del
-sistema.
-
-\subsection{Migraciones / versionado del esquema}
-\label{subsec:migraciones}
-
-\ph{Si el esquema se versiona (Alembic, Flyway, Liquibase\dots), explica
-brevemente la herramienta usada, dónde se almacenan las migraciones y qué
-comandos se utilizan en desarrollo y en CI.}
-
-Al no haber persistencia de datos, no existen migraciones de ningún tipo.
-
 \section{Flujo de datos principal}
 \label{sec:flujo}
 
-\ph{Describe el flujo de transformación de datos desde la entrada del usuario
-hasta el artefacto final. Por ejemplo:
-\textbf{Entrada} $\rightarrow$ \textbf{Representación intermedia}
-$\rightarrow$ \textbf{Artefacto final}.}
 
-El flujo de datos del sistema comienza con los parámetros introducidos por el usuario mediante la interfaz basada en \textit{wizard}. Las rutas del módulo \texttt{generator} de UVLHub reciben estos datos y, junto con los servicios internos, realizan las comprobaciones correspondientes a cada paso. La configuración se mantiene en forma de diccionario dentro de la sesión de Flask, permitiendo conservar los valores introducidos durante el recorrido por el asistente.
+El flujo de datos del sistema comienza con los parámetros introducidos por el usuario mediante la interfaz basada en asistente. Las rutas del módulo \texttt{generator} de UVLHub reciben estos datos y, junto con los servicios internos, realizan las comprobaciones correspondientes a cada paso. La configuración se mantiene en forma de diccionario dentro de la sesión de Flask, permitiendo conservar los valores introducidos durante el recorrido por el asistente.
 
-Una vez completada la configuración, el navegador obtiene estos parámetros en formato JSON mediante el endpoint \texttt{/generator/random/params-json}. Dentro del entorno de ejecución proporcionado por Pyodide, el archivo \texttt{fmgen\_wrapper.py} utiliza el método \texttt{from\_flat\_dict} para construir una instancia de \texttt{FmgeneratorModel}. Esta instancia se utiliza para ejecutar la operación \texttt{GenerateFeatureModel}, que produce los objetos \texttt{FeatureModel}. Posteriormente, estos se transforman a formato UVL y se ponen a disposición del usuario para su visualización o descarga. De esta forma, la construcción del modelo de configuración y la generación se realizan en el navegador, de acuerdo con el requisito RNF-03.
+Una vez completada la configuración, el navegador obtiene estos parámetros en
+formato JSON mediante el endpoint
+\texttt{/generator/random/params-json}. A partir de este punto existen dos
+recorridos. En la generación ordinaria, \texttt{fmgen\_wrapper.py} construye
+\texttt{FmgeneratorModel} dentro de Pyodide mediante
+\texttt{from\_flat\_dict} y ejecuta \texttt{GenerateFeatureModel}. Los objetos
+\texttt{FeatureModel} obtenidos se transforman en texto UVL mediante
+\texttt{UVLWriter} dentro del navegador. Cuando se activa la comprobación de
+satisfacibilidad, el navegador envía los parámetros JSON mediante una petición
+\texttt{POST} a \texttt{/generator/random/generate-sat}. El servidor construye
+la configuración efectiva booleana, genera los candidatos, comprueba su
+satisfacibilidad mediante PySAT y devuelve los modelos aceptados en formato
+JSON. Ambos recorridos terminan en la interfaz, que permite visualizar y
+descargar los resultados. Esta separación responde al requisito RNF-03.
 
-\begin{figure}[H]
+La Figura~\ref{fig:flujo_datos_principal} representa el recorrido común de
+los parámetros y las dos vías de generación.
+
+\begin{figure}[!htbp]
     \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1.2\textwidth]{flujo_datos_principal.png}
-    }
-        \caption{Flujo de datos principal. Elaboración propia}
+    \includegraphics[width=\textwidth]{flujo_datos_principal_actualizado.png}
+    \caption{Flujo de datos de la generación ordinaria en Pyodide y de la
+    generación satisfacible mediante SAT en el servidor. Elaboración propia.}
     \label{fig:flujo_datos_principal}
 \end{figure}
+
+\FloatBarrier
 
 \subsection{Estructura de la representación intermedia}
 \label{subsec:representacion_intermedia}
 
-\ph{Si el sistema produce una representación intermedia
-(JSON canónico, IR, AST, fichero de configuración\dots), describe sus campos
-principales y referencia el apéndice donde se incluya un ejemplo completo.}
 
-La representación intermedia de la configuración consiste en un diccionario de parámetros almacenado temporalmente en la sesión de Flask. Este diccionario permite mantener los valores introducidos por el usuario entre los diferentes pasos del \textit{wizard}, sin construir todavía una instancia del modelo de dominio del generador.
+La representación intermedia de la configuración consiste en un diccionario de parámetros almacenado temporalmente en la sesión de Flask. Este diccionario permite mantener los valores introducidos por el usuario entre los diferentes pasos del asistente, sin construir todavía una instancia del modelo de dominio del generador.
 
-Las rutas y los servicios del módulo \texttt{generator} gestionan y comprueban los parámetros correspondientes a cada paso. Cuando el navegador solicita la configuración, el servidor proporciona su representación en formato JSON. A partir de esta información, \texttt{fmgen\_wrapper.py} construye la instancia de \texttt{FmgeneratorModel} mediante \texttt{from\_flat\_dict} dentro de Pyodide, en el navegador del usuario.
+Las rutas y los servicios del módulo \texttt{generator} gestionan y
+comprueban los parámetros correspondientes a cada paso. El estado se conserva
+por pasos en \texttt{session["wizard"]} y la configuración consolidada se
+almacena en \texttt{session["params"]}. Cuando el navegador solicita la
+configuración, el servidor proporciona este último diccionario en formato
+JSON. En la generación ordinaria, \texttt{fmgen\_wrapper.py} lo convierte en
+una instancia de \texttt{FmgeneratorModel} mediante
+\texttt{from\_flat\_dict} dentro de Pyodide. En la generación satisfacible,
+el navegador envía el mismo diccionario al servidor y allí se construye la
+configuración efectiva utilizada por la operación.
 
-\begin{figure}[H]
-    \centering
-    \makebox[\textwidth][c]{%
-        \includegraphics[width=1\textwidth]{ejemplo_uso_session.png}
-    }
-        \caption{Ejemplo de uso de la \textit{session}. Elaboración propia}
-    \label{fig:ejemplo_uso_session}
-\end{figure}
+El Código~\ref{lst:load-step-state} muestra cómo el módulo recupera de la
+sesión los valores guardados para un paso y los combina con los valores
+predeterminados.
 
-Esta representación se utiliza para mantener el estado temporal del asistente y transferir los parámetros al entorno de generación del navegador. No constituye un registro permanente de las configuraciones utilizadas ni de los modelos obtenidos.
+\begin{lstlisting}[language=Python,
+caption={Lectura del estado de un paso desde la sesión de Flask.},
+label={lst:load-step-state}]
+def load_step_state(step: int, defaults: dict):
+    wizard = session.get("wizard", {})
+    saved = wizard.get(str(step), {})
+
+    out = defaults.copy()
+    out.update(saved)
+
+    return out
+\end{lstlisting}
+
+Esta representación se utiliza para mantener el estado temporal del asistente
+y transferir los parámetros al entorno donde se realiza la generación. No
+constituye un registro permanente de las configuraciones utilizadas ni de los
+modelos obtenidos.
 
 \subsection{Mapeo entre niveles}
 \label{subsec:mapeo}
 
-\ph{Si el flujo implica transformaciones explícitas (símbolos a valores
-numéricos, alias a constantes, claves a entidades\dots), describe los mapeos
-con ejemplos concretos.}
 
-El mapeo entre el diccionario de parámetros y el modelo interno de configuración se realiza en el navegador del usuario. Una vez recibida la configuración en formato JSON, \texttt{fmgen\_wrapper.py} utiliza el método \texttt{from\_flat\_dict} de \texttt{FmgeneratorModel} para convertir los parámetros en los atributos y objetos de configuración asociados. Esta transformación permite pasar de la representación utilizada durante el \textit{wizard} a la representación orientada a objetos que necesita el generador.
+El mapeo entre el diccionario de parámetros y el modelo interno de
+configuración se realiza mediante el método \texttt{from\_flat\_dict} de
+\texttt{FmgeneratorModel}. En la generación ordinaria, el método se ejecuta
+desde \texttt{fmgen\_wrapper.py} en el navegador; cuando se solicita la
+comprobación de satisfacibilidad, se ejecuta desde el servicio del asistente
+en el servidor. Esta transformación permite pasar de la representación
+utilizada durante el asistente a la representación orientada a objetos que
+necesita el generador.
 
 Algunos ejemplos de este mapeo son:
 
@@ -749,27 +536,14 @@ Algunos ejemplos de este mapeo son:
     utilizado para determinar el número de características del modelo generado.
 \end{itemize}
 
-Una vez construida la instancia de \texttt{FmgeneratorModel}, la configuración se valida y se utiliza para ejecutar la operación \texttt{GenerateFeatureModel} dentro de Pyodide. El objeto \texttt{FeatureModel} obtenido se transforma posteriormente a una representación textual en UVL. Tanto la construcción de la configuración como la ejecución del generador tienen lugar en el navegador.
+Una vez construida la instancia de \texttt{FmgeneratorModel}, la configuración
+se valida y se utiliza para ejecutar \texttt{GenerateFeatureModel}. En el
+flujo ordinario, la construcción y la ejecución tienen lugar en el navegador;
+en el flujo satisfacible, se realizan en el servidor con una configuración
+efectiva booleana y cada candidato se comprueba mediante PySAT. Los objetos
+\texttt{FeatureModel} aceptados se transforman posteriormente a su
+representación textual en UVL.
 
-\subsection{Trazabilidad e identificadores}
-\label{subsec:trazabilidad}
-
-\ph{Si el sistema necesita relacionar artefactos generados con su configuración
-de origen, explica el esquema de identificadores (UUID, hash, slug\dots)
-y dónde se persisten.}
-
-En el sistema no se mantiene trazabilidad persistente entre los modelos
-generados y la configuración utilizada para generarlos. La información de la
-configuración únicamente se mantiene durante la ejecución mediante la
-\textit{session} de Flask.
-
-% --- Transición al siguiente capítulo ---
-\ph{Cierra el capítulo con un párrafo puente de 2--4 líneas: qué queda
-establecido aquí y qué pregunta abre el capítulo siguiente. Por ejemplo:
-«Definidos la arquitectura, los modelos y los flujos de datos, el diseño
-queda cerrado sobre el papel. El Capítulo~\ref{chap:implementacion} desciende
-al código: las tecnologías elegidas y cómo cada módulo materializa las
-decisiones tomadas aquí».}
 
 Con la arquitectura del sistema, los modelos conceptuales, los flujos de datos
 y las principales decisiones de diseño definidos, queda establecida la solución
